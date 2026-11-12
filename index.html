@@ -337,7 +337,7 @@ html,body{height:100dvh}
 .mkt .mr em{grid-column:1/-1;font-style:normal;font-size:11.5px;display:flex;justify-content:space-between;color:var(--ink2)}.mkt .mr em i{font-style:normal;font-weight:700}
 .mkt .up{color:#22c55e}.mkt .dn{color:#ff5a5a}.mkt .lv{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-left:5px;vertical-align:middle;animation:tlpulse 2s infinite}
 .mkt .hl{margin-top:8px;padding:9px 10px;border-radius:10px;background:var(--bg);font-size:12px;line-height:1.45}.mkt .hl b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
-.mkt .hl li{margin:0 0 3px 14px}.mkt .ft{font-size:10.5px;color:var(--ink2);margin-top:6px}
+.mkt .hl li{margin:0 0 3px 14px}.mkt .sub{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:8px 4px 0;font-weight:700}#mktSide .sub{color:rgba(255,255,255,.55)}.mkt .ft{font-size:10.5px;color:var(--ink2);margin-top:6px}
 #mktSide{display:none}
 @media (min-width:1024px){
  #mktSide{display:block;margin:14px 0 10px;padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.06);color:#fff;overflow:auto;min-height:0;flex:1 1 auto}
@@ -360,6 +360,19 @@ html,body{height:100dvh}
 .inf-pop{position:fixed;z-index:60;max-width:300px;background:#0f2350;color:#fff;border-radius:12px;padding:10px 32px 10px 12px;font-size:12.5px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .inf-pop button{position:absolute;top:4px;right:6px;background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
 [data-info]{cursor:help}
+
+@media (min-width:1024px){
+ main>.mas{grid-column:1/-1!important;display:grid;grid-template-columns:repeat(var(--k),minmax(0,1fr));gap:20px;align-items:start}
+ .mas>.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+ .mas .blk{display:flex;flex-direction:column;min-width:0}
+ main .blk h2{margin:0 2px 10px;min-height:30px;white-space:nowrap;font-size:12px}
+ main .blk h2 small{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:11.5px;opacity:.85}
+ main .blk h2 .bsh{font-size:0;padding:0;width:30px;height:30px;display:grid;place-items:center;flex:none}
+ main .blk h2 .bsh::before{content:"↗";font-size:15px}
+ main .blk .card{border-radius:16px}.mas .blk>.card{margin-bottom:0}
+ main .blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}
+ /* macro (PIB/IPCA) no topo do Mercado */
+}
 </style>
 </head>
 <body>
@@ -453,10 +466,11 @@ async function dolarVivo(){try{const r=await fetch("https://economia.awesomeapi.
  const dt=new Date(+j.timestamp*1000);u.ref="ao vivo · "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});u.vivo=1;u.fonte="AwesomeAPI (mercado à vista)";pintaMercado();}catch(e){}}
 setInterval(()=>{if(document.visibilityState==="visible")dolarVivo();},300000);
 function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
- return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
+ const ic2={ipca:"🧾",pib:"🏛️"};const mac=(MKT.macro||[]).map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic2[x.id]||""} ${x.nome}</small><b>${x.valor}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("");
+ return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+(mac?`<div class="sub">Economia · oficial IBGE</div>${mac}<div class="sub">Setor e insumos</div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
  `<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Toque em cada item para ver a fonte.</div>`;}
 function pintaMercado(){const a=document.getElementById("mktSide");if(a)a.innerHTML=mktHtml(true);const b=document.getElementById("mktHoje");if(b)b.innerHTML=mktHtml(false);}
-document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(m&&MKT){const x=MKT.itens.find(i=>i.id===m.dataset.mkt);if(!x)return;
+document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(m&&MKT){const x=MKT.itens.concat(MKT.macro||[]).find(i=>i.id===m.dataset.mkt);if(!x)return;
  openSheet(`<div class="sh"><b>${x.nome}</b><button id="xS">×</button></div><div class="card"><div style="font-size:30px;font-weight:800">${x.valor}</div><div class="${x.dir>0?"up":"dn"}" style="font-weight:700;color:${x.dir>0?"#22c55e":"#ff5a5a"}">${x.var}</div><p class="note" style="margin:6px 0 0">${x.ref}</p><p style="margin:12px 0 0;line-height:1.5">${x.nota}</p><p class="note" style="margin:12px 0 0">Fonte: <b>${x.fonte}</b>${x.link?` · <a href="${x.link}" target="_blank" rel="noopener">abrir</a>`:""}</p></div>`);return;}
  const t=e.target.closest("[data-info]");if(t){e.stopPropagation();document.querySelector(".inf-pop")?.remove();const r=t.getBoundingClientRect(),d=document.createElement("div");d.className="inf-pop";d.innerHTML=t.dataset.info+'<button aria-label="Fechar">×</button>';document.body.appendChild(d);
   const W=d.offsetWidth,H=d.offsetHeight;d.style.left=Math.max(8,Math.min(innerWidth-W-8,r.left+r.width/2-W/2))+"px";d.style.top=(r.top>H+16?r.top-H-8:r.bottom+8)+"px";d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>d.remove(),7000);return;}
@@ -544,7 +558,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
  <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
  </div>
- <h2 class="mkth">Mercado <small>cimento · celulose · diesel · dólar</small></h2><div class="card mkt mktc" id="mktHoje"></div>
+ <h2 class="mkth">Mercado <small>PIB · IPCA · cimento · celulose · diesel · dólar</small></h2><div class="card mkt mktc" id="mktHoje"></div>
  ${D.frase?`<h2>Para o dia</h2><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
  <p class="motto">Carro parado é <em>prejuízo</em>. Vamos pra cima!</p>`;}
 function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3];ac.push(a);am.push(b);});
@@ -971,7 +985,10 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
  {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
   const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")||b.classList.contains("big")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
   const nw=bl.filter(b=>!b.classList.contains("wide")&&!b.classList.contains("big")&&!b.classList.contains("f4")&&!b.querySelector(".mktc")),k=c3?3:2,r=nw.length%k;nw.forEach(b=>b.classList.remove("s12","s6"));
-  if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}
+  if(innerWidth>=1024&&nw.length>1){const k=(c3&&innerWidth>=1500)?3:2,mas=document.createElement("div");mas.className="mas";mas.style.setProperty("--k",k);nw[0].before(mas);
+   const cols=[...Array(k)].map(()=>{const c=document.createElement("div");c.className="col";mas.appendChild(c);return c;});
+   nw.forEach(b=>{const c=cols.reduce((a,x)=>x.offsetHeight<a.offsetHeight?x:a);c.appendChild(b);});}
+  else{if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
 const corVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
 async function blocoPNG(blks){await new Promise(r=>{if(window.html2canvas)return r();const s2=document.createElement("script");s2.src="vendor/html2canvas.min.js";s2.onload=r;document.head.appendChild(s2);});
@@ -1078,6 +1095,7 @@ document.addEventListener("click",e=>{if(e.target.closest("#instGo"))instalarAgo
 window.addEventListener("appinstalled",()=>{document.documentElement.classList.add("pwa");$("#instCard")?.remove();});
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
+let _bp=innerWidth>=1500?2:innerWidth>=1024?1:0;addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{const b=innerWidth>=1500?2:innerWidth>=1024?1:0;if(b!==_bp){_bp=b;if(typeof cur!=='undefined'&&D)show(cur);}},250);});
 function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();pintaMercado();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
