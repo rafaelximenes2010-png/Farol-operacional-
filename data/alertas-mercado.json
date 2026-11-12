@@ -1,0 +1,21 @@
+{
+ "alertas": [
+  {
+   "id": "ipca-10/2026",
+   "nivel": "importante",
+   "titulo": "IPCA de outubro: 0,14%",
+   "texto": "Inflação oficial (IBGE): 0,14% no mês e 4,63% em 12 meses, acima do teto da meta (4,5%).",
+   "data": "12/11/2026",
+   "em": "2026-11-12T12:00:00Z"
+  },
+  {
+   "id": "ouro-12/11/2026",
+   "nivel": "info",
+   "titulo": "Ouro cai 2,68%",
+   "texto": "Onça troy a US$ 3.880 em 12/11, com dólar mais forte após aposta de alta de juros nos EUA.",
+   "data": "12/11/2026",
+   "em": "2026-11-12T19:00:00Z"
+  }
+ ],
+ "atualizado": "2026-11-12T21:30:00Z"
+}

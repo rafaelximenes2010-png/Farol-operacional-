@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.12-e",
+   "data": "12/11/2026",
+   "itens": [
+    "Mercado com prioridade a fontes oficiais: PTAX, Selic, IPCA e ouro direto do Banco Central",
+    "Busca automática diária dos dados de mercado (07h, 13h e 18h, dias úteis)",
+    "Alertas de mercado no sino e notificações no aparelho"
+   ]
+  },
+  {
    "v": "2026.11.12-d",
    "data": "12/11/2026",
    "itens": [

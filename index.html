@@ -410,6 +410,8 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .drl{position:relative;cursor:pointer}.drl::after{content:"ⓘ detalhar";position:absolute;top:10px;right:12px;font-size:11px;font-weight:700;color:var(--ink2);background:var(--bg);padding:3px 8px;border-radius:99px}
 
 .ofc{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#22c55e;border:1px solid rgba(34,197,94,.5);border-radius:5px;padding:0 4px;margin-left:4px;vertical-align:1px}
+
+#bAl.dotm::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:#f5b400;box-shadow:0 0 0 2px var(--hd,#1b3a7a)}#bAl{position:relative}
 </style>
 </head>
 <body>
@@ -722,13 +724,34 @@ function regSheet(n){const r=regByName(n),f=D.farol.find(x=>x[0]===n);let h=`<di
  h+=`<div class="sec">Fontes</div><div style="display:flex;gap:6px;flex-wrap:wrap">${SRC.reg}${SRC.calc}</div><p class="note">Ating. parcial = faturamento do mês ÷ meta proporcional até o D-1. Necessário/dia útil = (meta do mês − faturamento) ÷ ${M.duRest} dias úteis.</p>`;
  h+=`<p class="note">A evolução diária por regional entra quando a API do Power BI estiver ligada (o relatório atual traz só o consolidado por dia).</p>`;
  openSheet(h);}
+
+/* ===== Alertas de mercado (busca diária automática) ===== */
+let ALM=[];
+async function alertasMercado(avisar=true){try{const r=await fetch("data/alertas-mercado.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;ALM=(await r.json()).alertas||[];}catch(e){return;}
+ const vis=LS.get("farolAlmVistos",[]),novos=ALM.filter(a=>!vis.includes(a.id));
+ const b=document.getElementById("bAl");if(b)b.classList.toggle("dotm",novos.length>0);
+ if(!avisar||!novos.length)return;
+ if(LS.get("farolAlmInit",0)){const a=novos[0];toastMsg(`📈 ${a.titulo}`);
+  if(LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();novos.slice(0,3).forEach(x=>reg?reg.showNotification("Farol · Mercado",{body:x.titulo+" — "+x.texto,icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:x.id}):new Notification("Farol · Mercado",{body:x.titulo}));}catch(e){}}}
+ else LS.set("farolAlmInit",1);}
+function almVistos(){LS.set("farolAlmVistos",ALM.map(a=>a.id).slice(0,80));document.getElementById("bAl")?.classList.remove("dotm");}
+async function ativarNotif(){if(!("Notification" in window)){toastMsg("Este aparelho não suporta notificações. No iPhone, instale o app na tela de início.");return;}
+ const p=await Notification.requestPermission();if(p!=="granted"){toastMsg("Notificações não autorizadas.");return;}LS.set("farolNotif",1);
+ try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync){const st=await navigator.permissions.query({name:"periodic-background-sync"});if(st.state==="granted")await reg.periodicSync.register("farol-mercado",{minInterval:6*3600e3});}}catch(e){}
+ toastMsg("Pronto: você será avisado das atualizações importantes de mercado.");document.querySelector(".sheet")?.remove();}
+setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
+
 function alertsSheet(){const L=[];
  D.farol.filter(f=>f[1]<90).forEach(f=>L.push(["🔴","var(--rs)",f[0]+" no vermelho","Atingimento de "+pct(f[1])+" no D-1 ("+d1.data.slice(0,5)+")"]));
  D.reg.filter(r=>r[3]<100).forEach(r=>L.push(["🟡","var(--ys)",r[0]+" abaixo da meta proporcional",pct(r[3])+" no mês · devendo "+brl(-r[6])+" até o D-1"]));
  if(necDU>M.mediaDU) L.push(["⚠️","var(--ys)","Mês abaixo do ritmo necessário","Precisa de "+mi(necDU)+" por dia útil; a média é "+mi(M.mediaDU)]);
  (D.avisos||[]).forEach(t=>L.push(["⚠️","var(--ys)","Conferência dos dados",t]));
  L.push(["✅","var(--gs)","Dados do D-1 carregados",D.meta.fonte+" · "+D.meta.atualizado]);
- openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}`);}
+ const vis=LS.get("farolAlmVistos",[]),on=LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted";
+ const mk=ALM.length?`<h2 style="margin:14px 4px 8px">Mercado <small>busca automática · fontes oficiais</small></h2>`+ALM.slice(0,8).map(a=>`<div class="card al"><div class="ic" style="background:${a.nivel==="importante"?"var(--ys)":"var(--bg)"}">${vis.includes(a.id)?"📈":"🆕"}</div><div><b>${a.titulo}</b><small>${a.texto} · ${a.data}</small></div></div>`).join(""):"";
+ const nt=`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:12px"><div style="flex:1"><b>Notificações de mercado</b><br><small class="note">${on?"✓ Ativas neste aparelho":"Avise-me quando houver atualização importante (dólar, Selic, IPCA, ouro)"}</small></div>${on?"":`<button class="btn" id="nOn" style="width:auto;padding:9px 16px;background:#22c55e;color:#fff">🔔 Ativar</button>`}</div>`;
+ openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}${mk}${nt}`);if($("#nOn"))$("#nOn").onclick=ativarNotif;almVistos();}
 function openSheet(h){const s=document.createElement("div");s.className="sheet";s.innerHTML=`<div>${h}</div>`;document.body.appendChild(s);
  s.addEventListener("click",e=>{if(e.target===s||e.target.id==="xS") s.remove();});}
 /* =SUPER= */
@@ -1277,7 +1300,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(convite,6000);})();
 </script>
 <script src="pacote.js"></script>
 </body>
