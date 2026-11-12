@@ -1,1 +1,102 @@
-{"name": "Farol Operacional · CT LOS", "short_name": "Farol LOS", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#0f2350", "theme_color": "#0f2350", "lang": "pt-BR", "icons": [{"src": "icons/icon-192-v2.png", "sizes": "192x192", "type": "image/png"}, {"src": "icons/icon-512-v2.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}], "id": "farol-ct-los", "description": "Indicadores operacionais diários do CT LOS · Grupo LOS"}
+{
+ "name": "Farol Operacional · CT LOS",
+ "short_name": "Farol LOS",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#0f2350",
+ "theme_color": "#0f2350",
+ "lang": "pt-BR",
+ "icons": [
+  {
+   "src": "icons/icon-192-v2.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512-v2.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512-v2.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "id": "farol-ct-los",
+ "description": "Painel diário do CT LOS · Grupo LOS: faturamento D-1, farol por regional, projeção e orçamento. Abre em tela cheia, sem loja.",
+ "display_override": [
+  "window-controls-overlay",
+  "standalone"
+ ],
+ "categories": [
+  "business",
+  "productivity"
+ ],
+ "launch_handler": {
+  "client_mode": "focus-existing"
+ },
+ "prefer_related_applications": false,
+ "shortcuts": [
+  {
+   "name": "Hoje",
+   "url": "./?v=hoje",
+   "icons": [
+    {
+     "src": "icons/icone-96.png",
+     "sizes": "96x96"
+    }
+   ]
+  },
+  {
+   "name": "Mês",
+   "url": "./?v=mes",
+   "icons": [
+    {
+     "src": "icons/icone-96.png",
+     "sizes": "96x96"
+    }
+   ]
+  },
+  {
+   "name": "Projeção",
+   "url": "./?v=proj",
+   "icons": [
+    {
+     "src": "icons/icone-96.png",
+     "sizes": "96x96"
+    }
+   ]
+  },
+  {
+   "name": "Orçamento",
+   "url": "./?v=orc",
+   "icons": [
+    {
+     "src": "icons/icone-96.png",
+     "sizes": "96x96"
+    }
+   ]
+  }
+ ],
+ "screenshots": [
+  {
+   "src": "icons/shot-narrow.png",
+   "sizes": "1080x1920",
+   "type": "image/png",
+   "form_factor": "narrow",
+   "label": "Farol Operacional no celular"
+  },
+  {
+   "src": "icons/shot-wide.png",
+   "sizes": "1920x1080",
+   "type": "image/png",
+   "form_factor": "wide",
+   "label": "Farol Operacional no computador"
+  }
+ ]
+}
