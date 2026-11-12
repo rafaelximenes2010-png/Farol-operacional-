@@ -133,7 +133,7 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
     document.getElementById("pkSend").disabled = false; try { logEv("pacote"); } catch (e) {}
     const baixar = (blob, nome) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); a.remove(); };
     document.getElementById("pkPdf").onclick = () => pdf && baixar(pdf, nomeBase() + ".pdf");
-    document.getElementById("pkSend").onclick = async () => {
+    document.getElementById("pkSend").onclick = async () => { try { await navigator.clipboard.writeText(t); } catch (e) {}
       const files = []; if (png) files.push(new File([png], "Farol_CT_LOS_" + isoOf(d1.data) + ".png", { type: "image/png" })); if (pdf) files.push(new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }));
       try { if (navigator.canShare && navigator.canShare({ files })) { await navigator.share({ files, text: t, title: "Morning Operational News · " + d1.data }); return; } } catch (e) { if (e.name === "AbortError") return; }
       files.forEach(f => baixar(f, f.name)); window.open("https://wa.me/?text=" + encodeURIComponent(t), "_blank");
@@ -143,7 +143,7 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
     if (!D) { toastMsg("Carregue o PDF do dia primeiro."); return; }
     toastMsg("Preparando a revista…");
     try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null; const pdf = orig || await revistaPDF();
-      prontoParaEnviar(orig ? "Revista completa do dia" : "Revista (resumo gerado pelo app)", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), `*Morning Operational News · CT LOS* · resultado de ${d1.data}`, false);
+      prontoParaEnviar(orig ? "Revista completa do dia" : "Revista (resumo gerado pelo app)", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), texto(), false);
     } catch (e) { toastMsg("Não consegui preparar a revista: " + e.message); } }
   window.FarolPacote = { abrir, texto, cartao, revistaPDF, gerarRevista };
 })();

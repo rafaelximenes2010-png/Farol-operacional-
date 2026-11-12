@@ -20,7 +20,7 @@ header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff
 .hrow{display:flex;align-items:center;gap:10px}
 .logo{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
 .logo b{color:var(--red);font-weight:900;font-size:13px;letter-spacing:-.5px}
-.ht{flex:1;min-width:0}.ht b{display:block;font-size:17px;letter-spacing:.2px}.ht small{opacity:.8;font-size:12px}
+.ht{flex:1;min-width:0}.ht b{display:block;font-size:17px;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ht small{opacity:.8;font-size:12px}
 .hbtn{background:rgba(255,255,255,.14);border:0;color:#fff;width:38px;height:38px;border-radius:12px;font-size:18px;position:relative;cursor:pointer}
 .hbtn i{position:absolute;top:5px;right:6px;width:9px;height:9px;border-radius:50%;background:#ff5252;border:2px solid #1b3a7a}
 .upd{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;opacity:.9}
@@ -150,7 +150,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .selmode .blk .ck{display:flex}.selmode .blk.sel .ck{background:#25d366;border-color:#25d366}
 .selbar{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));background:#0f2350;color:#fff;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.3)}
 .selbar b{flex:1;font-size:14px}.selbar button{border:0;border-radius:10px;padding:9px 12px;font:inherit;font-weight:800;cursor:pointer}
-.tools{display:flex;justify-content:flex-end;gap:8px;margin:2px 0 -6px}.tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.tools{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}.tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .lei{padding:4px 14px}.lei .row{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.lei .row:last-child{border:0}
 .lei .tag{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:8px;padding:5px 8px;height:fit-content;text-align:center}
 .lei ul{margin:0;padding-left:16px}.lei li{font-size:14px;line-height:1.55;margin-bottom:4px}.lei li:last-child{margin-bottom:0}
@@ -160,6 +160,14 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 @media (prefers-color-scheme:dark){.t-dia{background:#16264a;color:#a9c1ff}.t-reg{background:#123524;color:#8fe0b0}.t-mes{background:#2e2150;color:#c9b6ff}.t-rit{background:#3a2c0c;color:#f5d38a}.t-pri{background:#3d1717;color:#ff9b9b}}
 .lock{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at 50% 38%,#1f3f86,#0b1a3f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;padding:24px;text-align:center}
 .lock .lg{background:#fff;border-radius:16px;padding:10px 18px}.lock .lg img{height:50px;display:block}.lock button{border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-width:240px}
+.sim .seg button{font-size:12px;padding:9px 4px}.simg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}.simg>div{min-width:0}.simg small{display:block;font-size:11px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.stp button{border:0;background:var(--bg);width:38px;height:44px;font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}
+.stp input{flex:1;min-width:0;width:100%;border:0;text-align:center;font:inherit;font-size:18px;font-weight:800;background:transparent;color:var(--ink);padding:0}.stp span{font-weight:700;color:var(--ink2);padding-right:4px}
+.simr{margin-top:12px;background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border-radius:14px;padding:14px 16px}.simr small{opacity:.8;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.simr b{display:block;font-size:30px;margin:2px 0}.simr div{font-size:12.5px;opacity:.85}
+.simf{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.simf div{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}.simf small{display:block;font-size:10.5px;font-weight:700;color:var(--ink2)}.simf b{display:block;font-size:18px;margin:2px 0}.simf span{font-size:10px;color:var(--ink2)}
+.simf .ok{background:var(--gs);border-color:#9fd8b5}.simf .ok b,.simf .ok span{color:var(--g)}
+.fx2{display:grid;gap:8px}.fx2 .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.fx2 .r b{font-size:14px}.fx2 .r .v{font-weight:800;text-align:right}.fx2 .r small{color:var(--ink2);font-size:12px}
+.fx2 .r.ok{border-color:#9fd8b5;background:var(--gs)}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -172,7 +180,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
     <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none;font-size:22px">‹</button>
     <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
-    <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bAl" aria-label="Alertas">🔔<i></i></button><button class="hbtn" id="bCfg" aria-label="Menu">☰</button>
+    <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bTema" aria-label="Dia e noite">🌙</button><button class="hbtn" id="bAl" aria-label="Alertas">🔔<i></i></button><button class="hbtn" id="bCfg" aria-label="Menu">☰</button>
   </div>
   <div class="upd"><span class="dot"></span><span id="updT">Carregando…</span>
     <span class="datebar"><select id="dSel" aria-label="Escolher dia"></select></span></div>
@@ -386,26 +394,28 @@ function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);
  const pmin=Math.min(...pj.map(x=>x[1])),pcm=pmin/M.metaOrc*100;
  return `<h2>Super meta 2026 · ponte do ano <small>realizado + projeção + orçado</small></h2>
  <div class="card" data-m="superano">${ponteAno(A,meta)}<div class="note">Ano projetado em <b>${mi(A.tot)}</b> = <b>${pct(pcA,1)}</b> da meta orçada (${mi(meta)}): <b>${faixaTxt(fA)}</b>.${prox?` Para ${prox[0]} faltam <b>${mi(meta*(1+prox[1]/100)-A.tot)}</b>.`:""}</div></div>
- <h2>Faixas do ano · quanto falta</h2><div class="card"><div class="tw"><table><thead><tr><th>Faixa</th><th>Valor do ano</th><th>Projetado</th><th>Falta</th></tr></thead><tbody>
- ${FAIXAS.map(f=>{const v=meta*(1+f[1]/100);return `<tr><td><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b></td><td>${mi(v)}</td><td><span class="pill ${A.tot>=v?"g":"r"}">${A.tot>=v?"✓ "+pct(A.tot/v*100):pct(A.tot/v*100)}</span></td><td>${A.tot>=v?"✓ atingida":mi(v-A.tot)}</td></tr>`;}).join("")}</tbody></table></div></div>
+ <h2>Faixas do ano · quanto falta</h2><div class="card fx2">${FAIXAS.map(f=>{const v=meta*(1+f[1]/100),ok=A.tot>=v;return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Projetado: ${pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${ok?"✓ atingida":"faltam "+mi(v-A.tot)}</small></div>`;}).join("")}</div>
  <h2>Cenários de fechamento 2026 <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} pelas 3 projeções</small></h2><div class="card"><div class="tw"><table><thead><tr><th>Cenário</th><th>${D.orc[A.mI]?D.orc[A.mI][0]:"Mês"}</th><th>2026</th><th>% meta</th><th>Faixa</th></tr></thead><tbody>
  ${pj.map(([n,v])=>{const t=A.real+v+A.fut,pc=t/meta*100;return `<tr><td><b>${n}</b></td><td>${mi(v)}</td><td>${mi(t)}</td><td>${pct(pc,1)}</td><td><span class="pill ${faixaAting(pc)>=1?"g":faixaAting(pc)===0?"y":"r"}">${faixaAting(pc)<0?"abaixo":faixaAting(pc)===0?"meta":FAIXAS[faixaAting(pc)][0]}</span></td></tr>`;}).join("")}</tbody></table></div>
  <div class="note">Realizado ${A.nFech} meses fechados (${mi(A.real)}) + mês atual projetado + meses seguintes no orçado. Super meta: +5%, +7% e +10% sobre a meta orçada do ano.</div></div>
  <h2>Super meta do mês · ponte <small>meta orçada → +5% → +7% → +10%</small></h2>
  <div class="card" data-m="supermes">${ponteSVG(M.metaOrc,pmin,M.acum)}<div class="note">Projeção conservadora do mês (${mi(pmin)}) = ${pct(pcm,1)} da meta orçada do mês: <b>${faixaTxt(faixaAting(pcm))}</b>.</div></div>
- <h2>Faixas do mês · quanto falta</h2><div class="card">${faixasTabela(M.metaOrc,M.acum,pmin,M.duRest)}</div>
- <h2>Remuneração variável · potencial <small>salários (fixo + variável)</small></h2>
- <div class="card"><div class="tw"><table><thead><tr><th>Cargo</th><th>Meta 100%</th><th>+5%</th><th>+7%</th><th>+10%</th><th>Total</th><th>Máx. na faixa</th></tr></thead><tbody>
- ${CARGOS.map(cg=>`<tr><td><b>${cg[0]}</b></td>${cg[1].map((v,i)=>`<td style="${i<=fA?"background:var(--gs);font-weight:800":""}">${v.toLocaleString("pt-BR")}</td>`).join("")}<td><b>${cg[1].reduce((a,b)=>a+b,0)}</b></td><td><b>${bonusMax(cg[0],fA).toLocaleString("pt-BR")}</b></td></tr>`).join("")}</tbody></table></div>
- <div class="note">Verde = faixas garantidas pela projeção do ano (${pct(pcA,1)}). Etapa 1 (faturamento) define o máximo elegível, com faixas cumulativas. Etapa 2 (EBITDA): abaixo de 80% não paga; de 80% a 120% paga proporcional; acima de 120% limita a 120%.</div></div>
- <h2>Simulador do bônus</h2>
- <div class="card cfg"><label>Cargo</label><select id="smC">${CARGOS.map(c=>`<option ${c[0]==="Gerente Nacional"?"selected":""}>${c[0]}</option>`).join("")}</select>
- <label>Atingimento do faturamento do ano (%)</label><input id="smF" type="number" inputmode="decimal" value="${pcA.toFixed(1)}">
- <label>Atingimento do EBITDA (%)</label><input id="smE" type="number" inputmode="decimal" value="100">
- <div id="smR" class="big" style="margin-top:12px"></div><div class="note" id="smN"></div></div>`;}
-function simular(){const c=$("#smC");if(!c)return;const f=faixaAting(+$("#smF").value||0),mx=bonusMax(c.value,f),pe=pctEbitda(+$("#smE").value||0),v=mx*pe/100;
- $("#smR").textContent=v.toLocaleString("pt-BR",{maximumFractionDigits:2})+" salário(s)";$("#smN").textContent=`Faixa: ${f<0?"abaixo da meta (não elegível)":FAIXAS[f][0]==="Meta"?"meta 100%":"super meta "+FAIXAS[f][0]} · máximo elegível ${mx.toLocaleString("pt-BR")} salário(s) × EBITDA aplicado ${pe}%.`;}
-document.addEventListener("input",e=>{if(e.target.closest("#smC,#smF,#smE"))simular();});document.addEventListener("change",e=>{if(e.target.id==="smC")simular();});
+ <h2>Faixas do mês · quanto falta</h2><div class="card fx2">${FAIXAS.map(f=>{const v=M.metaOrc*(1+f[1]/100),fl=Math.max(0,v-M.acum),okp=pmin>=v;return `<div class="r ${okp?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(M.acum/v*100)} · projeção ${okp?"✓ atinge":pct(pmin/v*100)}</small><small style="text-align:right">${fl?brl(fl/M.duRest)+"/dia útil":"✓"}</small></div>`;}).join("")}</div>
+ <h2>Simulador da remuneração variável</h2>
+ <div class="card sim"><div class="sec" style="margin-top:0">Cargo</div><div class="seg" id="smSeg">${CARGOS.map(c=>`<button type="button" data-cargo="${c[0]}" class="${c[0]==="Gerente Nacional"?"on":""}">${c[0]==="Demais Gerentes e Coordenadores"?"Gerentes e Coord.":c[0]}</button>`).join("")}</div>
+ <div class="simg"><div><small>Faturamento do ano</small><div class="stp"><button type="button" data-st="smF:-0.5">−</button><input id="smF" type="number" inputmode="decimal" step="0.1" value="${pcA.toFixed(1)}"><span>%</span><button type="button" data-st="smF:0.5">+</button></div></div>
+ <div><small>EBITDA</small><div class="stp"><button type="button" data-st="smE:-5">−</button><input id="smE" type="number" inputmode="decimal" step="1" value="100"><span>%</span><button type="button" data-st="smE:5">+</button></div></div></div>
+ <div class="simr"><small>Bônus estimado</small><b id="smR">—</b><div id="smN"></div></div>
+ <div class="simf" id="smFx"></div>
+ <p class="note">Etapa 1 (faturamento) define o máximo elegível; faixas cumulativas a partir de 100%. Etapa 2 (EBITDA): abaixo de 80% não paga; de 80% a 120% paga proporcional; acima de 120% limita a 120%.</p></div>`;}
+function simular(){const sg=$("#smSeg");if(!sg)return;const cargo=(sg.querySelector(".on")||sg.querySelector("button")).dataset.cargo;const fat=+$("#smF").value||0,eb=+$("#smE").value||0;
+ const f=faixaAting(fat),mx=bonusMax(cargo,f),pe=pctEbitda(eb),v=mx*pe/100;
+ $("#smR").textContent=v.toLocaleString("pt-BR",{maximumFractionDigits:2})+" salário"+(v===1?"":"s");
+ $("#smN").textContent=f<0?"Faturamento abaixo da meta: não elegível.":eb<80?`Elegível a ${mx.toLocaleString("pt-BR")} salários, mas EBITDA abaixo de 80% não paga.`:`Máximo elegível ${mx.toLocaleString("pt-BR")} × EBITDA aplicado ${pe}%.`;
+ const c=CARGOS.find(x=>x[0]===cargo)[1];let acc=0;$("#smFx").innerHTML=FAIXAS.map((fx,i)=>{acc+=c[i];const ok=i<=f;return `<div class="${ok?"ok":""}"><small>${fx[0]==="Meta"?"Meta 100%":fx[0]}</small><b>${acc.toLocaleString("pt-BR")}</b><span>${ok?"✓ garantida":"a conquistar"}</span></div>`;}).join("");}
+document.addEventListener("input",e=>{if(e.target.closest("#smF,#smE"))simular();});
+document.addEventListener("click",e=>{const cg=e.target.closest("#smSeg [data-cargo]");if(cg){document.querySelectorAll("#smSeg button").forEach(b=>b.classList.toggle("on",b===cg));simular();return;}
+ const st=e.target.closest("[data-st]");if(st){const [id,d]=st.dataset.st.split(":");const i=$("#"+id);i.value=(Math.round(((+i.value||0)+ +d)*10)/10).toString();simular();}});
 
 /* ===== DRILL-DOWN: "Entenda este número" ===== */
 const SRC={bi:'<span class="src bi">● Power BI · indicadores_flash</span>',reg:'<span class="src bi">● Power BI · Fechamento por regional</span>',
@@ -656,7 +666,8 @@ async function blocoPNG(blks){await new Promise(r=>{if(window.html2canvas)return
 function prontoParaEnviar(titulo,arquivo,txt,previa){const url=URL.createObjectURL(arquivo);
  openSheet(`<div class="sh"><b>${titulo}</b><button id="xS">×</button></div>${previa?`<div class="card" style="text-align:center"><img src="${url}" style="width:100%;max-width:340px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.15)"></div>`:`<div class="card">📄 <b>${arquivo.name}</b><br><small class="note">${(arquivo.size/1024/1024).toFixed(1)} MB</small></div>`}
  <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" id="psEnv" style="background:#25d366">📲 Enviar (WhatsApp, e-mail…)</button><button class="btn sec2" id="psSal">⬇ Salvar no aparelho</button></div>`);
- $("#psEnv").onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[arquivo]})){await navigator.share({files:[arquivo],text:txt});return;}}catch(e){if(e.name==="AbortError")return;}
+ $("#psEnv").onclick=async()=>{try{await navigator.clipboard.writeText(txt);}catch(e){}
+  try{if(navigator.canShare&&navigator.canShare({files:[arquivo]})){await navigator.share({files:[arquivo],text:txt});toastMsg("Se o texto não aparecer no WhatsApp, toque em Colar: ele já está copiado.");return;}}catch(e){if(e.name==="AbortError")return;}
   window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank");};
  $("#psSal").onclick=()=>{const a=document.createElement("a");a.href=url;a.download=arquivo.name;document.body.appendChild(a);a.click();a.remove();};}
 async function enviarBlocos(blks){if(!blks.length){toastMsg("Selecione ao menos um quadro.");return;}toastMsg("Preparando a imagem…");
@@ -727,6 +738,13 @@ async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=awai
  const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
   Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);D=Dx;compute();paintHead();show(cur);toastMsg("Edição atualizada: "+Dx.d1.data);}}catch(e){}}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNovaEdicao();});setInterval(checarNovaEdicao,5*60*1000);
+
+/* ===== DIA E NOITE ===== */
+function aplicaTema(){const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);
+ for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules}catch(e){continue}for(const r of rs){if(r.media&&r.conditionText!==undefined){if(!r._orig)r._orig=r.media.mediaText;if(/prefers-color-scheme:\s*dark/.test(r._orig))r.media.mediaText=t==="auto"?r._orig:(escuro?"all":"not all");}}}
+ const b=$("#bTema");if(b)b.textContent=escuro?"☀️":"🌙";document.querySelector('meta[name="theme-color"]').content=escuro?"#0b1a3f":"#0f2350";}
+$("#bTema").onclick=()=>{const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);LS.set("farolTema",escuro?"light":"dark");aplicaTema();show(cur);};
+aplicaTema();
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
