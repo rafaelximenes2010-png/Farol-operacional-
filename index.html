@@ -168,6 +168,12 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .simf .ok{background:var(--gs);border-color:#9fd8b5}.simf .ok b,.simf .ok span{color:var(--g)}
 .fx2{display:grid;gap:8px}.fx2 .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.fx2 .r b{font-size:14px}.fx2 .r .v{font-weight:800;text-align:right}.fx2 .r small{color:var(--ink2);font-size:12px}
 .fx2 .r.ok{border-color:#9fd8b5;background:var(--gs)}
+.hbtn svg,.ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:block;margin:auto}
+.hbtn{display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+.hbtn i{top:8px;right:9px;width:8px;height:8px;border:2px solid #1b3a7a}
+.avatar{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:linear-gradient(135deg,#ff6b6b,#d32f2f 55%,#1b3a7a);color:#fff;font-weight:800;font-size:14px;letter-spacing:.5px;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25);position:relative;padding:0}
+.avatar .on{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:#2fd16b;border:2px solid #1b3a7a}
+.ib{display:inline-flex;vertical-align:middle;margin-right:6px}.ib svg{width:20px;height:20px;margin:0}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -177,10 +183,10 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 <input type="file" id="pdfIn" accept="application/pdf" hidden>
 <header>
   <div class="hrow">
-    <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none;font-size:22px">‹</button>
+    <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
     <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
-    <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bTema" aria-label="Dia e noite">🌙</button><button class="hbtn" id="bAl" aria-label="Alertas">🔔<i></i></button><button class="hbtn" id="bCfg" aria-label="Menu">☰</button>
+    <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
   </div>
   <div class="upd"><span class="dot"></span><span id="updT">Carregando…</span>
     <span class="datebar"><select id="dSel" aria-label="Escolher dia"></select></span></div>
@@ -259,7 +265,7 @@ function vHoje(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fil
   <div class="card kpi" data-m="proj"><div class="l">Projeção do mês <span class="est">estimativa</span></div><div class="v">${mi(M.proj)}</div><div class="s">${pct(M.proj/M.metaOrc*100)} da orçada · ${pct(M.proj/M.metaBI*100)} BI</div></div>
  </div>
 ${ehAdmin()?`<div class="card load" style="margin-top:12px"><div class="ic">⇪</div><div><b>Edição de ${d1.data}</b><small>${D.meta.modo==="api"?"Power BI ao vivo":D.meta.modo==="equipe"?"publicada para a equipe":"lida do PDF neste aparelho"}</small></div><button class="btn" data-pdf>Carregar PDF</button></div>`:""}
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a">📰 Gerar revista</button><button class="btn" data-pacote style="background:#25d366">📲 Pacote WhatsApp</button></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a"><span class="ib"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>Gerar revista</button><button class="btn" data-pacote style="background:#25d366"><span class="ib"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span>Pacote WhatsApp</button></div>
  ${D.avisos&&D.avisos.length?`<p class="note" style="margin:8px 4px 0">Nota de conferência: ${D.avisos.join(" ")}</p>`:""}
  <h2>🦺 Segurança em primeiro lugar</h2>
  ${D.dds?`<div class="card dds" id="ddsCard" style="cursor:pointer"><div><div class="k">DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:`<div class="card">Sem mensagem de segurança nesta edição.</div>`}
@@ -587,7 +593,7 @@ function cadastro(editar){return new Promise(res=>{const u=perfil()||{};
  $("#uPol").onclick=e=>{e.preventDefault();politica();};
  $("#uOk").onclick=()=>{const v={nome:$("#uN").value.trim(),email:$("#uE").value.trim(),cargo:$("#uC").value.trim(),regional:$("#uR").value,aceite:$("#uA").checked,desde:u.desde||new Date().toISOString()};
   if(!v.nome||!/.+@.+\..+/.test(v.email)){$("#uMsg").textContent="Preencha nome e e-mail.";return;}if(!v.aceite){$("#uMsg").textContent="É preciso aceitar a política de dados.";return;}
-  LS.set("farolPerfil",v);document.querySelectorAll(".sheet").forEach(x=>x.remove());res(v);};});}
+  LS.set("farolPerfil",v);document.querySelectorAll(".sheet").forEach(x=>x.remove());try{paintAvatar()}catch(e){}res(v);};});}
 function primeiroNome(){const u=perfil();return u&&u.nome?u.nome.split(" ")[0]:"";}
 function boasVindas(){const n=primeiroNome();if(!n)return;const vez=LS.get("farolVisitas",0)+1;LS.set("farolVisitas",vez);
  const h=new Date().getHours(),sd=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
@@ -742,14 +748,15 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNova
 /* ===== DIA E NOITE ===== */
 function aplicaTema(){const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);
  for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules}catch(e){continue}for(const r of rs){if(r.media&&r.conditionText!==undefined){if(!r._orig)r._orig=r.media.mediaText;if(/prefers-color-scheme:\s*dark/.test(r._orig))r.media.mediaText=t==="auto"?r._orig:(escuro?"all":"not all");}}}
- const b=$("#bTema");if(b)b.textContent=escuro?"☀️":"🌙";document.querySelector('meta[name="theme-color"]').content=escuro?"#0b1a3f":"#0f2350";}
+ const b=$("#bTema");if(b)b.innerHTML=escuro?`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`:`<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`;document.querySelector('meta[name="theme-color"]').content=escuro?"#0b1a3f":"#0f2350";}
 $("#bTema").onclick=()=>{const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);LS.set("farolTema",escuro?"light":"dark");aplicaTema();show(cur);};
 aplicaTema();
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
-function paintHead(){if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
+function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
+function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
  $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:D.meta.modo==="equipe"?"Edição da equipe":"PDF do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
  const ks=Object.keys(edicoes()).sort().reverse();$("#dSel").innerHTML=ks.map(k=>`<option value="${k}" ${k===isoOf(d1.data)?"selected":""}>${k.slice(8)}/${k.slice(5,7)}</option>`).join("");}
 function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue a revista do dia</b><p class="note">Enquanto a API do Power BI não é liberada, o app é alimentado pelo PDF da Morning Operational News.</p>${ehAdmin()?`<button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button>`:`<p class="note">Aguarde a publicação da edição pelo administrador.</p>`}</div>`;}
