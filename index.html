@@ -277,7 +277,7 @@ html,body{height:100dvh}
  header button,header select,header a,header input{app-region:no-drag;-webkit-app-region:no-drag}
  nav.tabs{padding-top:calc(env(titlebar-area-height,0px) + 16px)}}
 /* ===================== CONVITE DE INSTALAÇÃO ===================== */
-.ipb{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 40px rgba(0,0,0,.35);max-width:440px;margin:0 auto;animation:ipbIn .35s ease}
+.ipb{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;background:#16203a;color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 40px rgba(0,0,0,.35);max-width:440px;margin:0 auto;animation:ipbIn .35s ease}
 @keyframes ipbIn{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
 .ipb .t{display:flex;gap:12px;align-items:center}.ipb .t img{width:48px;height:48px;border-radius:12px;flex:none}.ipb .t b{display:block;font-size:15px}.ipb .t small{color:var(--ink2);font-size:12.5px}
 .ipb .x{margin-left:auto;align-self:flex-start;background:none;border:0;color:var(--ink2);font-size:22px;line-height:1;cursor:pointer;padding:2px 4px}
@@ -422,6 +422,16 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .rgt{width:100%;border-collapse:collapse;font-size:12px}.rgt th,.rgt td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}.rgt th{color:var(--ink2);font-size:11px;text-transform:uppercase}
 .ebz{display:flex;gap:3px;border-radius:12px;overflow:hidden}.ebz span{padding:10px 6px;text-align:center;font-size:11px;line-height:1.35}.ebz b{font-size:12px}
 .rg .rk1{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+
+#nbStack{position:fixed;left:0;right:0;top:calc(8px + env(safe-area-inset-top));z-index:200;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 10px}
+.nb{pointer-events:auto;width:100%;max-width:420px;display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border-radius:22px;background:rgba(20,27,44,.95);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.12);box-shadow:0 14px 40px rgba(0,0,0,.4);color:#fff;transform:translateY(-130%) scale(.96);opacity:0;transition:transform .45s cubic-bezier(.2,1.2,.3,1),opacity .3s;cursor:pointer;touch-action:none}
+.nb.in{transform:none;opacity:1}.nb.out{transform:translateY(-130%);opacity:0;transition:transform .35s ease-in,opacity .3s}
+.nb img{width:38px;height:38px;border-radius:10px;flex:none}.nbt{flex:1;min-width:0}.nbh{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.65)}.nbh b{font-weight:700}
+.nbb b{display:block;font-size:14.5px;margin-top:2px}.nbb p{margin:2px 0 0;font-size:13px;line-height:1.35;color:rgba(255,255,255,.85);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media (prefers-color-scheme:light){.nb{background:rgba(255,255,255,.96);color:#0f172a;border-color:rgba(0,0,0,.06)}.nbh{color:#64748b}.nbb p{color:#334155}}
+@media (min-width:1024px){#nbStack{align-items:flex-end;padding-right:24px;top:20px}}
+
+.ipb li{display:block!important;position:relative;padding-left:34px;line-height:1.9}.ipb li i{position:absolute;left:0;top:2px}.ipb li span.k{display:inline!important;padding:2px 7px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -756,20 +766,31 @@ function regSheet(n){const r=regByName(n),f=D.farol.find(x=>x[0]===n);let h=`<di
  h+=`<p class="note">A evolução diária por regional entra quando a API do Power BI estiver ligada (o relatório atual traz só o consolidado por dia).</p>`;
  openSheet(h);}
 
+
+/* ===== Banner de notificação (estilo celular) ===== */
+function notifBanner(t,txt,{tag="MERCADO",dur=7000}={}){let st=document.getElementById("nbStack");if(!st){st=document.createElement("div");st.id="nbStack";document.body.appendChild(st);}
+ const b=document.createElement("div");b.className="nb";b.innerHTML=`<img src="icons/icon-192-v2.png" alt=""><div class="nbt"><div class="nbh"><b>FAROL · ${tag}</b><span>agora</span></div><div class="nbb"><b>${t}</b><p>${txt}</p></div></div>`;
+ st.prepend(b);requestAnimationFrame(()=>b.classList.add("in"));if(navigator.vibrate)try{navigator.vibrate([18,40,18]);}catch(e){}
+ const fora=()=>{b.classList.remove("in");b.classList.add("out");setTimeout(()=>b.remove(),380);};let y0=null;
+ b.addEventListener("pointerdown",e=>{y0=e.clientY;});b.addEventListener("pointerup",e=>{if(y0!=null&&y0-e.clientY>25){fora();}else{fora();alertsSheet();}y0=null;});
+ setTimeout(fora,dur);}
+async function testeNotif(){notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
+ if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:"Assim chegam os avisos do Farol na tela do celular.",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("Farol · Teste de notificação",o):new Notification("Farol · Teste de notificação",o),1500);}catch(e){}}}
+
 /* ===== Alertas de mercado (busca diária automática) ===== */
 let ALM=[];
 async function alertasMercado(avisar=true){try{const r=await fetch("data/alertas-mercado.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;ALM=(await r.json()).alertas||[];}catch(e){return;}
  const vis=LS.get("farolAlmVistos",[]),novos=ALM.filter(a=>!vis.includes(a.id));
  const b=document.getElementById("bAl");if(b)b.classList.toggle("dotm",novos.length>0);
  if(!avisar||!novos.length)return;
- if(LS.get("farolAlmInit",0)){const a=novos[0];toastMsg(`📈 ${a.titulo}`);
+ if(LS.get("farolAlmInit",0)){novos.slice(0,3).reverse().forEach((a,i)=>setTimeout(()=>notifBanner(a.titulo,a.texto),i*900));
   if(LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();novos.slice(0,3).forEach(x=>reg?reg.showNotification("Farol · Mercado",{body:x.titulo+" — "+x.texto,icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:x.id}):new Notification("Farol · Mercado",{body:x.titulo}));}catch(e){}}}
  else LS.set("farolAlmInit",1);}
 function almVistos(){LS.set("farolAlmVistos",ALM.map(a=>a.id).slice(0,80));document.getElementById("bAl")?.classList.remove("dotm");}
 async function ativarNotif(){if(!("Notification" in window)){toastMsg("Este aparelho não suporta notificações. No iPhone, instale o app na tela de início.");return;}
  const p=await Notification.requestPermission();if(p!=="granted"){toastMsg("Notificações não autorizadas.");return;}LS.set("farolNotif",1);
  try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync){const st=await navigator.permissions.query({name:"periodic-background-sync"});if(st.state==="granted")await reg.periodicSync.register("farol-mercado",{minInterval:6*3600e3});}}catch(e){}
- toastMsg("Pronto: você será avisado das atualizações importantes de mercado.");document.querySelector(".sheet")?.remove();}
+ document.querySelector(".sheet")?.remove();setTimeout(testeNotif,400);}
 setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
 
@@ -781,8 +802,8 @@ function alertsSheet(){const L=[];
  L.push(["✅","var(--gs)","Dados do D-1 carregados",D.meta.fonte+" · "+D.meta.atualizado]);
  const vis=LS.get("farolAlmVistos",[]),on=LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted";
  const mk=ALM.length?`<h2 style="margin:14px 4px 8px">Mercado <small>busca automática · fontes oficiais</small></h2>`+ALM.slice(0,8).map(a=>`<div class="card al"><div class="ic" style="background:${a.nivel==="importante"?"var(--ys)":"var(--bg)"}">${vis.includes(a.id)?"📈":"🆕"}</div><div><b>${a.titulo}</b><small>${a.texto} · ${a.data}</small></div></div>`).join(""):"";
- const nt=`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:12px"><div style="flex:1"><b>Notificações de mercado</b><br><small class="note">${on?"✓ Ativas neste aparelho":"Avise-me quando houver atualização importante (dólar, Selic, IPCA, ouro)"}</small></div>${on?"":`<button class="btn" id="nOn" style="width:auto;padding:9px 16px;background:#22c55e;color:#fff">🔔 Ativar</button>`}</div>`;
- openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}${mk}${nt}`);if($("#nOn"))$("#nOn").onclick=ativarNotif;almVistos();}
+ const nt=`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:12px"><div style="flex:1"><b>Notificações de mercado</b><br><small class="note">${on?"✓ Ativas neste aparelho":"Avise-me quando houver atualização importante (dólar, Selic, IPCA, ouro)"}</small></div><button class="btn sec2" id="nTs" style="width:auto;padding:9px 12px">Testar</button>${on?"":`<button class="btn" id="nOn" style="width:auto;padding:9px 16px;background:#22c55e;color:#fff">🔔 Ativar</button>`}</div>`;
+ openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}${mk}${nt}`);if($("#nOn"))$("#nOn").onclick=ativarNotif;$("#nTs").onclick=()=>{document.querySelector(".sheet")?.remove();setTimeout(testeNotif,300);};almVistos();}
 function openSheet(h){const s=document.createElement("div");s.className="sheet";s.innerHTML=`<div>${h}</div>`;document.body.appendChild(s);
  s.addEventListener("click",e=>{if(e.target===s||e.target.id==="xS") s.remove();});}
 /* =SUPER= */
@@ -848,7 +869,7 @@ function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);
  <button type="button" class="regra" id="bRegra"><b>Etapa 1 (faturamento)</b> define o máximo elegível; faixas cumulativas a partir de 100%.<br><b>Etapa 2 (EBITDA):</b> abaixo de 80% <b>não paga</b>; de 80% a 120% <b>paga proporcional</b>; acima de 120% <b>limita a 120%</b>.<span class="rgo">Ver a regra completa e exemplos ›</span></button></div>`;}
 function regraSheet(){const n=v=>v.toLocaleString("pt-BR",{maximumFractionDigits:2});
  const fx=[["Abaixo de 100%","não elegível",-1],["100% a 104,9%","Meta",0],["105% a 106,9%","Meta + 5%",1],["107% a 109,9%","Meta + 7%",2],["110% ou mais","Meta + 10%",3]];
- const ex=[[70,"Abaixo de 80%: não paga nada, mesmo com faturamento acima da meta"],[80,"Piso: paga 80% do máximo elegível"],[95,"Paga 95% do máximo elegível"],[110,"Paga 110% do máximo elegível"],[135,"Acima de 120%: limitado a 120%"]];
+ const ex=[[70,"Abaixo de 80%: não paga nada, mesmo com faturamento acima da meta"],[80,"Piso: paga 80% do máximo elegível"],[95,"Paga 95% do máximo elegível"],[110,"Paga 110% do máximo elegível"],[135,"Acima de 120%: conta como 120% (teto)"]];
  const g="Gerente Nacional",mx=bonusMax(g,3);
  openSheet(`<div class="sh"><b>Regra da remuneração variável</b><button id="xS">×</button></div>
  <div class="card rg"><div class="rk1">Como funciona</div><p style="margin:4px 0 0"><b>Bônus = máximo elegível (Etapa 1) × % EBITDA aplicado (Etapa 2)</b>, em salários.</p></div>
@@ -862,13 +883,13 @@ function regraSheet(){const n=v=>v.toLocaleString("pt-BR",{maximumFractionDigits
  <li><b>De 80% a 120%</b>: paga o <b>mesmo percentual do EBITDA</b> sobre o máximo elegível. Ex.: EBITDA 95% → recebe 95% do máximo.</li>
  <li><b>Acima de 120%</b>: o pagamento <b>fica limitado a 120%</b> do máximo elegível (teto).</li></ul></div>
  <h2 style="margin:16px 4px 8px">Exemplos <small>${g}, faturamento +10% (máximo ${n(mx)} salários)</small></h2>
- <div class="card">${ex.map(([e,t])=>`<div class="xr" style="grid-template-columns:96px 1fr auto"><span style="text-transform:none;white-space:nowrap">EBITDA ${e}%</span><span style="font-size:12px;color:var(--ink2)">${t}</span><b style="color:${pctEbitda(e)?"#22c55e":"#ff5a5a"}">${n(mx*pctEbitda(e)/100)} sal.</b></div>`).join("")}</div>
- <p class="note" style="margin:10px 4px">Conta: ${n(mx)} salários × % EBITDA aplicado. Use o simulador acima para testar outros cenários.</p>`);}
+ <div class="card">${ex.map(([e,t])=>`<div class="xr" style="grid-template-columns:96px 1fr auto"><span style="text-transform:none;white-space:nowrap">EBITDA ${e}%</span><span style="font-size:12px;color:var(--ink2)">${t}</span><b style="color:${pctEbitda(e)?"#22c55e":"#ff5a5a"}">${n(mx*pctEbitda(e)/100)} sal.${e>120?" · teto":""}</b></div>`).join("")}</div>
+ <p class="note" style="margin:10px 4px"><b>Teto: o EBITDA aplicado nunca passa de 120%</b>, então o bônus máximo possível é ${n(mx)} × 120% = <b>${n(mx*1.2)} salários</b>. Conta: ${n(mx)} salários × % EBITDA aplicado. Use o simulador acima para testar outros cenários.</p>`);}
 document.addEventListener("click",e=>{if(e.target.closest("#bRegra"))regraSheet();});
 function simular(){const sg=$("#smSeg");if(!sg)return;const cargo=(sg.querySelector(".on")||sg.querySelector("button")).dataset.cargo;const fat=+$("#smF").value||0,eb=+$("#smE").value||0;
  const f=faixaAting(fat),mx=bonusMax(cargo,f),pe=pctEbitda(eb),v=mx*pe/100;
  $("#smR").textContent=v.toLocaleString("pt-BR",{maximumFractionDigits:2})+" salário"+(v===1?"":"s");
- $("#smN").textContent=f<0?"Faturamento abaixo da meta: não elegível.":eb<80?`Elegível a ${mx.toLocaleString("pt-BR")} salários, mas EBITDA abaixo de 80% não paga.`:`Máximo elegível ${mx.toLocaleString("pt-BR")} × EBITDA aplicado ${pe}%.`;
+ $("#smN").textContent=f<0?"Faturamento abaixo da meta: não elegível.":eb<80?`Elegível a ${mx.toLocaleString("pt-BR")} salários, mas EBITDA abaixo de 80% não paga.`:`Máximo elegível ${mx.toLocaleString("pt-BR")} × EBITDA aplicado ${pe}%${eb>120?" (teto de 120%: EBITDA de "+eb+"% conta como 120%)":""}.`;
  const c=CARGOS.find(x=>x[0]===cargo)[1];let acc=0;$("#smFx").innerHTML=FAIXAS.map((fx,i)=>{acc+=c[i];const ok=i<=f;return `<div class="${ok?"ok":""}"><small>${fx[0]==="Meta"?"Meta 100%":fx[0]}</small><b>${acc.toLocaleString("pt-BR")}</b><span>${ok?"✓ garantida":"a conquistar"}</span></div>`;}).join("");}
 document.addEventListener("input",e=>{if(e.target.closest("#smF,#smE"))simular();});
 document.addEventListener("click",e=>{const cg=e.target.closest("#smSeg [data-cargo]");if(cg){document.querySelectorAll("#smSeg button").forEach(b=>b.classList.toggle("on",b===cg));simular();return;}
