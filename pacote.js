@@ -19,7 +19,7 @@
     let t = `*MORNING OPERATIONAL NEWS · CT LOS* 🚦\n*Grupo LOS* · resultado de ${d1.dia}, ${d1.data}\n\n`;
     t += `💰 *Faturamento D-1:* ${brl(d1.fat)} (*${pct(atD1)}* da meta)\n`;
     t += `📈 *Acumulado do mês:* ${mi(M.acum)} · ${pct(atAcO)} da orçada · ${pct(atAcB)} BI\n`;
-    t += `🔭 *Projeção:* ${mi(M.proj)} (estimativa)\n`;
+    t += `🔭 *Projeção:* ${mi(M.proj)} (projeção)\n`;
     t += `🎯 *Ritmo:* faltam ${mi(falta)} em ${M.duRest} dias úteis · ${mi(necDU)}/dia útil\n\n`;
     t += `*Farol do dia* (${g} de ${f.length} no verde)\n` + f.map(([n, p]) => `${bola(p)} ${n} ${pct(p)}`).join("\n") + "\n";
     if (ag.length) t += `\n⚠️ *Onde agir hoje:* ` + ag.map(r => `${r[0]} (${pct(r[3])} no mês, devendo ${brl(-r[6])})`).join("; ") + "\n";
@@ -41,7 +41,7 @@
     x.fillStyle = "#ff8a8a"; x.font = "800 26px system-ui,-apple-system,Segoe UI,Roboto,sans-serif"; x.fillText("CT LOS · FAROL OPERACIONAL", 480, 100);
     x.fillStyle = "#fff"; x.font = "900 italic 58px system-ui,-apple-system,Segoe UI,Roboto,sans-serif"; x.fillText("MORNING", 480, 160); x.fillStyle = "#c7d6ff"; x.fillText("OPERATIONAL NEWS", 480, 215);
     x.fillStyle = "rgba(255,255,255,.85)"; x.font = "500 30px system-ui,sans-serif"; x.fillText(`Resultado de ${d1.dia}, ${d1.data}`, 60, 275);
-    const k = [["FATURAMENTO D-1", mi(d1.fat), "meta " + mi(d1.meta)], ["ATINGIMENTO D-1", pct(atD1), atD1 >= 100 ? "acima da meta" : "abaixo da meta"], ["ACUMULADO DO MÊS", mi(M.acum), pct(atAcO) + " orçada · " + pct(atAcB) + " BI"], ["PROJEÇÃO DO MÊS", mi(M.proj), "estimativa"]];
+    const k = [["FATURAMENTO D-1", mi(d1.fat), "meta " + mi(d1.meta)], ["ATINGIMENTO D-1", pct(atD1), atD1 >= 100 ? "acima da meta" : "abaixo da meta"], ["ACUMULADO DO MÊS", mi(M.acum), pct(atAcO) + " orçada · " + pct(atAcB) + " BI"], ["PROJEÇÃO DO MÊS", mi(M.proj), "projeção"]];
     k.forEach((q, i) => { const X = 60 + (i % 2) * 490, Y = 310 + Math.floor(i / 2) * 210; rr(X, Y, 470, 190, 26, "rgba(255,255,255,.12)");
       x.fillStyle = "rgba(255,255,255,.75)"; x.font = "800 24px system-ui,sans-serif"; x.fillText(q[0], X + 28, Y + 50);
       x.fillStyle = i === 1 ? (atD1 >= 100 ? "#7ef0a8" : "#ff9b9b") : "#fff"; x.font = "900 64px system-ui,sans-serif"; x.fillText(q[1], X + 28, Y + 125);
@@ -76,7 +76,7 @@
     const ft = n => `<div class="ft">Carro parado é prejuízo. Vamos pra cima!<span>Morning Operational News · CT LOS · página ${n} de 2</span></div>`;
     const resumo = (document.querySelector(".lei") || {}).innerText || "";
     const p1 = `<div class="rv">${hd(`Edição de ${new Date().toLocaleDateString("pt-BR")} · Resultado de ${d1.dia}, ${d1.data} · Grupo LOS consolidado`)}<div class="bd">
-<div class="k4"><div class="k"><small>FATURAMENTO D-1</small><b>${mi(d1.fat)}</b><i>meta ${mi(d1.meta)}</i></div><div class="k"><small>ATINGIMENTO D-1</small><b style="color:${corH(atD1)}">${pct(atD1)}</b><i>${sg(d1.fat - d1.meta)}</i></div><div class="k"><small>ACUMULADO DO MÊS</small><b>${mi(M.acum)}</b><i>${pct(atAcO)} orçada · ${pct(atAcB)} BI</i></div><div class="k"><small>PROJEÇÃO DO MÊS</small><b>${mi(M.proj)}</b><i>estimativa</i></div></div>
+<div class="k4"><div class="k"><small>FATURAMENTO D-1</small><b>${mi(d1.fat)}</b><i>meta ${mi(d1.meta)}</i></div><div class="k"><small>ATINGIMENTO D-1</small><b style="color:${corH(atD1)}">${pct(atD1)}</b><i>${sg(d1.fat - d1.meta)}</i></div><div class="k"><small>ACUMULADO DO MÊS</small><b>${mi(M.acum)}</b><i>${pct(atAcO)} orçada · ${pct(atAcB)} BI</i></div><div class="k"><small>PROJEÇÃO DO MÊS</small><b>${mi(M.proj)}</b><i>projeção</i></div></div>
 <h3>FAROL DO DIA POR REGIONAL</h3><div class="fr">${D.farol.map(([n, p]) => `<div><em style="background:${corH(p)}"></em><small>${n}</small><b style="color:${corH(p)}">${pct(p)}</b></div>`).join("")}</div>
 ${D.dds ? `<h3>SEGURANÇA EM PRIMEIRO LUGAR · DDS</h3><div class="dds"><p><b>${D.dds.titulo}</b></p><p>${D.dds.texto}</p><p><b>— ${D.dds.autor}</b></p></div>` : ""}
 ${D.editorial ? `<h3>MENSAGEM DO DIA</h3><div class="ed"><p>${D.editorial.texto}</p><p style="text-align:right"><i>— ${D.editorial.autor}</i></p></div>` : ""}
@@ -88,9 +88,9 @@ ${D.frase ? `<div class="rq" style="margin-top:10px">“${D.frase.texto}” — 
 ${D.reg.map(r => `<tr><td><b>${r[0]}</b></td><td>${brl(r[1])}</td><td>${brl(r[2])}</td><td>${pct(r[1] / r[2] * 100)}</td><td style="color:${corH(r[3])};font-weight:800">${pct(r[3])}</td><td>${brl((r[2] - r[1]) / M.duRest)}</td><td>${r[7]}</td></tr>`).join("")}</table>
 <h3>PERFORMANCE POR DIA</h3><table><tr><th>DATA</th><th>FATURAMENTO</th><th>META</th><th>ATING.</th><th>DESVIO</th><th>ACUMULADO</th><th>ATING. ACUM.</th></tr>
 ${D.dias.map(x => { ac += x[2]; am += x[3]; const p = x[2] / x[3] * 100; return `<tr><td>${x[0]} ${x[1]}</td><td>${brl(x[2])}</td><td>${brl(x[3])}</td><td style="color:${corH(p)};font-weight:800">${pct(p)}</td><td>${sg(x[2] - x[3])}</td><td>${brl(ac)}</td><td>${pct(ac / am * 100)}</td></tr>`; }).join("")}</table>
-<h3>PASSADO × FUTURO</h3><div class="k4"><div class="k"><small>FALTA P/ META ORÇADA</small><b>${mi(falta)}</b><i>meta ${mi(M.metaOrc)}</i></div><div class="k"><small>DIAS ÚTEIS</small><b>${M.duRest}</b><i>restantes</i></div><div class="k"><small>NECESSÁRIO/DIA ÚTIL</small><b>${mi(necDU)}</b><i>média real ${mi(M.mediaDU)}</i></div><div class="k"><small>FECHAMENTO</small><b>${D.proj3.map(p => p[1]).sort((a, b) => a - b).map(v => v.toLocaleString("pt-BR", { minimumFractionDigits: 1 })).filter((v, i, a) => i === 0 || i === a.length - 1).join("–")} mi</b><i>3 projeções (estimativa)</i></div></div>
+<h3>PASSADO × FUTURO</h3><div class="k4"><div class="k"><small>FALTA P/ META ORÇADA</small><b>${mi(falta)}</b><i>meta ${mi(M.metaOrc)}</i></div><div class="k"><small>DIAS ÚTEIS</small><b>${M.duRest}</b><i>restantes</i></div><div class="k"><small>NECESSÁRIO/DIA ÚTIL</small><b>${mi(necDU)}</b><i>média real ${mi(M.mediaDU)}</i></div><div class="k"><small>FECHAMENTO</small><b>${D.proj3.map(p => p[1]).sort((a, b) => a - b).map(v => v.toLocaleString("pt-BR", { minimumFractionDigits: 1 })).filter((v, i, a) => i === 0 || i === a.length - 1).join("–")} mi</b><i>3 projeções (projeção)</i></div></div>
 ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:#7a5200">⚠ ${D.avisos.join(" ")}</p>` : ""}
-<p style="margin-top:10px;font-size:9.5px;color:#5b6478">Fonte: ${D.meta.fonte}. Projeções são estimativas. Gerado pelo app Farol Operacional.</p></div>${ft(2)}</div>`;
+<p style="margin-top:10px;font-size:9.5px;color:#5b6478">Fonte: ${D.meta.fonte}. Projeções do Power BI e do ritmo do mês. Gerado pelo app Farol Operacional.</p></div>${ft(2)}</div>`;
     return css + p1 + p2;
   }
   async function revistaPDF() {
