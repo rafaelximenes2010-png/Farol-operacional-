@@ -210,6 +210,13 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 }
 .pwa .inst{display:none!important}
 @media (min-width:1500px){main{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.instcard{display:none}
+@media (min-width:1024px){html:not(.pwa) .instcard{display:flex;grid-column:1/-1;align-items:center;gap:18px;background:linear-gradient(135deg,#0f2350,#1b3a7a 60%,#2346a0);color:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 8px 24px rgba(15,35,80,.25)}
+ .instcard img{width:64px;height:64px;border-radius:16px;flex:none}.instcard b{display:block;font-size:19px}.instcard small{opacity:.85;font-size:13.5px}
+ .instcard .go{margin-left:auto;background:#22c55e;color:#fff;border:0;border-radius:14px;padding:16px 26px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 6px 16px rgba(34,197,94,.4)}
+ .instcard .go:hover{filter:brightness(1.08)}.instcard .x{background:none;border:0;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 6px}
+ #instHow{font-size:13.5px;margin-top:6px;color:#ffe08a;font-weight:700}
+ .inst{background:#22c55e!important;color:#fff!important;padding:9px 16px!important;font-size:13.5px!important;border-radius:12px!important}}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -293,7 +300,8 @@ function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</
  <div class="card dds"><div><div class="k">DDS do dia · ${d1.data}</div><b class="t">🦺 ${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>
  ${D.frase?`<div class="sec">Para o dia</div><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal">— ${D.frase.autor}</div></div>`:""}
  <p class="note">A mensagem de segurança aparece todos os dias no topo do app. Com a API, o administrador cadastra os temas do DDS no painel e eles ficam guardados no histórico.</p>`);}
-function vHoje(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.filter(x=>x[1]>=90&&x[1]<100).length,nR=f.length-nG-nY;
+function vHoje(){return instCardHtml()+vHoje0();}
+function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.filter(x=>x[1]>=90&&x[1]<100).length,nR=f.length-nG-nY;
  const ag=D.reg.filter(r=>r[3]<100);
  return `
  <div class="kpis">
@@ -608,7 +616,7 @@ function cfgSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Farol-
 /* ===== INSTALAÇÃO (PWA) ===== */
 let deferredInstall=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("#bInst").style.display="inline-block";});
-async function doInstall(){if(!deferredInstall){location.href="instalar.html";return;}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("#bInst").style.display="none";}
+async function doInstall(){if(!deferredInstall){const h=$("#instHow");if(h){LS.set("farolInstOculto",0);h.textContent=instAjuda();return;}location.href="instalar.html";return;}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("#bInst").style.display="none";}
 if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
 
 /* ===== ABERTURA (farol: vermelho → amarelo → verde) ===== */
@@ -790,6 +798,13 @@ function aplicaTema(){const t=LS.get("farolTema","auto");const escuro=t==="dark"
  const b=$("#bTema");if(b)b.innerHTML=escuro?`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`:`<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`;document.querySelector('meta[name="theme-color"]').content=escuro?"#0b1a3f":"#0f2350";}
 $("#bTema").onclick=()=>{const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);LS.set("farolTema",escuro?"light":"dark");aplicaTema();show(cur);};
 aplicaTema();
+
+function instCardHtml(){if(LS.get("farolInstOculto",0))return "";return `<div class="instcard" id="instCard"><img src="icons/icone-96.png" alt=""><div><b>Instale o Farol neste computador</b><small>Abre em janela própria, com ícone na área de trabalho e no menu Iniciar. Um clique.</small><div id="instHow"></div></div><button class="go" type="button" id="instGo">⬇ Instalar agora</button><button class="x" type="button" id="instX" title="Ocultar">×</button></div>`;}
+function instAjuda(){const ua=navigator.userAgent;return /Edg\//.test(ua)?"No Edge: clique no ícone ⊞ “Aplicativo disponível” na barra de endereço (à direita) › Instalar.":/Chrome\//.test(ua)?"No Chrome: clique no ícone ⊕ “Instalar” na barra de endereço (à direita) › Instalar.":/Safari\//.test(ua)?"No Safari do Mac: menu Arquivo › Adicionar ao Dock.":/Firefox\//.test(ua)?"O Firefox não instala apps: abra este endereço no Google Chrome ou no Microsoft Edge.":"Abra este endereço no Google Chrome ou no Microsoft Edge.";}
+async function instalarAgora(){if(deferredInstall){deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r.outcome==="accepted"){document.documentElement.classList.add("pwa");toastMsg("Farol instalado! Procure o ícone na área de trabalho ou no menu Iniciar.");}return;}
+ const h=$("#instHow");if(h)h.textContent=instAjuda();else toastMsg(instAjuda());}
+document.addEventListener("click",e=>{if(e.target.closest("#instGo"))instalarAgora();if(e.target.closest("#instX")){LS.set("farolInstOculto",1);$("#instCard")?.remove();}});
+window.addEventListener("appinstalled",()=>{document.documentElement.classList.add("pwa");$("#instCard")?.remove();});
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
