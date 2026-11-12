@@ -416,6 +416,12 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .mic{display:inline-grid;place-items:center;flex:none;border-radius:28%;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent);vertical-align:middle}
 .mic svg{width:60%;height:60%}
 .mkt .mr small.mrn{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.mkt .mr small.mrn .mic{border-radius:7px}
+
+.regra{display:block;width:100%;text-align:left;margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(91,155,255,.4);background:rgba(91,155,255,.08);color:var(--ink);font:inherit;font-size:13.5px;line-height:1.55;cursor:pointer}
+.regra .rgo{display:block;margin-top:6px;color:#7fb0ff;font-weight:800;font-size:13px}
+.rgt{width:100%;border-collapse:collapse;font-size:12px}.rgt th,.rgt td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}.rgt th{color:var(--ink2);font-size:11px;text-transform:uppercase}
+.ebz{display:flex;gap:3px;border-radius:12px;overflow:hidden}.ebz span{padding:10px 6px;text-align:center;font-size:11px;line-height:1.35}.ebz b{font-size:12px}
+.rg .rk1{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:700}
 </style>
 </head>
 <body>
@@ -839,7 +845,26 @@ function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);
  <div><small>EBITDA</small><div class="stp"><button type="button" data-st="smE:-5">−</button><input id="smE" type="number" inputmode="decimal" step="1" value="100"><span>%</span><button type="button" data-st="smE:5">+</button></div></div></div>
  <div class="simr"><small>Bônus estimado</small><b id="smR">—</b><div id="smN"></div></div>
  <div class="simf" id="smFx"></div>
- <p class="note">Etapa 1 (faturamento) define o máximo elegível; faixas cumulativas a partir de 100%. Etapa 2 (EBITDA): abaixo de 80% não paga; de 80% a 120% paga proporcional; acima de 120% limita a 120%.</p></div>`;}
+ <button type="button" class="regra" id="bRegra"><b>Etapa 1 (faturamento)</b> define o máximo elegível; faixas cumulativas a partir de 100%.<br><b>Etapa 2 (EBITDA):</b> abaixo de 80% <b>não paga</b>; de 80% a 120% <b>paga proporcional</b>; acima de 120% <b>limita a 120%</b>.<span class="rgo">Ver a regra completa e exemplos ›</span></button></div>`;}
+function regraSheet(){const n=v=>v.toLocaleString("pt-BR",{maximumFractionDigits:2});
+ const fx=[["Abaixo de 100%","não elegível",-1],["100% a 104,9%","Meta",0],["105% a 106,9%","Meta + 5%",1],["107% a 109,9%","Meta + 7%",2],["110% ou mais","Meta + 10%",3]];
+ const ex=[[70,"Abaixo de 80%: não paga nada, mesmo com faturamento acima da meta"],[80,"Piso: paga 80% do máximo elegível"],[95,"Paga 95% do máximo elegível"],[110,"Paga 110% do máximo elegível"],[135,"Acima de 120%: limitado a 120%"]];
+ const g="Gerente Nacional",mx=bonusMax(g,3);
+ openSheet(`<div class="sh"><b>Regra da remuneração variável</b><button id="xS">×</button></div>
+ <div class="card rg"><div class="rk1">Como funciona</div><p style="margin:4px 0 0"><b>Bônus = máximo elegível (Etapa 1) × % EBITDA aplicado (Etapa 2)</b>, em salários.</p></div>
+ <h2 style="margin:16px 4px 8px">Etapa 1 · Faturamento <small>define o máximo</small></h2>
+ <div class="card"><p class="note" style="margin:0 0 8px">Valores em salários. O atingimento do faturamento sobre a meta orçada define até onde se chega. As faixas são <b>cumulativas</b>: quem chega a +10% soma todas as anteriores.</p>
+ <table class="rgt"><tr><th>Atingimento</th><th>Faixa</th>${CARGOS.map(c=>`<th>${({"Diretoria":"Dir.","Gerente Nacional":"G. Nac.","Demais Gerentes e Coordenadores":"Ger./Coord."})[c[0]]||c[0]}</th>`).join("")}</tr>
+ ${fx.map(f=>`<tr><td>${f[0]}</td><td><b>${f[1]}</b></td>${CARGOS.map(c=>`<td>${f[2]<0?"0":n(bonusMax(c[0],f[2]))}</td>`).join("")}</tr>`).join("")}</table></div>
+ <h2 style="margin:16px 4px 8px">Etapa 2 · EBITDA <small>quanto do máximo é pago</small></h2>
+ <div class="card"><div class="ebz"><span style="flex:1.1;background:rgba(255,90,90,.25);color:#ff5a5a">0% a 79,9%<br><b>NÃO PAGA</b></span><span style="flex:1;background:rgba(34,197,94,.22);color:#22c55e">80% a 120%<br><b>PROPORCIONAL</b></span><span style="flex:1;background:rgba(91,155,255,.22);color:#5b9bff">acima de 120%<br><b>TETO 120%</b></span></div>
+ <ul style="margin:12px 0 0 18px;padding:0;line-height:1.55"><li><b>Abaixo de 80%</b> do EBITDA orçado: <b>o bônus é zero</b>, mesmo que o faturamento tenha batido +10%. É uma trava (gatilho).</li>
+ <li><b>De 80% a 120%</b>: paga o <b>mesmo percentual do EBITDA</b> sobre o máximo elegível. Ex.: EBITDA 95% → recebe 95% do máximo.</li>
+ <li><b>Acima de 120%</b>: o pagamento <b>fica limitado a 120%</b> do máximo elegível (teto).</li></ul></div>
+ <h2 style="margin:16px 4px 8px">Exemplos <small>${g}, faturamento +10% (máximo ${n(mx)} salários)</small></h2>
+ <div class="card">${ex.map(([e,t])=>`<div class="xr" style="grid-template-columns:96px 1fr auto"><span style="text-transform:none;white-space:nowrap">EBITDA ${e}%</span><span style="font-size:12px;color:var(--ink2)">${t}</span><b style="color:${pctEbitda(e)?"#22c55e":"#ff5a5a"}">${n(mx*pctEbitda(e)/100)} sal.</b></div>`).join("")}</div>
+ <p class="note" style="margin:10px 4px">Conta: ${n(mx)} salários × % EBITDA aplicado. Use o simulador acima para testar outros cenários.</p>`);}
+document.addEventListener("click",e=>{if(e.target.closest("#bRegra"))regraSheet();});
 function simular(){const sg=$("#smSeg");if(!sg)return;const cargo=(sg.querySelector(".on")||sg.querySelector("button")).dataset.cargo;const fat=+$("#smF").value||0,eb=+$("#smE").value||0;
  const f=faixaAting(fat),mx=bonusMax(cargo,f),pe=pctEbitda(eb),v=mx*pe/100;
  $("#smR").textContent=v.toLocaleString("pt-BR",{maximumFractionDigits:2})+" salário"+(v===1?"":"s");
