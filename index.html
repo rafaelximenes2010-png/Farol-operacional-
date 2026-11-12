@@ -392,6 +392,11 @@ main h2{color:var(--ink);font-size:14px;font-weight:800;letter-spacing:.09em;pos
 main h2::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:16px;border-radius:4px;background:linear-gradient(180deg,#5b9bff,#22c55e)}
 main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transform:none;font-size:12px}
 @media (min-width:1024px){main .blk h2{font-size:13.5px;color:var(--ink)}main .blk h2 small{font-size:12px;opacity:.75}}
+
+.msgbar{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(245,180,0,.35);background:linear-gradient(90deg,rgba(245,180,0,.16),rgba(91,155,255,.10));color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.msgbar .mi1{font-size:22px}.msgbar .mt{flex:1;min-width:0}.msgbar .mt b{display:block;font-size:14.5px}.msgbar .mt small{display:block;color:var(--ink2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msgbar .mc{background:#f5b400;color:#1b1300;font-weight:800;font-size:12px;border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center}.msgbar .chev{color:var(--ink2);font-size:20px}
+@media (min-width:1024px){main>.msgbar{grid-column:1/-1!important;margin:0}}
 </style>
 </head>
 <body>
@@ -524,6 +529,20 @@ const XTRA={
 const XTRA_POR={hoje:["mom","cal","sem","conc","mg"],mes:["cal","mom","sem"],reg:["conc","mg"],proj:["mom","sem"],orc:["mom"]};
 function xtraHtml(t){return (XTRA_POR[t]||[]).map(k=>{let o;try{o=XTRA[k]();}catch(e){o="";}return o?`<h2 class="xtra${o.mob?" xmob":""}">${o.t} <small>${o.s}</small></h2>${o.h}`:"";}).join("");}
 
+
+/* ===== Mensagens do dia num único item no topo ===== */
+function msgBar(){if(!D.dds&&!D.editorial&&!D.frase)return"";const n=[D.dds,D.editorial,D.frase].filter(Boolean).length;
+ return `<button type="button" class="msgbar" id="msgBar"><span class="mi1">📣</span><span class="mt"><b>Mensagens do dia</b><small>${D.dds?"🦺 "+D.dds.titulo:""}${D.editorial?" · ✉️ Editorial":""}${D.frase?" · 💡 Para o dia":""}</small></span><span class="mc">${n}</span><span class="chev">›</span></button>`;}
+function msgTexto(){let t=`📣 *Mensagens do dia · CT LOS*\n`;if(D.dds)t+=`\n🦺 *DDS — ${D.dds.titulo}*\n${D.dds.texto}\n— ${D.dds.autor}\n`;if(D.editorial)t+=`\n✉️ *Mensagem do dia*\n${D.editorial.texto}\n— ${D.editorial.autor}\n`;if(D.frase)t+=`\n💡 *Para o dia*\n“${D.frase.texto}”\n— ${D.frase.autor}\n`;return t+`\n*Carro parado é prejuízo. Pra cima!* 🚀`;}
+function msgSheet(){openSheet(`<div class="sh"><b>Mensagens do dia</b><button id="xS">×</button></div>
+ ${D.dds?`<div class="card dds" style="margin-bottom:10px"><div><div class="k">🦺 Segurança em primeiro lugar · DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:""}
+ ${D.editorial?`<div class="card edit" style="margin-bottom:10px"><div class="k">✉️ Mensagem do dia · Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
+ ${D.frase?`<div class="card frase" style="margin-bottom:10px"><div class="k" style="font-style:normal">💡 Para o dia</div>“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" id="msWa" style="background:#25d366">💬 Enviar no WhatsApp</button><button class="btn sec2" id="msCp">📋 Copiar texto</button></div>`);
+ $("#msWa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(msgTexto()),"_blank");
+ $("#msCp").onclick=async()=>{try{await navigator.clipboard.writeText(msgTexto());toastMsg("Mensagens copiadas.");}catch(e){prompt("Copie:",msgTexto());}};}
+document.addEventListener("click",e=>{if(e.target.closest("#msgBar"))msgSheet();});
+
 /* ===== Pregão do mês (gráfico estilo bolsa) ===== */
 let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
 function tkSerie(m){const d=D.dias;let a=0,b=0;
@@ -566,7 +585,7 @@ document.addEventListener("pointerdown",tkMove);document.addEventListener("point
 function vHoje(){return instCardHtml()+vHoje0();}
 function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.filter(x=>x[1]>=90&&x[1]<100).length,nR=f.length-nG-nY;
  const ag=D.reg.filter(r=>r[3]<100);
- return `
+ return `${msgBar()}
  <div class="kpis">
   <div class="card kpi hero" data-m="fatD1"><div class="l">Faturamento D-1</div><div class="v">${mi(d1.fat)}</div><div class="s">meta do dia ${mi(d1.meta)} · <span class="up">${d1.vsD2>0?"▲":"▼"} ${pct(d1.vsD2,1)} vs D-2</span></div></div>
   <div class="card kpi lit ${atD1>=100?"":"bad"}" data-m="atD1"><div class="l">Atingimento D-1</div><div class="v ${atD1>=100?"up":"dn"}">${pct(atD1)}</div><div class="s">${sg(d1.fat-d1.meta)} no dia</div></div>
@@ -598,16 +617,12 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  <h2>Ritmo para a meta</h2>
  <div class="card" data-m="necDU"><div class="grid3" style="margin:0"><div><small>Falta (orçada)</small><b>${mi(falta)}</b></div><div><small>Dias úteis</small><b>${M.duRest}</b></div><div><small>Necessário/dia útil</small><b>${mi(necDU)}</b></div></div>
  <div class="note">A média realizada por dia útil é ${mi(M.mediaDU)}: o ritmo necessário está ${pct((1-necDU/M.mediaDU)*100,1)} abaixo do que já vem sendo feito.</div></div>
- <h2>🦺 Segurança em primeiro lugar</h2>
- ${D.dds?`<div class="card dds" id="ddsCard" style="cursor:pointer"><div><div class="k">DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:`<div class="card">Sem mensagem de segurança nesta edição.</div>`}
- ${D.editorial?`<h2>Mensagem do dia</h2><div class="card edit"><div class="k">Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
  <h2>Arquivos do dia <small>edição de ${d1.data}</small></h2>
  <div class="card acts" style="padding:0">
  <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
  <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
  </div>
  <h2 class="mkth">Mercado <small>PIB · IPCA · cimento · celulose · diesel · dólar</small></h2><div class="card mkt mktc" id="mktHoje"></div>
- ${D.frase?`<h2>Para o dia</h2><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
  <p class="motto">Carro parado é <em>prejuízo</em>. Vamos pra cima!</p>`;}
 function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3];ac.push(a);am.push(b);});
  const best=D.dias.reduce((m,x)=>x[2]/x[3]>m[2]/m[3]?x:m),worst=D.dias.reduce((m,x)=>x[2]/x[3]<m[2]/m[3]?x:m);
