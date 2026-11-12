@@ -29,6 +29,8 @@ ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:
 .note{font-size:12.5px;color:#5b6478;line-height:1.5}
 .ok{background:#e5f4ea;color:#1e8e4e;border-radius:12px;padding:12px;font-weight:700;text-align:center}
 [hidden]{display:none!important}
+.qrc{display:block;text-align:center}.qrc img{width:100%!important;max-width:300px;height:auto!important;padding:0!important;border:0!important;background:none!important;border-radius:16px!important;box-shadow:0 8px 24px rgba(15,35,80,.2)}.qrc p{margin:12px 0 0}
+@media (min-width:760px){.qrc{display:flex;align-items:center;gap:26px;text-align:left}.qrc img{max-width:240px;flex:none}.qrc p{font-size:16px;margin:0}}
 </style>
 </head>
 <body>
@@ -66,7 +68,7 @@ ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:
     </ol>
   </div>
 
-  <div class="card qr" style="display:block;text-align:center"><img src="icons/convite-instalar.png" alt="Cartão de convite com QR code" style="width:100%;max-width:320px;border-radius:14px"><p style="margin:10px 0 0"><b>Aponte a câmera do celular</b> para o QR code: a página abre e reconhece o aparelho sozinha.</p></div>
+  <div class="card qr qrc"><img src="icons/convite-instalar.png" alt="Cartão de convite com QR code"><p><b>Aponte a câmera do celular</b> para o QR code: a página abre e reconhece o aparelho sozinha.</p></div>
   <a class="big" id="bWa" style="background:#25d366;text-align:center;text-decoration:none;margin-bottom:8px">💬 Enviar convite pelo WhatsApp</a>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"><button class="big" id="bCard" style="background:#0f2350;font-size:15px;padding:14px">🖼️ Enviar cartão QR</button><button class="big" id="bCp" style="background:#0f2350;font-size:15px;padding:14px">🔗 Copiar link</button></div>
   <p class="note" style="text-align:center">Na primeira vez, o app pede a senha da equipe CT LOS. Os números ficam protegidos e não são públicos.</p>
