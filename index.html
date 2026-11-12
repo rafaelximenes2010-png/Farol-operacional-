@@ -397,6 +397,8 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .msgbar .mi1{font-size:22px}.msgbar .mt{flex:1;min-width:0}.msgbar .mt b{display:block;font-size:14.5px}.msgbar .mt small{display:block;color:var(--ink2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .msgbar .mc{background:#f5b400;color:#1b1300;font-weight:800;font-size:12px;border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center}.msgbar .chev{color:var(--ink2);font-size:20px}
 @media (min-width:1024px){main>.msgbar{grid-column:1/-1!important;margin:0}}
+
+#uUso,#uPol{color:#7fb0ff;font-weight:700}
 </style>
 </head>
 <body>
@@ -968,7 +970,10 @@ function splash(){return new Promise(res=>{const sp=$("#splash");if(!sp)return r
  setTimeout(()=>{sp.classList.add("out");setTimeout(()=>{sp.remove();res();},450);},2300);});}
 /* ===== CADASTRO DO USUÁRIO E BOAS-VINDAS ===== */
 const REGIONAIS=["Diretoria / Corporativo","CT LOS","CEARA/NORTE","CENTRO-OESTE","LOSX","NORDESTE","NORDESTE 2","POSTO AVANCADO","SUL/SUDESTE","SUZANO","KLABIN"];
+const DOMINIO="@grupolos.com.br",POL_USO_V="1.0 · 12/11/2026";
+function emailOk(e){return typeof e==="string"&&e.trim().toLowerCase().endsWith(DOMINIO);}
 function perfil(){return LS.get("farolPerfil",null);}
+function perfilValido(){const u=perfil();return !!(u&&emailOk(u.email)&&u.aceiteUso&&u.aceiteUso.versao===POL_USO_V);}
 function cadastro(editar){return new Promise(res=>{const u=perfil()||{};
  openSheet(`<div class="sh"><b>${editar?"Meu perfil":"Bem-vindo ao Farol"}</b>${editar?'<button id="xS">×</button>':""}</div>
  <div class="card cfg"><p class="note" style="margin:0">${editar?"Atualize seus dados.":"Faça seu cadastro para acessar os indicadores do CT LOS."}</p>
@@ -976,17 +981,46 @@ function cadastro(editar){return new Promise(res=>{const u=perfil()||{};
  <label>E-mail corporativo</label><input id="uE" type="email" value="${u.email||""}" autocomplete="email" placeholder="nome@grupolos.com.br">
  <label>Cargo</label><input id="uC" value="${u.cargo||""}" placeholder="Ex.: Gerente Regional">
  <label>Regional</label><select id="uR">${REGIONAIS.map(r=>`<option ${u.regional===r?"selected":""}>${r}</option>`).join("")}</select>
- <label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;margin-top:12px"><input type="checkbox" id="uA" style="width:auto;margin-top:3px" ${u.aceite?"checked":""}> <span>Li e concordo com a <a href="#" id="uPol">Política de dados e segurança</a>. As informações são confidenciais e de uso interno do Grupo LOS.</span></label>
+ <label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;margin-top:12px"><input type="checkbox" id="uA" style="width:auto;margin-top:3px" ${u.aceite?"checked":""}> <span>Li e concordo com a <a href="#" id="uUso">Política de uso</a> e a <a href="#" id="uPol">Política de dados e segurança</a>. As informações são confidenciais e de uso interno do Grupo LOS.</span></label>
  <button class="btn" id="uOk" style="margin-top:12px;width:100%">${editar?"Salvar":"Cadastrar e entrar"}</button><p class="note" id="uMsg"></p></div>`);
  $("#uPol").onclick=e=>{e.preventDefault();politica();};
+ if($("#uUso"))$("#uUso").onclick=e=>{e.preventDefault();politicaUso();};
  $("#uOk").onclick=()=>{const v={nome:$("#uN").value.trim(),email:$("#uE").value.trim(),cargo:$("#uC").value.trim(),regional:$("#uR").value,aceite:$("#uA").checked,desde:u.desde||new Date().toISOString()};
-  if(!v.nome||!/.+@.+\..+/.test(v.email)){$("#uMsg").textContent="Preencha nome e e-mail.";return;}if(!v.aceite){$("#uMsg").textContent="É preciso aceitar a política de dados.";return;}
+  v.email=v.email.toLowerCase();if(!v.nome||!/.+@.+\..+/.test(v.email)){$("#uMsg").textContent="Preencha nome e e-mail.";return;}
+  if(!emailOk(v.email)){$("#uMsg").textContent="Acesso exclusivo para e-mails @grupolos.com.br.";return;}
+  if(!v.aceite){$("#uMsg").textContent="É preciso aceitar a Política de uso e a Política de dados.";return;}v.aceiteUso={versao:POL_USO_V,em:new Date().toISOString()};
   LS.set("farolPerfil",v);document.querySelectorAll(".sheet").forEach(x=>x.remove());try{paintAvatar()}catch(e){}res(v);};});}
 function primeiroNome(){const u=perfil();return u&&u.nome?u.nome.split(" ")[0]:"";}
 function boasVindas(){const n=primeiroNome();if(!n)return;const vez=LS.get("farolVisitas",0)+1;LS.set("farolVisitas",vez);
  const h=new Date().getHours(),sd=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
  const el=document.createElement("div");el.className="welcome";el.innerHTML=`<span style="font-size:22px">👋</span><div><b>${vez>1?`Olá, ${n}, seja bem-vindo de volta!`:`${sd}, ${n}! Seja bem-vindo ao Farol.`}</b><br><small>${D?`Edição de ${d1.data} pronta para você.`:"Carregue a edição do dia para começar."}</small></div>`;
  $("#main").prepend(el);setTimeout(()=>{el.style.transition="opacity .6s";el.style.opacity="0";setTimeout(()=>el.remove(),650);},6000);}
+
+/* ===== POLÍTICA DE USO ===== */
+function politicaUso(){const u=perfil()||{},ac=u.aceiteUso;openSheet(`<div class="sh"><b>Política de uso</b><button id="xS">×</button></div><div class="card pol">
+ <p><b>Farol Operacional · CT LOS · Grupo LOS</b><br><span class="note">Versão ${POL_USO_V}</span></p>
+ ${ac?`<p class="note" style="background:var(--bg);border-radius:10px;padding:8px 10px">✓ Aceita por <b>${u.nome||""}</b> (${u.email||""}) em ${new Date(ac.em).toLocaleString("pt-BR")}.</p>`:""}
+ <h4>1. Quem pode usar</h4><p>Somente colaboradores do Grupo LOS com e-mail corporativo <b>@grupolos.com.br</b>, autorizados pela Gerência Nacional de Operações. O acesso é pessoal e intransferível.</p>
+ <h4>2. Para que serve</h4><p>Acompanhar os indicadores operacionais diários (faturamento, metas, farol por regional, projeções e orçamento) e apoiar decisões de gestão. Não substitui os relatórios oficiais do Power BI e da Controladoria.</p>
+ <h4>3. Sigilo das informações</h4><ul><li>Todos os números são <b>confidenciais e de uso interno</b>.</li><li>É proibido enviar prints, PDFs, cartões ou textos do app para pessoas de fora do Grupo LOS (clientes, fornecedores, parceiros, imprensa ou redes sociais).</li><li>O compartilhamento interno deve usar os grupos oficiais da operação.</li></ul>
+ <h4>4. Senha e acesso</h4><ul><li>A senha da equipe não pode ser repassada a terceiros nem anotada em locais visíveis.</li><li>Use bloqueio de tela e Face ID/biometria no aparelho.</li><li>Ao sair da empresa ou trocar de aparelho, use “Sair e apagar dados deste aparelho”.</li></ul>
+ <h4>5. Uso correto dos dados</h4><ul><li>Projeções são estimativas e devem ser tratadas como tal.</li><li>Divergências com o Power BI devem ser informadas ao administrador antes de qualquer decisão.</li><li>Não é permitido alterar, editar ou redistribuir números como se fossem oficiais.</li></ul>
+ <h4>6. Atualizações</h4><p>As edições são publicadas diariamente pelo administrador. O histórico fica na Central de atualizações.</p>
+ <h4>7. Descumprimento</h4><p>O uso fora destas regras pode levar ao bloqueio do acesso (troca da senha da equipe) e às medidas previstas nas normas internas do Grupo LOS.</p>
+ <h4>8. Responsável</h4><p>Gerência Nacional de Operações · CT LOS — administrador: Rafael Ximenes.</p></div>`);}
+/* ===== CENTRAL DE ATUALIZAÇÕES ===== */
+async function centralAtualizacoes(){openSheet(`<div class="sh"><b>Central de atualizações</b><button id="xS">×</button></div><div id="caBody"><div class="card note">Carregando…</div></div>`);
+ let nov=null,eds=[];try{const r=await fetch("data/novidades.json?t="+Date.now(),{cache:"no-store"});if(r.ok)nov=await r.json();}catch(e){}
+ try{const r=await fetch("https://api.github.com/repos/rafaelximenes2010-png/Farol-operacional-/contents/data/edicoes",{cache:"no-store"});if(r.ok)eds=(await r.json()).map(x=>x.name.replace(".enc","")).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)).sort().reverse();}catch(e){}
+ const b=document.getElementById("caBody");if(!b)return;const dt=x=>x.split("-").reverse().join("/");
+ b.innerHTML=`<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><small class="note">Edição no ar</small><div style="font-size:20px;font-weight:800">${D?D.d1.data:"—"}</div><small class="note">${D&&D.meta&&D.meta.atualizado?"publicada "+D.meta.atualizado:""}</small></div><button class="btn" id="caChk" style="width:auto;padding:10px 14px">↻ Verificar agora</button></div></div>
+ <h2 style="margin:16px 4px 8px">Edições publicadas</h2><div class="card" style="padding:6px 14px">${eds.length?eds.slice(0,15).map(e=>`<div class="xr" style="grid-template-columns:1fr auto"><span style="text-transform:none">📊 Resultado de ${dt(e)}</span><b>${D&&D.d1.data.split("/").reverse().join("-")===e?"✓ no ar":""}</b></div>`).join(""):'<p class="note">Histórico indisponível sem internet.</p>'}</div>
+ <h2 style="margin:16px 4px 8px">Dados de mercado</h2><div class="card note" style="margin:0">PIB, IPCA, cimento, celulose e diesel atualizados em <b>${MKT?MKT.atualizado:"—"}</b>; dólar ao vivo quando há internet.</div>
+ <h2 style="margin:16px 4px 8px">Novidades do app</h2>${nov?nov.versoes.map(v=>`<div class="card" style="margin-bottom:8px"><b>Versão ${v.v}</b> <small class="note">· ${v.data}</small><ul style="margin:6px 0 0 18px;padding:0">${v.itens.map(i=>`<li style="margin:3px 0">${i}</li>`).join("")}</ul></div>`).join(""):'<p class="note">Sem conexão.</p>'}
+ <p class="note" style="text-align:center">Política de uso: versão ${POL_USO_V} · <a href="#" id="caPol">ler</a></p>`;
+ document.getElementById("caChk").onclick=async()=>{toastMsg("Verificando…");try{const reg=await navigator.serviceWorker?.getRegistration();await reg?.update();}catch(e){}await checarNovaEdicao();setTimeout(()=>location.reload(),600);};
+ document.getElementById("caPol").onclick=e=>{e.preventDefault();document.querySelector(".sheet")?.remove();politicaUso();};}
+
 /* ===== POLÍTICA DE DADOS E SEGURANÇA ===== */
 function politica(){openSheet(`<div class="sh"><b>Política de dados e segurança</b><button id="xS">×</button></div><div class="card pol">
  <p><b>Farol Operacional · CT LOS · Grupo LOS</b><br><span class="note">Versão de 11/11/2026</span></p>
@@ -1023,12 +1057,14 @@ function central(){const l=LS.get("farolLog",{}),gh=LS.get("farolGh",null),fez=k
 function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button id="xS">×</button></div><div class="menu">
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
  ${ehAdmin()?`<div class="card mi" data-pdf><span class="ic">📤</span><div><b>Atualização de indicadores</b><small>2 PDFs do Power BI + revista (DDS e mensagem) · até a API entrar</small></div></div><div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
+ <div class="card mi" id="mAtu"><span class="ic">🔄</span><div><b>Central de atualizações</b><small>Edições publicadas e novidades do app</small></div></div>
+ <div class="card mi" id="mUso"><span class="ic">📜</span><div><b>Política de uso</b><small>Regras de acesso e sigilo · aceite registrado</small></div></div>
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
  <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Instalar e convidar</b><small>Instalar neste aparelho · WhatsApp · QR code</small></div></div>
  
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);if($("#mIns"))$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mAtu").onclick=go(centralAtualizacoes);$("#mUso").onclick=go(politicaUso);if($("#mIns"))$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
@@ -1215,7 +1251,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfil()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();setTimeout(convite,6000);})();
 </script>
 <script src="pacote.js"></script>
 </body>

@@ -1,6 +1,6 @@
 // Farol Operacional — service worker
 // Rede primeiro para o app (recebe as atualizações na hora) e cópia guardada para abrir sem internet.
-const CACHE="farol-v49"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","pacote.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/simbolo-los.png","icons/icone-96.png"];
+const CACHE="farol-v50"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","pacote.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/simbolo-los.png","icons/icone-96.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP)));self.skipWaiting();});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))));self.clients.claim();});
 self.addEventListener("fetch",e=>{const u=new URL(e.request.url);if(e.request.method!=="GET"||u.origin!==location.origin)return;
