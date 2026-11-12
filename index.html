@@ -68,6 +68,10 @@ tr.tot td{font-weight:800}
 .rk .bar span{position:absolute;inset:0 auto 0 0;border-radius:8px}
 .rk .bar em{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
 .chart{width:100%;height:auto;display:block}
+.tk{padding:14px 14px 10px}.tkh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.tkh .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}.tkh .v{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}.tkh .c{font-size:13px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}.tkh .c.up{color:#22c55e}.tkh .c.dn{color:#ff5a5a}.tkh .dt{font-size:11.5px;color:var(--ink2);text-align:right}
+.tkt{display:flex;gap:4px;background:var(--bg);border-radius:9px;padding:3px;margin:12px 0 6px}.tkt button{flex:1;border:0;background:none;color:var(--ink2);font:inherit;font-size:12px;font-weight:650;padding:7px 4px;border-radius:7px;cursor:pointer}.tkt button.on{background:var(--card,#1b2436);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.tksv{width:100%;height:auto;display:block;touch-action:pan-y}.tkf{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--line);margin-top:6px;padding-top:9px}.tkf div small{display:block;font-size:10.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}.tkf div b{font-size:13px;font-variant-numeric:tabular-nums}
+
 .legend{display:flex;gap:14px;font-size:11px;color:var(--ink2);margin-top:6px;flex-wrap:wrap}.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
 .note{font-size:12px;color:var(--ink2);margin:8px 4px 0;line-height:1.45}
 .warn{background:var(--ys);color:#7a5200;border-radius:12px;padding:10px 12px;font-size:12px;margin-top:10px}
@@ -320,6 +324,46 @@ function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</
  <div class="card dds"><div><div class="k">DDS do dia · ${d1.data}</div><b class="t">🦺 ${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>
  ${D.frase?`<div class="sec">Para o dia</div><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal">— ${D.frase.autor}</div></div>`:""}
  <p class="note">A mensagem de segurança aparece todos os dias no topo do app. Com a API, o administrador cadastra os temas do DDS no painel e eles ficam guardados no histórico.</p>`);}
+
+/* ===== Pregão do mês (gráfico estilo bolsa) ===== */
+let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
+function tkSerie(m){const d=D.dias;let a=0,b=0;
+ if(m==="ating") return {pts:d.map(x=>x[2]/x[3]*100),fmt:v=>pct(v),ref:d.map(()=>100),refN:"meta",tit:"Atingimento do dia"};
+ if(m==="acum") return {pts:d.map(x=>(a+=x[2])),fmt:v=>mi(v),ref:d.map(x=>(b+=x[3])),refN:"meta acumulada",tit:"Faturamento acumulado"};
+ return {pts:d.map(x=>x[2]),fmt:v=>mi(v),ref:d.map(x=>x[3]),refN:"meta do dia",tit:"Faturamento do dia"};}
+function tkSvg(m){const S=tkSerie(m),P=S.pts,R=S.ref,n=P.length,w=360,h=170,pl=6,pr=6,pt=14,pb=20;
+ const all=P.concat(R),mx=Math.max(...all)*1.06,mn=m==="acum"?0:Math.min(...all)*.9;const X=i=>pl+(w-pl-pr)*i/Math.max(1,n-1),Y=v=>pt+(h-pt-pb)*(1-(v-mn)/(mx-mn||1));
+ const up=P[n-1]>=(m==="ating"?100:R[n-1]),col=up?"#22c55e":"#ff5a5a";
+ const line=P.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+","+Y(v).toFixed(1)).join(""),ref=R.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+","+Y(v).toFixed(1)).join("");
+ const imax=P.indexOf(Math.max(...P)),imin=P.indexOf(Math.min(...P));
+ let g=`<defs><linearGradient id="tkg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".28"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>`;
+ for(let k=1;k<4;k++)g+=`<line x1="${pl}" x2="${w-pr}" y1="${pt+(h-pt-pb)*k/4}" y2="${pt+(h-pt-pb)*k/4}" stroke="var(--line)" stroke-dasharray="2 4"/>`;
+ g+=`<path d="${line}L${X(n-1)},${h-pb}L${X(0)},${h-pb}Z" fill="url(#tkg)"/><path d="${ref}" fill="none" stroke="var(--ink2)" stroke-width="1.2" stroke-dasharray="4 4" opacity=".7"/>`;
+ g+=`<path d="${line}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
+ if(m!=="acum"){g+=`<text x="${Math.min(w-30,Math.max(30,X(imax)))}" y="${Y(P[imax])-6}" font-size="9.5" text-anchor="middle" fill="var(--ink2)">máx ${S.fmt(P[imax])}</text><text x="${Math.min(w-30,Math.max(30,X(imin)))}" y="${Math.min(h-pb-2,Y(P[imin])+13)}" font-size="9.5" text-anchor="middle" fill="var(--ink2)">mín ${S.fmt(P[imin])}</text>`;}
+ g+=`<circle cx="${X(n-1)}" cy="${Y(P[n-1])}" r="7" fill="${col}" opacity=".25"/><circle cx="${X(n-1)}" cy="${Y(P[n-1])}" r="3.6" fill="${col}"/>`;
+ [0,Math.floor((n-1)/2),n-1].forEach(i=>g+=`<text x="${X(i)}" y="${h-5}" font-size="10" text-anchor="${i===0?"start":i===n-1?"end":"middle"}" fill="var(--ink2)">${D.dias[i][0]}</text>`);
+ g+=`<g class="tkc" style="display:none"><line y1="${pt}" y2="${h-pb}" stroke="var(--ink2)" stroke-width="1"/><circle r="4.5" fill="var(--bg)" stroke="${col}" stroke-width="2.2"/></g>`;
+ return `<svg class="tksv" viewBox="0 0 ${w} ${h}" data-n="${n}" data-pl="${pl}" data-pr="${pr}">${g}</svg>`;}
+function tkHead(m,i){const S=tkSerie(m),P=S.pts,n=P.length;i=i==null?n-1:i;const v=P[i],pv=i>0?P[i-1]:null,d=D.dias[i];
+ let c="";if(m==="acum"){const dv=v-S.ref[i];c=`<div class="c ${dv>=0?"up":"dn"}">${dv>=0?"▲ +":"▼ −"}${mi(Math.abs(dv))} vs meta</div>`;}
+ else if(pv!=null){const ch=m==="ating"?v-pv:(v/pv-1)*100;c=`<div class="c ${ch>=0?"up":"dn"}">${ch>=0?"▲ +":"▼ "}${m==="ating"?pct(ch,1).replace("%","")+" p.p.":pct(ch,1)} vs ${D.dias[i-1][0]}</div>`;}
+ return `<div><div class="l">${S.tit}</div><div class="v">${S.fmt(v)}</div>${c}</div><div class="dt">${d[0]} · ${d[1]}<br>${S.refN}: ${S.fmt(S.ref[i])}</div>`;}
+function tickerHtml(){if(!D.dias||D.dias.length<2)return"";const m=tkModo,P=D.dias.map(x=>x[2]),tot=P.reduce((a,b)=>a+b,0);
+ return `<div class="card tk" id="tk"><div class="tkh">${tkHead(m)}</div>
+ <div class="tkt">${[["dia","Diário"],["ating","% da meta"],["acum","Acumulado"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
+ <div id="tkg">${tkSvg(m)}</div>
+ <div class="tkf"><div><small>Máx</small><b>${mi(Math.max(...P))}</b></div><div><small>Mín</small><b>${mi(Math.min(...P))}</b></div><div><small>Média</small><b>${mi(tot/P.length)}</b></div><div><small>Na meta</small><b>${D.dias.filter(x=>x[2]>=x[3]).length}/${D.dias.length}</b></div></div></div>`;}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();tkModo=b.dataset.tk;LS.set("farolTk",tkModo);const t=document.getElementById("tk");if(!t)return;
+ t.querySelectorAll("[data-tk]").forEach(x=>x.classList.toggle("on",x===b));t.querySelector("#tkg").innerHTML=tkSvg(tkModo);t.querySelector(".tkh").innerHTML=tkHead(tkModo);},true);
+function tkMove(e){const sv=e.target.closest&&e.target.closest(".tksv");if(!sv)return;const r=sv.getBoundingClientRect(),n=+sv.dataset.n,pl=+sv.dataset.pl,pr=+sv.dataset.pr,w=360;
+ const x=(e.clientX-r.left)/r.width*w,i=Math.max(0,Math.min(n-1,Math.round((x-pl)/(w-pl-pr)*(n-1))));const P=tkSerie(tkModo).pts;
+ const lines=[...sv.querySelectorAll("path")];const X=pl+(w-pl-pr)*i/Math.max(1,n-1);const seg=lines[2].getAttribute("d").split(/[ML]/).filter(Boolean)[i].split(",");
+ const c=sv.querySelector(".tkc");c.style.display="";c.querySelector("line").setAttribute("x1",X);c.querySelector("line").setAttribute("x2",X);c.querySelector("circle").setAttribute("cx",seg[0]);c.querySelector("circle").setAttribute("cy",seg[1]);
+ sv.closest(".tk").querySelector(".tkh").innerHTML=tkHead(tkModo,i);}
+function tkEnd(e){const sv=e.target.closest&&e.target.closest(".tksv");if(!sv)return;sv.querySelector(".tkc").style.display="none";sv.closest(".tk").querySelector(".tkh").innerHTML=tkHead(tkModo);}
+document.addEventListener("pointerdown",tkMove);document.addEventListener("pointermove",e=>{if(e.buttons||e.pointerType!=="mouse")tkMove(e);else if(e.target.closest&&e.target.closest(".tksv"))tkMove(e);});document.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse")tkEnd(e);});document.addEventListener("pointerleave",tkEnd,true);
+
 function vHoje(){return instCardHtml()+vHoje0();}
 function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.filter(x=>x[1]>=90&&x[1]<100).length,nR=f.length-nG-nY;
  const ag=D.reg.filter(r=>r[3]<100);
@@ -341,6 +385,8 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
    <span class="fln"><b>${n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX")}</b><small>${r?"Mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"><span style="width:${w}%"></span><em style="left:${m100}%"></em></span></span>
    <span class="flp"><b>${pct(p)}</b><small>D-1</small></span></button>`;}).join("")}
  </div>
+ <h2>Pregão do mês <small>dia a dia, como na bolsa</small></h2>
+ ${tickerHtml()}
  <h2>Leitura do dia <small>toque nos números</small></h2>
  <div class="card lei">${resumoHtml()}</div>
  <h2>Onde agir hoje <small>abaixo da meta proporcional do mês</small></h2>
@@ -353,9 +399,8 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  <h2>🦺 Segurança em primeiro lugar</h2>
  ${D.dds?`<div class="card dds" id="ddsCard" style="cursor:pointer"><div><div class="k">DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:`<div class="card">Sem mensagem de segurança nesta edição.</div>`}
  ${D.editorial?`<h2>Mensagem do dia</h2><div class="card edit"><div class="k">Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
- <h2>Atualização e arquivos <small>edição de ${d1.data}</small></h2>
+ <h2>Arquivos do dia <small>edição de ${d1.data}</small></h2>
  <div class="card acts" style="padding:0">
- ${ehAdmin()?`<button type="button" class="a" data-pdf><span class="i"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><div><b>Atualizar números</b><small>2 PDFs do Power BI (+ a revista, para DDS e mensagem) · ${D.meta.modo==="equipe"?"publicada para a equipe":D.meta.modo==="api"?"Power BI ao vivo":"lida neste aparelho"}</small></div><span class="chev">›</span></button>`:""}
  <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
  <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
  </div>
@@ -724,7 +769,7 @@ function central(){const l=LS.get("farolLog",{}),gh=LS.get("farolGh",null),fez=k
  const st=(ok,t,s,warn)=>`<div class="st"><span class="d" style="background:${ok?"#1e8e4e":warn?"#d08a0e":"#9aa3b5"}"></span><div><b>${t}</b><small>${s}</small></div></div>`;
  openSheet(`<div class="sh"><b>Central de Automação</b><button id="xS">×</button></div>
  <div class="sec">Rotina do dia</div><div class="card">
- ${st(fez("carregado"),"1. Carregar a revista do dia (PDF)",fez("carregado")?"Feito hoje às "+quando(l.carregado).slice(-5):"Pendente · última: "+quando(l.carregado),!fez("carregado"))}
+ ${st(fez("carregado"),"1. Atualizar indicadores (PDFs do BI + revista)",fez("carregado")?"Feito hoje às "+quando(l.carregado).slice(-5):"Pendente · última: "+quando(l.carregado),!fez("carregado"))}
  ${st(fez("pacote"),"2. Gerar o pacote do WhatsApp",fez("pacote")?"Feito hoje às "+quando(l.pacote).slice(-5):"Pendente",!fez("pacote"))}
  ${st(fez("publicado"),"3. Publicar no app da equipe",fez("publicado")?"Feito hoje às "+quando(l.publicado).slice(-5):gh&&gh.token?"Pendente":"Configure o token do GitHub para publicar",!fez("publicado"))}
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px"><button class="btn" data-pdf style="font-size:12px;padding:10px 6px">Carregar PDF</button><button class="btn" data-revista style="font-size:12px;padding:10px 6px;background:#b0263a">Gerar revista</button><button class="btn" data-pacote style="font-size:12px;padding:10px 6px;background:#25d366">Pacote</button><button class="btn" id="cPub" style="font-size:12px;padding:10px 6px">Publicar</button></div></div>
@@ -741,7 +786,7 @@ function central(){const l=LS.get("farolLog",{}),gh=LS.get("farolGh",null),fez=k
 /* ===== MENU ===== */
 function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button id="xS">×</button></div><div class="menu">
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
- ${ehAdmin()?`<div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
+ ${ehAdmin()?`<div class="card mi" data-pdf><span class="ic">📤</span><div><b>Atualização de indicadores</b><small>2 PDFs do Power BI + revista (DDS e mensagem) · até a API entrar</small></div></div><div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
  <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Convidar pelo WhatsApp</b><small>Envia o link de instalação em 1 toque</small></div></div>
  <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar o app</b><small>iPhone, Android e computador</small></div></div>
