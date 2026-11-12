@@ -20,7 +20,7 @@
     const edS = `${DIASF[ed.getDay()]}, ${String(ed.getDate()).padStart(2, "0")}/${String(ed.getMonth() + 1).padStart(2, "0")}/${ed.getFullYear()}`;
     const tit = n => n.toLowerCase().replace(/(^|[\s\/-])(\S)/g, (m, a, b) => a + b.toUpperCase()).replace(/\bLosx\b/, "LOSX").replace(/Ceara/, "Ceará").replace(/Avancado/, "Avançado");
     const f = [...D.farol].sort((a, b) => b[1] - a[1]), g = f.filter(x => x[1] >= 100), y = f.filter(x => x[1] >= 90 && x[1] < 100), r = f.filter(x => x[1] < 90);
-    const lin = (e, arr) => arr.length ? `${e} ${arr.map(([n, p]) => `${tit(n)} ${pct(p)}`).join(" | ")}\n` : "";
+    const lin = (e, arr) => arr.map(([n, p]) => `${e} ${tit(n)} ${pct(p)}\n`).join("");
     const ag = D.reg.filter(x => x[3] < 100).map(x => `${tit(x[0])} (${pct(x[3])} no parcial)`).concat(r.filter(x => !D.reg.some(q => q[0] === x[0] && q[3] < 100)).map(x => tit(x[0])));
     const sgn = v => (v >= 0 ? "+" : "−") + brl(Math.abs(v));
     let t = `☀️ *MORNING OPERATIONAL NEWS*\n_Revista Diária de Operações | CT LOS_\nEdição de ${edS}\n\nBom dia, time! A edição de hoje já está disponível. 📎\n\n`;

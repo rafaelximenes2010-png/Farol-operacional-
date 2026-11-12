@@ -68,7 +68,11 @@ tr.tot td{font-weight:800}
 .rk .bar{height:14px;background:var(--bg);border-radius:8px;position:relative;overflow:hidden}
 .rk .bar span{position:absolute;inset:0 auto 0 0;border-radius:8px}
 .rk .bar em{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+:root{--lnB:#1b3a7a;--lnR:#c62828;--lnP:#7c3aed;--lnG:#94a3b8}
+@media (prefers-color-scheme:dark){:root{--lnB:#5b9bff;--lnR:#ff5c5c;--lnP:#b18cff;--lnG:#c3cddd}}
 .chart{width:100%;height:auto;display:block}
+.chart polyline{filter:drop-shadow(0 0 3px rgba(91,155,255,.0))}
+@media (prefers-color-scheme:dark){.chart polyline{filter:drop-shadow(0 0 4px rgba(140,180,255,.45))}.chart path[opacity]{opacity:.22}}
 .tk{padding:14px 14px 10px}.tkh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.tkh .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}.tkh .v{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}.tkh .c{font-size:13px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}.tkh .c.up{color:#22c55e}.tkh .c.dn{color:#ff5a5a}.tkh .dt{font-size:11.5px;color:var(--ink2);text-align:right}
 .tkt{display:flex;gap:4px;background:var(--bg);border-radius:9px;padding:3px;margin:12px 0 6px}.tkt button{flex:1;border:0;background:none;color:var(--ink2);font:inherit;font-size:12px;font-weight:650;padding:7px 4px;border-radius:7px;cursor:pointer}.tkt button.on{background:var(--card,#1b2436);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .tksv{width:100%;height:auto;display:block;touch-action:pan-y}.tkf{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--line);margin-top:6px;padding-top:9px}.tkf div small{display:block;font-size:10.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}.tkf div b{font-size:13px;font-variant-numeric:tabular-nums}
@@ -416,8 +420,8 @@ function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3]
   <div class="card kpi" data-m="dias"><div class="l">Dias na meta</div><div class="v">${M.diasMeta} de ${M.diasTot}</div><div class="s">melhor ${best[0]} (${pct(best[2]/best[3]*100)}) · pior ${worst[0]} (${pct(worst[2]/worst[3]*100)})</div></div>
   <div class="card kpi" data-m="mediaDU"><div class="l">Média por dia útil</div><div class="v">${mi(M.mediaDU)}</div><div class="s">margens ${pct(M.mgT,2)} terc. · ${pct(M.mgA,2)} agr.</div></div></div>
  <h2>Acumulado real × meta (Power BI)</h2>
- <div class="card">${lineChart([{pts:am,c:"#c62828",dash:1,w:2},{pts:ac,c:"#1b3a7a",fill:1,end:1}],360,200,{labels:D.dias.map((x,i)=>[i,x[0].slice(0,2)])})}
- <div class="legend"><span><i style="background:#1b3a7a"></i>Real ${mi(M.acum)}</span><span><i style="background:#c62828"></i>Meta ${mi(M.metaAcBI)}</span></div></div>
+ <div class="card">${lineChart([{pts:am,c:"var(--lnR)",dash:1,w:2},{pts:ac,c:"var(--lnB)",fill:1,end:1}],360,200,{labels:D.dias.map((x,i)=>[i,x[0].slice(0,2)])})}
+ <div class="legend"><span><i style="background:var(--lnB)"></i>Real ${mi(M.acum)}</span><span><i style="background:var(--lnR)"></i>Meta ${mi(M.metaAcBI)}</span></div></div>
  <h2>Faturamento diário × meta <small>cor = farol · traço = meta</small></h2>
  <div class="card">${barsChart(D.dias.map(x=>{const p=x[2]/x[3]*100;return{v:x[2],m:x[3],c:C[cor(p)],t:pct(p),l:x[0].slice(0,2)}}))}</div>
  <h2>Dia a dia</h2>
@@ -443,8 +447,8 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
   <div class="card kpi" data-m="necDU"><div class="l">Necessário / dia útil</div><div class="v">${mi(necDU)}</div><div class="s">realizado: ${mi(M.mediaDU)}/dia útil</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Fechamento projetado</div>${(()=>{const v=D.proj3.map(x=>x[1]),mn=Math.min(...v),mx=Math.max(...v),f1=x=>x.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});return `<div class="v">R$ ${f1(mx)} mi</div><div class="s">faixa R$ ${f1(mn)} a ${f1(mx)} mi · ${mn*1e6>=M.metaOrc?"todas acima da meta":"atenção à meta"}</div>`;})()}</div></div>
  <h2>Trajetória do mês <small>tracejado = meta e projeção</small></h2>
- <div class="card">${lineChart([{pts:metaL,c:"#94a3b8",dash:1,w:2},{pts:projL,c:"#7c3aed",dash:1,w:2.2,end:1},{pts:real,c:"#1b3a7a",fill:1,w:3}],360,210,{n:30,mark:9,labels:[[0,"01"],[4,"05"],[9,"10"],[14,"15"],[19,"20"],[24,"25"],[29,"30"]]})}
- <div class="legend"><span><i style="background:#1b3a7a"></i>Realizado</span><span><i style="background:#7c3aed"></i>Projeção ${mi(M.proj)}</span><span><i style="background:#94a3b8"></i>Meta orçada ${mi(M.metaOrc)}</span></div></div>
+ <div class="card">${lineChart([{pts:metaL,c:"var(--lnG)",dash:1,w:2},{pts:projL,c:"var(--lnP)",dash:1,w:2.2,end:1},{pts:real,c:"var(--lnB)",fill:1,w:3}],360,210,{n:30,mark:9,labels:[[0,"01"],[4,"05"],[9,"10"],[14,"15"],[19,"20"],[24,"25"],[29,"30"]]})}
+ <div class="legend"><span><i style="background:var(--lnB)"></i>Realizado</span><span><i style="background:var(--lnP)"></i>Projeção ${mi(M.proj)}</span><span><i style="background:var(--lnG)"></i>Meta orçada ${mi(M.metaOrc)}</span></div></div>
  <h2>Três projeções × meta <small>projeções, não realizado</small></h2>
  <div class="card rank">${[...D.proj3.map(p=>[p[0],p[1],"#7c3aed"]),["Meta orçada",M.metaOrc/1e6,"#0f2350"],["Meta Power BI",M.metaBI/1e6,"#94a3b8"]].map(p=>`<div class="rk" style="grid-template-columns:130px 1fr 70px;cursor:default"><span>${p[0]}</span><div class="bar"><span style="width:${p[1]/mxp*100}%;background:${p[2]}"></span></div><span>${p[1].toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} mi</span></div>`).join("")}</div>
  <h2>Ritmo por dia útil</h2>
