@@ -373,6 +373,25 @@ html,body{height:100dvh}
  main .blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}
  /* macro (PIB/IPCA) no topo do Mercado */
 }
+
+/* análises extras */
+.xcal{padding:12px}.xgr i{max-height:64px}.xwk,.xgr{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.xwk span{font-size:10.5px;color:var(--ink2);text-align:center;font-weight:700}
+.xgr i{font-style:normal;aspect-ratio:1/1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;min-width:0}
+.xgr i b{font-size:12px;line-height:1}.xgr i small{font-size:9.5px;opacity:.9;margin-top:2px}
+.xgr .xe{background:none}.xgr .xf{background:var(--bg);border:1px dashed var(--line);color:var(--ink2)}
+.xlg{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:11px;color:var(--ink2)}.xlg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}.xlg i.f{border:1px dashed var(--ink2)}
+.xsem{padding:10px 14px}.xr{display:grid;grid-template-columns:44px 1fr auto auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px}.xr:last-child{border-bottom:0}
+.xr span:first-child{color:var(--ink2);font-weight:700;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xr .xb{height:8px;border-radius:99px;background:var(--bg);overflow:hidden}.xr .xb i{display:block;height:100%;border-radius:99px}
+.xr b{font-variant-numeric:tabular-nums}.xr em{font-style:normal;font-weight:700;font-size:12px;min-width:42px;text-align:right}
+.xmom{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}.xk{background:var(--bg);border-radius:12px;padding:10px 12px}.xk small{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}.xk b{display:block;font-size:20px;font-weight:800;margin:2px 0}.xk span{font-size:11.5px;color:var(--ink2)}
+.xcon{padding:12px 14px}.xst{display:flex;height:14px;border-radius:99px;overflow:hidden;gap:2px}.xst i{display:block;height:100%}.xll{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--ink2)}.xll i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}.xll b{color:var(--ink)}
+.xsem .xr:has(span[style]){grid-template-columns:110px 1fr auto}
+
+/* títulos das seções em evidência */
+main h2{color:var(--ink);font-size:14px;font-weight:800;letter-spacing:.09em;position:relative;padding-left:12px}
+main h2::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:16px;border-radius:4px;background:linear-gradient(180deg,#5b9bff,#22c55e)}
+main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transform:none;font-size:12px}
+@media (min-width:1024px){main .blk h2{font-size:13.5px;color:var(--ink)}main .blk h2 small{font-size:12px;opacity:.75}}
 </style>
 </head>
 <body>
@@ -475,6 +494,35 @@ document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(
  const t=e.target.closest("[data-info]");if(t){e.stopPropagation();document.querySelector(".inf-pop")?.remove();const r=t.getBoundingClientRect(),d=document.createElement("div");d.className="inf-pop";d.innerHTML=t.dataset.info+'<button aria-label="Fechar">×</button>';document.body.appendChild(d);
   const W=d.offsetWidth,H=d.offsetHeight;d.style.left=Math.max(8,Math.min(innerWidth-W-8,r.left+r.width/2-W/2))+"px";d.style.top=(r.top>H+16?r.top-H-8:r.bottom+8)+"px";d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>d.remove(),7000);return;}
  if(!e.target.closest(".inf-pop"))document.querySelector(".inf-pop")?.remove();},true);
+
+
+/* ===== Análises extras: preenchem os espaços do painel de forma inteligente ===== */
+function xCor(p){return p>=100?"#22c55e":p>=90?"#f5b400":"#ff5a5a";}
+const XTRA={
+ cal(){const d=D.dias;if(!d||!d.length)return"";const [dd,mm,aa]=D.d1.data.split("/").map(Number),ini=new Date(aa,mm-1,1).getDay(),tot=new Date(aa,mm,0).getDate();
+  let c="";for(let i=0;i<ini;i++)c+=`<i class="xe"></i>`;
+  for(let k=1;k<=tot;k++){const r=d[k-1];if(r){const p=r[2]/r[3]*100;c+=`<i class="xd" style="background:${xCor(p)}${p>=100?"":"cc"}" data-info="<b>${r[0]} ${r[1]}</b><br>Faturamento ${brl(r[2])}<br>Meta ${brl(r[3])}<br>Atingimento <b>${pct(p)}</b>"><b>${k}</b><small>${Math.round(p)}%</small></i>`;}
+   else c+=`<i class="xf"><b>${k}</b></i>`;}
+  return {t:"Calendário do mês",s:"cor = atingimento do dia",mob:1,h:`<div class="card xcal"><div class="xwk">${["D","S","T","Q","Q","S","S"].map(x=>`<span>${x}</span>`).join("")}</div><div class="xgr">${c}</div><div class="xlg"><span><i style="background:#22c55e"></i>≥100%</span><span><i style="background:#f5b400"></i>90–99%</span><span><i style="background:#ff5a5a"></i>&lt;90%</span><span><i class="f"></i>a realizar</span></div></div>`};},
+ sem(){const d=D.dias;if(!d||d.length<7)return"";const nm=["seg","ter","qua","qui","sex","sáb","dom"],a={};d.forEach(r=>{const k=r[1].slice(0,3);(a[k]=a[k]||[]).push(r);});
+  const rows=nm.filter(k=>a[k]).map(k=>{const v=a[k],f=v.reduce((s,r)=>s+r[2],0)/v.length,p=v.reduce((s,r)=>s+r[2],0)/v.reduce((s,r)=>s+r[3],0)*100;return[k,f,p,v.length];});const mx=Math.max(...rows.map(r=>r[1]));
+  return {t:"Média por dia da semana",s:"padrão de faturamento",mob:1,h:`<div class="card xsem">${rows.map(([k,f,p,n])=>`<div class="xr" data-info="<b>${k}</b> · ${n} dia(s) no mês<br>Média ${brl(f)}<br>Atingimento ${pct(p)}"><span>${k}</span><span class="xb"><i style="width:${f/mx*100}%;background:${xCor(p)}"></i></span><b>${mi(f)}</b><em style="color:${xCor(p)}">${pct(p)}</em></div>`).join("")}</div>`};},
+ mom(){const d=D.dias;if(!d||d.length<4)return"";let st=0;for(let i=d.length-1;i>=0&&d[i][2]>=d[i][3];i--)st++;let best=0,c=0;d.forEach(r=>{c=r[2]>=r[3]?c+1:0;best=Math.max(best,c);});
+  const l3=d.slice(-3),l3p=l3.reduce((s,r)=>s+r[2],0)/l3.reduce((s,r)=>s+r[3],0)*100,mp=M.acum/M.metaAcBI*100,folga=(M.acum-M.metaAcOrc)/(M.metaMediaRest||M.metaOrc/30),esf=necDU/M.mediaDU*100;
+  const card=(l,v,sub,inf,col)=>`<div class="xk" data-info="${inf}"><small>${l}</small><b style="${col?"color:"+col:""}">${v}</b><span>${sub}</span></div>`;
+  return {t:"Momentum e folga",s:"como o mês está andando",h:`<div class="card xmom">${card("Sequência na meta",st+" dia"+(st===1?"":"s"),"recorde do mês: "+best,"Dias seguidos, até o D-1, com faturamento igual ou acima da meta do dia.",st?"#22c55e":"#ff5a5a")}
+  ${card("Últimos 3 dias",pct(l3p),"vs "+pct(mp)+" no mês","Atingimento somado dos 3 últimos dias comparado ao do mês inteiro (régua Power BI). Acima = acelerando.",xCor(l3p))}
+  ${card("Folga acumulada",(folga>=0?"+":"")+folga.toLocaleString("pt-BR",{maximumFractionDigits:1})+" dias","de meta média restante","Quanto o acumulado está acima da meta orçada proporcional, convertido em dias de meta média dos dias úteis restantes.",folga>=0?"#22c55e":"#ff5a5a")}
+  ${card("Índice de esforço",pct(esf),"necessário ÷ realizado","Ritmo diário necessário para a meta orçada dividido pela média realizada por dia útil. Abaixo de 100% = a meta sai mantendo o ritmo atual.",esf<=100?"#22c55e":esf<=110?"#f5b400":"#ff5a5a")}</div>`};},
+ conc(){const r=[...D.reg].sort((a,b)=>b[1]-a[1]),t=r.reduce((s,x)=>s+x[1],0);if(!t)return"";const pal=["#5b9bff","#22c55e","#b18cff","#f5b400","#ff7a7a","#2dd4bf","#f472b6","#a3e635","#94a3b8","#fb923c"];
+  const t3=r.slice(0,3).reduce((s,x)=>s+x[1],0)/t*100;
+  return {t:"Concentração do faturamento",s:"participação no acumulado",h:`<div class="card xcon"><div class="xst">${r.map((x,i)=>`<i style="width:${x[1]/t*100}%;background:${pal[i%10]}" data-info="<b>${tit(x[0])}</b><br>${brl(x[1])} · ${pct(x[1]/t*100,1)} do mês"></i>`).join("")}</div>
+  <p class="note" style="margin:8px 0 6px">Top 3 regionais = <b>${pct(t3,1)}</b> do faturamento do mês.</p><div class="xll">${r.map((x,i)=>`<span><i style="background:${pal[i%10]}"></i>${tit(x[0])} <b>${pct(x[1]/t*100,1)}</b></span>`).join("")}</div></div>`};},
+ mg(){const r=[...D.reg].filter(x=>x[4]!=null).sort((a,b)=>b[4]-a[4]);if(!r.length)return"";const mx=Math.max(...r.map(x=>x[4]),1);
+  return {t:"Margem de terceiros por regional",s:"média do grupo "+pct(M.mgT,2),h:`<div class="card xsem">${r.map(x=>`<div class="xr" data-info="<b>${tit(x[0])}</b><br>Margem terceiros ${pct(x[4],2)} · agregados ${pct(x[5],2)}<br>Quadrante: ${x[7]||"—"}"><span style="width:110px">${tit(x[0])}</span><span class="xb"><i style="width:${Math.max(2,x[4]/mx*100)}%;background:${x[4]>=M.mgT?"#22c55e":"#f5b400"}"></i></span><b>${pct(x[4],2)}</b></div>`).join("")}</div>`};},
+};
+const XTRA_POR={hoje:["mom","cal","sem","conc","mg"],mes:["cal","mom","sem"],reg:["conc","mg"],proj:["mom","sem"],orc:["mom"]};
+function xtraHtml(t){return (XTRA_POR[t]||[]).map(k=>{let o;try{o=XTRA[k]();}catch(e){o="";}return o?`<h2 class="xtra${o.mob?" xmob":""}">${o.t} <small>${o.s}</small></h2>${o.h}`:"";}).join("");}
 
 /* ===== Pregão do mês (gráfico estilo bolsa) ===== */
 let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
@@ -982,12 +1030,22 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
   mv.forEach(x=>b.appendChild(x));b.dataset.title=(h.childNodes[0].textContent||"").trim();
   const bt=document.createElement("button");bt.className="bsh";bt.type="button";bt.textContent="↗ Enviar";bt.setAttribute("data-bsh","");h.appendChild(bt);
   const ck=document.createElement("span");ck.className="ck";ck.textContent="✓";b.prepend(ck);});
- {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
+ {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{const xh=b.querySelector("h2.xtra");b.classList.toggle("xt",!!xh);b.classList.toggle("xm",!!(xh&&xh.classList.contains("xmob")));b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
   const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")||b.classList.contains("big")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
-  const nw=bl.filter(b=>!b.classList.contains("wide")&&!b.classList.contains("big")&&!b.classList.contains("f4")&&!b.querySelector(".mktc")),k=c3?3:2,r=nw.length%k;nw.forEach(b=>b.classList.remove("s12","s6"));
+  const xs=bl.filter(b=>b.classList.contains("xt"));const nw=bl.filter(b=>!b.classList.contains("xt")&&!b.classList.contains("wide")&&!b.classList.contains("big")&&!b.classList.contains("f4")&&!b.querySelector(".mktc")),k=c3?3:2,r=nw.length%k;nw.forEach(b=>b.classList.remove("s12","s6"));
   if(innerWidth>=1024&&nw.length>1){const k=(c3&&innerWidth>=1500)?3:2,mas=document.createElement("div");mas.className="mas";mas.style.setProperty("--k",k);nw[0].before(mas);
    const cols=[...Array(k)].map(()=>{const c=document.createElement("div");c.className="col";mas.appendChild(c);return c;});
-   nw.forEach(b=>{const c=cols.reduce((a,x)=>x.offsetHeight<a.offsetHeight?x:a);c.appendChild(b);});}
+   nw.forEach(b=>{const c=cols.reduce((a,x)=>x.offsetHeight<a.offsetHeight?x:a);c.appendChild(b);});
+   /* preenche os vãos: cada análise extra vai para a coluna mais curta enquanto houver espaço */
+   xs.forEach(b=>cols[0].appendChild(b));
+   const arrumar=()=>{const G=20,hb=new Map();nw.concat(xs).forEach(b=>hb.set(b,b.offsetHeight));const H=cols.map(()=>0),put=(b,i)=>{cols[i].appendChild(b);H[i]+=(H[i]?G:0)+hb.get(b);};
+    nw.forEach(b=>put(b,H.indexOf(Math.min(...H))));const resto=[];
+    xs.forEach(b=>{const mx=Math.max(...H),i=H.indexOf(Math.min(...H)),nh=H[i]+G+hb.get(b),over=nh-mx;if(over>60&&over>(mx-H[i])*0.8)resto.push(b);else put(b,i);});
+    m.querySelectorAll(":scope>.mas.tail").forEach(x=>x.remove());
+    if(resto.length){const t2=document.createElement("div");t2.className="mas tail";t2.style.setProperty("--k",k);m.appendChild(t2);const c2=[...Array(k)].map(()=>{const c=document.createElement("div");c.className="col";t2.appendChild(c);return c;}),H2=c2.map(()=>0);
+     resto.forEach(b=>{const i=H2.indexOf(Math.min(...H2));c2[i].appendChild(b);H2[i]+=hb.get(b)+G;});const mo=m.querySelector(":scope>.motto");if(mo)m.appendChild(mo);}};
+   arrumar();requestAnimationFrame(()=>requestAnimationFrame(arrumar));}
+  else if(innerWidth<1024){xs.forEach(b=>{if(!b.classList.contains("xm"))b.remove();});}
   else{if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
 const corVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
@@ -1096,7 +1154,7 @@ window.addEventListener("appinstalled",()=>{document.documentElement.classList.a
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 let _bp=innerWidth>=1500?2:innerWidth>=1024?1:0;addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{const b=innerWidth>=1500?2:innerWidth>=1024?1:0;if(b!==_bp){_bp=b;if(typeof cur!=='undefined'&&D)show(cur);}},250);});
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();pintaMercado();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
