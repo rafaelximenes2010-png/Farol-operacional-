@@ -406,6 +406,8 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .setc ul{margin:10px 0 0 18px;padding:0;font-size:13px;line-height:1.5}
 
 .setc a,.card.pol a,.mkt a,.sheet .card a{color:#7fb0ff;font-weight:700}
+
+.drl{position:relative;cursor:pointer}.drl::after{content:"ⓘ detalhar";position:absolute;top:10px;right:12px;font-size:11px;font-weight:700;color:var(--ink2);background:var(--bg);padding:3px 8px;border-radius:99px}
 </style>
 </head>
 <body>
@@ -672,13 +674,13 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
   <div class="card kpi lit" data-m="du"><div class="l">Dias úteis restantes</div><div class="v">${M.duRest}</div><div class="s">seg–sex, sem feriados</div></div>
   <div class="card kpi" data-m="necDU"><div class="l">Necessário / dia útil</div><div class="v">${mi(necDU)}</div><div class="s">realizado: ${mi(M.mediaDU)}/dia útil</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Fechamento projetado</div>${(()=>{const v=D.proj3.map(x=>x[1]),mn=Math.min(...v),mx=Math.max(...v),f1=x=>x.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});return `<div class="v">R$ ${f1(mx)} mi</div><div class="s">faixa R$ ${f1(mn)} a ${f1(mx)} mi · ${mn*1e6>=M.metaOrc?"todas acima da meta":"atenção à meta"}</div>`;})()}</div></div>
- <h2>Trajetória do mês <small>tracejado = meta e projeção</small></h2>
- <div class="card">${lineChart([{pts:metaL,c:"var(--lnG)",dash:1,w:2},{pts:projL,c:"var(--lnP)",dash:1,w:2.2,end:1},{pts:real,c:"var(--lnB)",fill:1,w:3}],360,210,{n:30,mark:9,labels:[[0,"01"],[4,"05"],[9,"10"],[14,"15"],[19,"20"],[24,"25"],[29,"30"]]})}
+ <h2>Trajetória do mês <small>toque para detalhar</small></h2>
+ <div class="card drl" data-m="proj">${lineChart([{pts:metaL,c:"var(--lnG)",dash:1,w:2},{pts:projL,c:"var(--lnP)",dash:1,w:2.2,end:1},{pts:real,c:"var(--lnB)",fill:1,w:3}],360,210,{n:30,mark:9,labels:[[0,"01"],[4,"05"],[9,"10"],[14,"15"],[19,"20"],[24,"25"],[29,"30"]]})}
  <div class="legend"><span><i style="background:var(--lnB)"></i>Realizado</span><span><i style="background:var(--lnP)"></i>Projeção ${mi(M.proj)}</span><span><i style="background:var(--lnG)"></i>Meta orçada ${mi(M.metaOrc)}</span></div></div>
- <h2>Três projeções × meta <small>projeções, não realizado</small></h2>
- <div class="card rank">${[...D.proj3.map(p=>[p[0],p[1],"#7c3aed"]),["Meta orçada",M.metaOrc/1e6,"#0f2350"],["Meta Power BI",M.metaBI/1e6,"#94a3b8"]].map(p=>`<div class="rk" style="grid-template-columns:130px 1fr 70px;cursor:default"><span>${p[0]}</span><div class="bar"><span style="width:${p[1]/mxp*100}%;background:${p[2]}"></span></div><span>${p[1].toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} mi</span></div>`).join("")}</div>
- <h2>Ritmo por dia útil</h2>
- <div class="card">${barsChart([{v:M.mediaDU,c:"#1b3a7a",t:mi(M.mediaDU),l:"Realizado"},{v:M.metaMediaRest,c:"#0f2350",t:mi(M.metaMediaRest),l:"Meta média restante"},{v:necDU,c:"#7c3aed",t:mi(necDU),l:"Necessário p/ meta"} ],360,180)}</div>
+ <h2>Três projeções × meta <small>toque em cada linha</small></h2>
+ <div class="card rank">${[...D.proj3.map(p=>[p[0],p[1],"#7c3aed"]),["Meta orçada",M.metaOrc/1e6,"#0f2350"],["Meta Power BI",M.metaBI/1e6,"#94a3b8"]].map((p,i)=>`<div class="rk" data-m="${i<D.proj3.length?"proj":"metas"}" style="grid-template-columns:130px 1fr 70px;cursor:pointer"><span>${p[0]} ›</span><div class="bar"><span style="width:${p[1]/mxp*100}%;background:${p[2]}"></span></div><span>${p[1].toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} mi</span></div>`).join("")}</div>
+ <h2>Ritmo por dia útil <small>toque para detalhar</small></h2>
+ <div class="card drl" data-m="necDU">${barsChart([{v:M.mediaDU,c:"#1b3a7a",t:mi(M.mediaDU),l:"Realizado"},{v:M.metaMediaRest,c:"#0f2350",t:mi(M.metaMediaRest),l:"Meta média restante"},{v:necDU,c:"#7c3aed",t:mi(necDU),l:"Necessário p/ meta"} ],360,180)}</div>
  <h2>Projeção por regional <small>meta do mês × ating. parcial</small></h2>
  <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Desvio vs prop.</th><th>Projeção</th><th>Falta p/ meta</th><th>Necessário/dia útil</th><th>Quadrante</th></tr></thead><tbody>
  ${D.reg.map(x=>{const fl=x[2]-x[1];const q=x[7];return `<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td class="${x[6]>=0?"up":"dn"}">${x[6]>=0?"+":"−"}${mi(Math.abs(x[6])).replace("R$ ","R$ ")}</td><td>${mi(x[2]*x[3]/100)}</td><td>${mi(fl)}</td><td>${brl(fl/M.duRest)}</td><td>${q==="—"?"—":`<span class="q ${q==="Crítico"?"c":q==="Proteger margem"?"p":"a"}">${q}</span>`}</td></tr>`}).join("")}
