@@ -1,0 +1,15 @@
+{
+ "atualizado": "12/11/2026",
+ "itens": [
+  {"id":"usd","nome":"Dólar comercial","valor":"R$ 5,51","var":"+0,08%","dir":1,"ref":"fech. 09/11","fonte":"Investing.com / Brasil 61","nota":"Fechamento de 09/11/2026 (PTAX R$ 5,5146). No app, o valor é atualizado ao vivo quando há internet.","link":"https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes"},
+  {"id":"diesel","nome":"Diesel S10 · média Brasil","valor":"R$ 7,30/L","var":"−0,14% na semana","dir":-1,"ref":"semana 01–07/11","fonte":"ANP · Levantamento de Preços","nota":"Média de 3.174 postos. Mínimo R$ 5,89 e máximo R$ 9,19. Terceira semana seguida de queda após o pico de R$ 7,38 em outubro.","link":"https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos"},
+  {"id":"cimento","nome":"Cimento · vendas Brasil","valor":"5,9 Mt","var":"−6,1% a/a","dir":-1,"ref":"outubro/26 · SNIC","fonte":"SNIC","nota":"Jan–out: 56,7 Mt (+0,1%). Por dia útil: 251,1 mil t (−0,1% a/a; +0,5% vs set). 12 meses: 67 Mt (+0,7%). Chuvas e menos dias úteis pesaram.","link":"https://snic.org.br/numeros-do-setor.php"},
+  {"id":"celulose","nome":"Celulose fibra curta · China","valor":"US$ 600/t","var":"futuro dez/26 US$ 605","dir":1,"ref":"BHKP líquido · semana","fonte":"XP Investimentos (Papel e Celulose)","nota":"Fibra longa (NBSK) na China: US$ 604/t. Suzano subiu a lista da fibra curta na Europa para US$ 1.410/t em nov/26 (+US$ 50); sem anúncio para a Ásia.","link":"https://conteudos.xpi.com.br/acoes/relatorios/"}
+ ],
+ "snic": [
+  "Vendas de outubro caíram 6,1% sobre out/25: chuvas e menos dias úteis.",
+  "No ano (jan–out), estabilidade: 56,7 Mt, +0,1%.",
+  "Nordeste +6,5% e Norte +5,9% no ano; Sudeste −3,2%; Sul e Centro-Oeste estáveis.",
+  "Demanda apoiada em Minha Casa, Minha Vida e obras de infraestrutura (pavimento de concreto)."
+ ]
+}

@@ -330,6 +330,36 @@ html,body{height:100dvh}
 }
 @media (min-width:1500px){main[data-c="3"]>.blk{grid-column:span 4!important}main[data-c]>.blk.wide{grid-column:1/-1!important}main[data-c="3"]>.blk.s6{grid-column:span 6!important}}
 @media (min-width:1024px){main>.blk.s12{grid-column:1/-1!important}main>.blk.s12 svg.chart,main>.blk.wide svg.chart{max-height:360px}main>.blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}main>.blk .kpis .kpi .v{font-size:clamp(20px,1.7vw,28px);word-break:break-word}}
+
+/* ===== Mercado (SNIC, celulose, diesel, dólar) ===== */
+.mkt .mr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 4px;border-bottom:1px solid var(--line);cursor:pointer;align-items:baseline}
+.mkt .mr:last-of-type{border-bottom:0}.mkt .mr small{color:var(--ink2);font-size:11.5px}.mkt .mr b{font-size:15px;font-variant-numeric:tabular-nums;text-align:right}
+.mkt .mr em{grid-column:1/-1;font-style:normal;font-size:11.5px;display:flex;justify-content:space-between;color:var(--ink2)}.mkt .mr em i{font-style:normal;font-weight:700}
+.mkt .up{color:#22c55e}.mkt .dn{color:#ff5a5a}.mkt .lv{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-left:5px;vertical-align:middle;animation:tlpulse 2s infinite}
+.mkt .hl{margin-top:8px;padding:9px 10px;border-radius:10px;background:var(--bg);font-size:12px;line-height:1.45}.mkt .hl b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
+.mkt .hl li{margin:0 0 3px 14px}.mkt .ft{font-size:10.5px;color:var(--ink2);margin-top:6px}
+#mktSide{display:none}
+@media (min-width:1024px){
+ #mktSide{display:block;margin:14px 0 10px;padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.06);color:#fff;overflow:auto;min-height:0;flex:1 1 auto}
+ #mktSide .ttl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin:0 4px 4px;display:flex;justify-content:space-between}
+ #mktSide .mr{border-color:rgba(255,255,255,.1)}#mktSide .mr small,#mktSide .mr em,#mktSide .ft{color:rgba(255,255,255,.65)}#mktSide .mr:hover{background:rgba(255,255,255,.06);border-radius:8px}
+ #mktSide .hl{background:rgba(0,0,0,.2)}#mktSide .hl b{color:rgba(255,255,255,.65)}
+ #mktSide .up{color:#4ade80}#mktSide .dn{color:#ff7a7a}
+ nav.tabs .side-foot{margin-top:0}
+ main>.blk:has(.mktc){display:none}
+ /* farol compacto e horizontal no computador */
+ .flhero{gap:18px;padding:2px 2px 12px}
+ .tlbig{flex-direction:row;width:auto;padding:10px 14px;border-radius:999px;gap:10px}
+ .tlbig .vis,.tlbig .pole{display:none}
+ .tlbig i{width:40px;height:40px}.tlbig i b{font-size:16px}
+ .flht>b{font-size:30px}.flht>span{font-size:13px}.flhl{margin-top:8px}.flhl em{font-size:11.5px;padding:4px 9px}
+ .fl .flr{padding:7px 2px;gap:10px}.fl .fln b{font-size:13.5px}.fl .fln small{font-size:11.5px}.fl .flbar{margin-top:5px}.fl .flp b{font-size:13.5px;padding:4px 9px}.fl .flp small{display:none}.fl .flp{min-width:62px}
+ main>.blk.big{grid-column:span 7!important}main>.blk.f4{grid-column:span 5!important}
+}
+@media (min-width:1500px){main>.blk.big{grid-column:span 8!important}main>.blk.f4{grid-column:span 4!important}}
+.inf-pop{position:fixed;z-index:60;max-width:300px;background:#0f2350;color:#fff;border-radius:12px;padding:10px 32px 10px 12px;font-size:12.5px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.inf-pop button{position:absolute;top:4px;right:6px;background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
+[data-info]{cursor:help}
 </style>
 </head>
 <body>
@@ -355,6 +385,7 @@ html,body{height:100dvh}
   <button data-t="reg"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Regionais</button>
   <button data-t="proj"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Projeção</button>
   <button data-t="orc"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h3M8 17h6"/></svg>Orçamento</button>
+  <div class="mkt" id="mktSide"></div>
   <div class="side-foot"><img src="icons/logo-los.png" alt="Grupo LOS">Indicadores operacionais diários.<br>Carro parado é prejuízo.</div>
 </nav>
 <script src="parser.js"></script>
@@ -413,13 +444,31 @@ function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</
  ${D.frase?`<div class="sec">Para o dia</div><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal">— ${D.frase.autor}</div></div>`:""}
  <p class="note">A mensagem de segurança aparece todos os dias no topo do app. Com a API, o administrador cadastra os temas do DDS no painel e eles ficam guardados no histórico.</p>`);}
 
+
+/* ===== Mercado: SNIC, celulose, diesel e dólar (dólar ao vivo) ===== */
+let MKT=null;
+async function carregaMercado(){try{const r=await fetch("data/mercado.json?t="+Date.now());if(r.ok)MKT=await r.json();}catch(e){}pintaMercado();dolarVivo();}
+async function dolarVivo(){try{const r=await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL",{cache:"no-store"});if(!r.ok)return;const j=(await r.json()).USDBRL;if(!j||!MKT)return;
+ const u=MKT.itens.find(x=>x.id==="usd");const v=+j.bid,p=+j.pctChange;u.valor="R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:3,maximumFractionDigits:3});u.var=(p>=0?"+":"−")+Math.abs(p).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%";u.dir=p>=0?1:-1;
+ const dt=new Date(+j.timestamp*1000);u.ref="ao vivo · "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});u.vivo=1;u.fonte="AwesomeAPI (mercado à vista)";pintaMercado();}catch(e){}}
+setInterval(()=>{if(document.visibilityState==="visible")dolarVivo();},300000);
+function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
+ return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
+ `<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Toque em cada item para ver a fonte.</div>`;}
+function pintaMercado(){const a=document.getElementById("mktSide");if(a)a.innerHTML=mktHtml(true);const b=document.getElementById("mktHoje");if(b)b.innerHTML=mktHtml(false);}
+document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(m&&MKT){const x=MKT.itens.find(i=>i.id===m.dataset.mkt);if(!x)return;
+ openSheet(`<div class="sh"><b>${x.nome}</b><button id="xS">×</button></div><div class="card"><div style="font-size:30px;font-weight:800">${x.valor}</div><div class="${x.dir>0?"up":"dn"}" style="font-weight:700;color:${x.dir>0?"#22c55e":"#ff5a5a"}">${x.var}</div><p class="note" style="margin:6px 0 0">${x.ref}</p><p style="margin:12px 0 0;line-height:1.5">${x.nota}</p><p class="note" style="margin:12px 0 0">Fonte: <b>${x.fonte}</b>${x.link?` · <a href="${x.link}" target="_blank" rel="noopener">abrir</a>`:""}</p></div>`);return;}
+ const t=e.target.closest("[data-info]");if(t){e.stopPropagation();document.querySelector(".inf-pop")?.remove();const r=t.getBoundingClientRect(),d=document.createElement("div");d.className="inf-pop";d.innerHTML=t.dataset.info+'<button aria-label="Fechar">×</button>';document.body.appendChild(d);
+  const W=d.offsetWidth,H=d.offsetHeight;d.style.left=Math.max(8,Math.min(innerWidth-W-8,r.left+r.width/2-W/2))+"px";d.style.top=(r.top>H+16?r.top-H-8:r.bottom+8)+"px";d.querySelector("button").onclick=()=>d.remove();setTimeout(()=>d.remove(),7000);return;}
+ if(!e.target.closest(".inf-pop"))document.querySelector(".inf-pop")?.remove();},true);
+
 /* ===== Pregão do mês (gráfico estilo bolsa) ===== */
 let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
 function tkSerie(m){const d=D.dias;let a=0,b=0;
  if(m==="ating") return {pts:d.map(x=>x[2]/x[3]*100),fmt:v=>pct(v),ref:d.map(()=>100),refN:"meta",tit:"Atingimento do dia"};
  if(m==="acum") return {pts:d.map(x=>(a+=x[2])),fmt:v=>mi(v),ref:d.map(x=>(b+=x[3])),refN:"meta acumulada",tit:"Faturamento acumulado"};
  return {pts:d.map(x=>x[2]),fmt:v=>mi(v),ref:d.map(x=>x[3]),refN:"meta do dia",tit:"Faturamento do dia"};}
-function tkSvg(m){const S=tkSerie(m),P=S.pts,R=S.ref,n=P.length,w=360,h=170,pl=6,pr=6,pt=14,pb=20;
+function tkSvg(m){const S=tkSerie(m),P=S.pts,R=S.ref,n=P.length,dk=matchMedia("(min-width:1024px)").matches,w=dk?720:360,h=dk?250:170,pl=6,pr=6,pt=14,pb=20;
  const all=P.concat(R),mx=Math.max(...all)*1.06,mn=m==="acum"?0:Math.min(...all)*.9;const X=i=>pl+(w-pl-pr)*i/Math.max(1,n-1),Y=v=>pt+(h-pt-pb)*(1-(v-mn)/(mx-mn||1));
  const up=P[n-1]>=(m==="ating"?100:R[n-1]),col=up?"#22c55e":"#ff5a5a";
  const line=P.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+","+Y(v).toFixed(1)).join(""),ref=R.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+","+Y(v).toFixed(1)).join("");
@@ -432,7 +481,7 @@ function tkSvg(m){const S=tkSerie(m),P=S.pts,R=S.ref,n=P.length,w=360,h=170,pl=6
  g+=`<circle cx="${X(n-1)}" cy="${Y(P[n-1])}" r="7" fill="${col}" opacity=".25"/><circle cx="${X(n-1)}" cy="${Y(P[n-1])}" r="3.6" fill="${col}"/>`;
  [0,Math.floor((n-1)/2),n-1].forEach(i=>g+=`<text x="${X(i)}" y="${h-5}" font-size="10" text-anchor="${i===0?"start":i===n-1?"end":"middle"}" fill="var(--ink2)">${D.dias[i][0]}</text>`);
  g+=`<g class="tkc" style="display:none"><line y1="${pt}" y2="${h-pb}" stroke="var(--ink2)" stroke-width="1"/><circle r="4.5" fill="var(--bg)" stroke="${col}" stroke-width="2.2"/></g>`;
- return `<svg class="tksv" viewBox="0 0 ${w} ${h}" data-n="${n}" data-pl="${pl}" data-pr="${pr}">${g}</svg>`;}
+ return `<svg class="tksv" viewBox="0 0 ${w} ${h}" data-w="${w}" data-n="${n}" data-pl="${pl}" data-pr="${pr}">${g}</svg>`;}
 function tkHead(m,i){const S=tkSerie(m),P=S.pts,n=P.length;i=i==null?n-1:i;const v=P[i],pv=i>0?P[i-1]:null,d=D.dias[i];
  let c="";if(m==="acum"){const dv=v-S.ref[i];c=`<div class="c ${dv>=0?"up":"dn"}">${dv>=0?"▲ +":"▼ −"}${mi(Math.abs(dv))} vs meta</div>`;}
  else if(pv!=null){const ch=m==="ating"?v-pv:(v/pv-1)*100;c=`<div class="c ${ch>=0?"up":"dn"}">${ch>=0?"▲ +":"▼ "}${m==="ating"?pct(ch,1).replace("%","")+" p.p.":pct(ch,1)} vs ${D.dias[i-1][0]}</div>`;}
@@ -441,10 +490,10 @@ function tickerHtml(){if(!D.dias||D.dias.length<2)return"";const m=tkModo,P=D.di
  return `<div class="card tk" id="tk"><div class="tkh">${tkHead(m)}</div>
  <div class="tkt">${[["dia","Diário"],["ating","% da meta"],["acum","Acumulado"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
  <div id="tkg">${tkSvg(m)}</div>
- <div class="tkf"><div><small>Máx</small><b>${mi(Math.max(...P))}</b></div><div><small>Mín</small><b>${mi(Math.min(...P))}</b></div><div><small>Média</small><b>${mi(tot/P.length)}</b></div><div><small>Na meta</small><b>${D.dias.filter(x=>x[2]>=x[3]).length}/${D.dias.length}</b></div></div></div>`;}
+ <div class="tkf"><div data-info="Maior faturamento diário do mês até o D-1."><small>Máx</small><b>${mi(Math.max(...P))}</b></div><div data-info="Menor faturamento diário do mês (domingos e feriados puxam para baixo)."><small>Mín</small><b>${mi(Math.min(...P))}</b></div><div data-info="Média simples de todos os dias corridos do mês até o D-1. A média por dia útil está no Ritmo."><small>Média</small><b>${mi(tot/P.length)}</b></div><div data-info="Dias em que o faturamento igualou ou superou a meta daquele dia."><small>Na meta</small><b>${D.dias.filter(x=>x[2]>=x[3]).length}/${D.dias.length}</b></div></div></div>`;}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();tkModo=b.dataset.tk;LS.set("farolTk",tkModo);const t=document.getElementById("tk");if(!t)return;
  t.querySelectorAll("[data-tk]").forEach(x=>x.classList.toggle("on",x===b));t.querySelector("#tkg").innerHTML=tkSvg(tkModo);t.querySelector(".tkh").innerHTML=tkHead(tkModo);},true);
-function tkMove(e){const sv=e.target.closest&&e.target.closest(".tksv");if(!sv)return;const r=sv.getBoundingClientRect(),n=+sv.dataset.n,pl=+sv.dataset.pl,pr=+sv.dataset.pr,w=360;
+function tkMove(e){const sv=e.target.closest&&e.target.closest(".tksv");if(!sv)return;const r=sv.getBoundingClientRect(),n=+sv.dataset.n,pl=+sv.dataset.pl,pr=+sv.dataset.pr,w=+sv.dataset.w||360;
  const x=(e.clientX-r.left)/r.width*w,i=Math.max(0,Math.min(n-1,Math.round((x-pl)/(w-pl-pr)*(n-1))));const P=tkSerie(tkModo).pts;
  const lines=[...sv.querySelectorAll("path")];const X=pl+(w-pl-pr)*i/Math.max(1,n-1);const seg=lines[2].getAttribute("d").split(/[ML]/).filter(Boolean)[i].split(",");
  const c=sv.querySelector(".tkc");c.style.display="";c.querySelector("line").setAttribute("x1",X);c.querySelector("line").setAttribute("x2",X);c.querySelector("circle").setAttribute("cx",seg[0]);c.querySelector("circle").setAttribute("cy",seg[1]);
@@ -467,7 +516,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  <h2>${D.meta&&D.meta.farolTipo==="mes"?"Farol do mês · regionais":"Farol do dia · D-1"} <small>${D.meta&&/Power BI/.test(D.meta.fonte||"")&&D.meta.farolTipo!=="mes"?"variação do acumulado ÷ meta do dia":"verde ≥100 · amarelo 90–99 · vermelho &lt;90"}</small></h2>
  <div class="card fl">
   <div class="flhero"><div class="tlbig" aria-hidden="true"><span class="vis"></span><i class="r ${nR?"on":""}"><b>${nR}</b></i><i class="y ${nY?"on":""}"><b>${nY}</b></i><i class="g ${nG?"on":""}"><b>${nG}</b></i><span class="pole"></span></div>
-   <div class="flht"><small>Farol do dia · ${d1.data}</small><b>${nG} de ${f.length}</b><span>regionais no verde</span>
+   <div class="flht" data-info="Farol do dia: variação do acumulado de cada regional dividida pela meta do dia. Verde ≥ 100%, amarelo 90–99%, vermelho abaixo de 90%."><small>Farol do dia · ${d1.data}</small><b>${nG} de ${f.length}</b><span>regionais no verde</span>
    <div class="flhl"><em class="g">● ${nG} acima da meta</em><em class="y">● ${nY} próximas</em><em class="r">● ${nR} em atenção</em></div></div></div>
   <div class="flsum"><div class="seg3"><span style="flex:${nG||.0001};background:var(--g)"></span><span style="flex:${nY||.0001};background:var(--y)"></span><span style="flex:${nR||.0001};background:var(--r)"></span></div>
   <div class="flleg"><span><i style="background:var(--g)"></i><b>${nG}</b> acima</span><span><i style="background:var(--y)"></i><b>${nY}</b> próximo</span><span><i style="background:var(--r)"></i><b>${nR}</b> atenção</span></div></div>
@@ -495,6 +544,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
  <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
  </div>
+ <h2 class="mkth">Mercado <small>cimento · celulose · diesel · dólar</small></h2><div class="card mkt mktc" id="mktHoje"></div>
  ${D.frase?`<h2>Para o dia</h2><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
  <p class="motto">Carro parado é <em>prejuízo</em>. Vamos pra cima!</p>`;}
 function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3];ac.push(a);am.push(b);});
@@ -918,9 +968,9 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
   mv.forEach(x=>b.appendChild(x));b.dataset.title=(h.childNodes[0].textContent||"").trim();
   const bt=document.createElement("button");bt.className="bsh";bt.type="button";bt.textContent="↗ Enviar";bt.setAttribute("data-bsh","");h.appendChild(bt);
   const ck=document.createElement("span");ck.className="ck";ck.textContent="✓";b.prepend(ck);});
- {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".fl,.gerl"));});
-  const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
-  const nw=bl.filter(b=>!b.classList.contains("wide")),k=c3?3:2,r=n%k;nw.forEach(b=>b.classList.remove("s12","s6"));
+ {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
+  const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")||b.classList.contains("big")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
+  const nw=bl.filter(b=>!b.classList.contains("wide")&&!b.classList.contains("big")&&!b.classList.contains("f4")&&!b.querySelector(".mktc")),k=c3?3:2,r=nw.length%k;nw.forEach(b=>b.classList.remove("s12","s6"));
   if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
 const corVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
@@ -1028,7 +1078,7 @@ document.addEventListener("click",e=>{if(e.target.closest("#instGo"))instalarAgo
 window.addEventListener("appinstalled",()=>{document.documentElement.classList.add("pwa");$("#instCard")?.remove();});
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();pintaMercado();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
@@ -1076,7 +1126,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfil()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfil()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();setTimeout(convite,6000);})();
 </script>
 <script src="pacote.js"></script>
 </body>
