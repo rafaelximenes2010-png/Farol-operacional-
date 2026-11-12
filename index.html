@@ -103,7 +103,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .sec{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:14px 2px 6px}
 .cfg label{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:10px 0 4px}.cfg input{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)}
 .btn{border:0;border-radius:12px;padding:11px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--navy);color:#fff}.btn.sec2{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-.inst{display:none;margin-left:6px;background:#fff;color:var(--navy);border:0;border-radius:10px;padding:6px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.inst{display:none;white-space:nowrap;margin-left:6px;background:#fff;color:var(--navy);border:0;border-radius:10px;padding:6px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
 .dds{background:repeating-linear-gradient(135deg,#f2c200 0 14px,#1d1d1d 14px 28px);padding:0 0 0 14px;border:0;overflow:hidden}
 .dds>div{background:#fff8dc;padding:14px;color:#3b2f00}
 @media (prefers-color-scheme:dark){.dds>div{background:#2b2408;color:#f5e6b0}}
@@ -174,6 +174,42 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .avatar{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:linear-gradient(135deg,#ff6b6b,#d32f2f 55%,#1b3a7a);color:#fff;font-weight:800;font-size:14px;letter-spacing:.5px;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25);position:relative;padding:0}
 .avatar .on{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:#2fd16b;border:2px solid #1b3a7a}
 .ib{display:inline-flex;vertical-align:middle;margin-right:6px}.ib svg{width:20px;height:20px;margin:0}
+
+/* ===================== COMPUTADOR (≥1024px) ===================== */
+.side-brand,.side-foot{display:none}
+@media (min-width:1024px){
+ body{display:grid;grid-template-columns:248px 1fr;grid-template-rows:auto 1fr;height:100vh}
+ header{grid-column:2;grid-row:1;padding:18px 28px;border-radius:0}
+ header .logo,header .ht{display:none}
+ header .hrow{gap:10px}
+ header .upd{margin-top:0;position:absolute;left:28px;top:50%;transform:translateY(-50%);font-size:15px;font-weight:600}
+ header .hrow{justify-content:flex-end;min-height:40px}
+ header .datebar{margin-left:14px}
+ main{grid-column:2;grid-row:2;padding:24px 28px 40px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px;align-content:start;max-width:none}
+ main>*{grid-column:1/-1;margin:0!important}
+ main>.blk{grid-column:auto}
+ main>.blk:has(.tw),main>.blk:has(.lei),main>.blk:has(.dds),main>.blk:has(.farol),main>.blk:has(.fx2),main>.blk:has(.sim){grid-column:auto}
+ main>.blk:has(table){grid-column:1/-1}
+ main>.blk h2{margin-top:0}
+ .kpis{grid-template-columns:repeat(4,1fr);gap:14px}.kpi .v{font-size:30px}
+ .farol{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+ nav.tabs{grid-column:1;grid-row:1/3;flex-direction:column;justify-content:flex-start;gap:4px;padding:18px 14px;border-top:0;border-right:1px solid var(--line);background:linear-gradient(180deg,#0b1a3f,#132a5c);}
+ nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;font-size:14.5px;padding:12px 14px;color:rgba(255,255,255,.75);border-radius:12px}
+ nav.tabs button svg{width:20px;height:20px}
+ nav.tabs button.on{background:rgba(255,255,255,.14);color:#fff}
+ nav.tabs button:hover{background:rgba(255,255,255,.08);color:#fff}
+ .side-brand{display:flex;align-items:center;gap:12px;padding:4px 6px 22px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12);color:#fff}
+ .side-brand img{width:46px;height:46px;border-radius:12px}.side-brand b{display:block;font-size:17px}.side-brand small{opacity:.7;font-size:12px}
+ .side-foot{display:block;margin-top:auto;padding:14px 8px 4px;border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:12px;line-height:1.5}
+ .side-foot img{width:150px;height:auto;background:#fff;border-radius:12px;padding:8px 14px;display:block;margin-bottom:10px}
+ .share{right:28px;bottom:28px}
+ .selbar{left:auto;right:28px;width:460px;bottom:28px}
+ .sheet{align-items:center}.sheet>div{border-radius:20px;max-width:620px;max-height:86vh}
+ .inst{display:inline-block!important}
+ .lock,#splash{z-index:120}
+}
+.pwa .inst{display:none!important}
+@media (min-width:1500px){main{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -186,7 +222,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
     <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
     <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
-    <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
+    <button class="inst" id="bInst" title="Instalar no computador">⬇ Instalar app</button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
   </div>
   <div class="upd"><span class="dot"></span><span id="updT">Carregando…</span>
     <span class="datebar"><select id="dSel" aria-label="Escolher dia"></select></span></div>
@@ -194,11 +230,13 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 <main id="main"></main>
 <button class="share" id="bSh" aria-label="Compartilhar no WhatsApp">↗</button>
 <nav class="tabs">
+  <div class="side-brand"><img src="icons/icone-96.png" alt=""><div><b>Farol Operacional</b><small>CT LOS · Grupo LOS</small></div></div>
   <button data-t="hoje" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Hoje</button>
   <button data-t="mes"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 16v-5M11 16V7M16 16v-8M21 16V4"/></svg>Mês</button>
   <button data-t="reg"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Regionais</button>
   <button data-t="proj"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Projeção</button>
   <button data-t="orc"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h3M8 17h6"/></svg>Orçamento</button>
+  <div class="side-foot"><img src="icons/logo-los.png" alt="Grupo LOS">Indicadores operacionais diários.<br>Carro parado é prejuízo.</div>
 </nav>
 <script src="parser.js"></script>
 <script>
@@ -566,11 +604,11 @@ function cfgSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Farol-
  $("#gPub").onclick=()=>{LS.set("farolGh",gv());if(!D){toastMsg("Carregue um PDF primeiro.");return;}publicar();};
  $("#cSave").onclick=async()=>{API.base=$("#cApi").value.trim();$("#cMsg").textContent="Testando…";const Dx=await loadData();if(Dx){D=Dx;compute();show(cur);paintHead();}$("#cMsg").innerHTML="Fonte atual: <b>"+(D?D.meta.fonte:"nenhuma")+"</b>";};
  const ib=$("#cInst");if(ib) ib.onclick=doInstall;
- $("#cWa").href="https://wa.me/?text="+encodeURIComponent("*Farol Operacional · CT LOS* 🚦\nOs indicadores do dia no seu celular.\n\nBaixe aqui (iPhone, Android ou computador):\n"+new URL("instalar.html",location.href).href+"\n\nA senha da equipe eu te passo em separado.");}
+ $("#cWa").href="https://wa.me/?text="+encodeURIComponent("🚦 *Farol Operacional · CT LOS*\nInstale o app (celular ou computador):\n"+new URL("instalar.html",location.href).href+"\nA senha da equipe vai em outra mensagem.");}
 /* ===== INSTALAÇÃO (PWA) ===== */
 let deferredInstall=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("#bInst").style.display="inline-block";});
-async function doInstall(){if(!deferredInstall){cfgSheet();return;}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("#bInst").style.display="none";}
+async function doInstall(){if(!deferredInstall){location.href="instalar.html";return;}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("#bInst").style.display="none";}
 if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
 
 /* ===== ABERTURA (farol: vermelho → amarelo → verde) ===== */
@@ -636,10 +674,11 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
  ${ehAdmin()?`<div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
- <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar e convidar</b><small>iPhone, Android, computador e WhatsApp</small></div></div>
+ <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Convidar pelo WhatsApp</b><small>Envia o link de instalação em 1 toque</small></div></div>
+ <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar o app</b><small>iPhone, Android e computador</small></div></div>
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=go(cfgSheet);
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{window.open("https://wa.me/?text="+encodeURIComponent("🚦 *Farol Operacional · CT LOS*\nInstale o app (celular ou computador):\n"+new URL("instalar.html",location.href).href+"\nA senha da equipe vai em outra mensagem."),"_blank");};
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
@@ -771,6 +810,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
  if(ios&&!st&&!LS.get("farolIosHint",0)){const d=document.createElement("div");d.style.cssText="position:fixed;left:12px;right:12px;bottom:84px;background:#0f2350;color:#fff;border-radius:16px;padding:12px 14px;z-index:15;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.3)";
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
+if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
 (async()=>{await splash();if(!perfil()) await cadastro(false);D=await loadData();if(D)compute();paintHead();show("hoje");boasVindas();setTimeout(iosHint,4000);})();
 </script>
 <script src="pacote.js"></script>
