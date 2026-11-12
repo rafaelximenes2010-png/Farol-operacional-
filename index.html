@@ -546,7 +546,7 @@ function msgSheet(){openSheet(`<div class="sh"><b>Mensagens do dia</b><button id
 document.addEventListener("click",e=>{if(e.target.closest("#msgBar"))msgSheet();});
 
 /* ===== Desempenho diário (gráfico de linha) ===== */
-let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}if(tkModo==="acum")tkModo="dia";
+let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
 function tkSerie(m){const d=D.dias;let a=0,b=0;
  if(m==="ating") return {pts:d.map(x=>x[2]/x[3]*100),fmt:v=>pct(v),ref:d.map(()=>100),refN:"meta",tit:"Atingimento do dia"};
  if(m==="acum") return {pts:d.map(x=>(a+=x[2])),fmt:v=>mi(v),ref:d.map(x=>(b+=x[3])),refN:"meta acumulada",tit:"Faturamento acumulado"};
@@ -571,7 +571,7 @@ function tkHead(m,i){const S=tkSerie(m),P=S.pts,n=P.length;i=i==null?n-1:i;const
  return `<div><div class="l">${S.tit}</div><div class="v">${S.fmt(v)}</div>${c}</div><div class="dt">${d[0]} · ${d[1]}<br>${S.refN}: ${S.fmt(S.ref[i])}</div>`;}
 function tickerHtml(){if(!D.dias||D.dias.length<2)return"";const m=tkModo,P=D.dias.map(x=>x[2]),tot=P.reduce((a,b)=>a+b,0);
  return `<div class="card tk" id="tk"><div class="tkh">${tkHead(m)}</div>
- <div class="tkt">${[["dia","Diário"],["ating","% da meta"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
+ <div class="tkt">${[["dia","Diário"],["ating","% da meta"],["acum","Acumulado"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
  <div id="tkg">${tkSvg(m)}</div>
  <div class="tkf"><div data-info="Maior faturamento diário do mês até o D-1."><small>Máx</small><b>${mi(Math.max(...P))}</b></div><div data-info="Menor faturamento diário do mês (domingos e feriados puxam para baixo)."><small>Mín</small><b>${mi(Math.min(...P))}</b></div><div data-info="Média simples de todos os dias corridos do mês até o D-1. A média por dia útil está no Ritmo."><small>Média</small><b>${mi(tot/P.length)}</b></div><div data-info="Dias em que o faturamento igualou ou superou a meta daquele dia."><small>Na meta</small><b>${D.dias.filter(x=>x[2]>=x[3]).length}/${D.dias.length}</b></div></div></div>`;}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();tkModo=b.dataset.tk;LS.set("farolTk",tkModo);const t=document.getElementById("tk");if(!t)return;
@@ -632,9 +632,7 @@ function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3]
   <div class="card kpi lit ${M.acum>=M.metaAcOrc?"":"bad"}" data-m="desvio"><div class="l">Desvio acumulado</div><div class="v">${M.acum>=M.metaAcOrc?"+":"−"}${mi(Math.abs(M.acum-M.metaAcOrc))}</div><div class="s">vs meta orçada ${mi(M.metaAcOrc)}</div></div>
   <div class="card kpi" data-m="dias"><div class="l">Dias na meta</div><div class="v">${M.diasMeta} de ${M.diasTot}</div><div class="s">melhor ${best[0]} (${pct(best[2]/best[3]*100)}) · pior ${worst[0]} (${pct(worst[2]/worst[3]*100)})</div></div>
   <div class="card kpi" data-m="mediaDU"><div class="l">Média por dia útil</div><div class="v">${mi(M.mediaDU)}</div><div class="s">margens ${pct(M.mgT,2)} terc. · ${pct(M.mgA,2)} agr.</div></div></div>
- <h2>Acumulado real × meta (Power BI)</h2>
- <div class="card">${lineChart([{pts:am,c:"var(--lnR)",dash:1,w:2},{pts:ac,c:"var(--lnB)",fill:1,end:1}],360,200,{labels:D.dias.map((x,i)=>[i,x[0].slice(0,2)])})}
- <div class="legend"><span><i style="background:var(--lnB)"></i>Real ${mi(M.acum)}</span><span><i style="background:var(--lnR)"></i>Meta ${mi(M.metaAcBI)}</span></div></div>
+
  <h2>Faturamento diário × meta <small>cor = farol · traço = meta</small></h2>
  <div class="card">${barsChart(D.dias.map(x=>{const p=x[2]/x[3]*100;return{v:x[2],m:x[3],c:C[cor(p)],t:pct(p),l:x[0].slice(0,2)}}))}</div>
  <h2>Dia a dia</h2>
