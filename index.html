@@ -399,6 +399,13 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 @media (min-width:1024px){main>.msgbar{grid-column:1/-1!important;margin:0}}
 
 #uUso,#uPol{color:#7fb0ff;font-weight:700}
+
+.mktmais{display:block;width:100%;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(91,155,255,.45);background:rgba(91,155,255,.12);color:inherit;font:inherit;font-weight:800;font-size:13.5px;text-align:left;cursor:pointer}
+.mktmais small{display:block;font-weight:500;font-size:11px;opacity:.75;margin-top:2px}
+.setc{margin-bottom:10px}.sth{display:flex;gap:12px;align-items:center}.sth .si{font-size:26px}.sth b{display:block;font-size:14.5px}.sth small{display:block;color:var(--ink2);font-size:11.5px}.sth .sv{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.setc ul{margin:10px 0 0 18px;padding:0;font-size:13px;line-height:1.5}
+
+.setc a,.card.pol a,.mkt a,.sheet .card a{color:#7fb0ff;font-weight:700}
 </style>
 </head>
 <body>
@@ -440,7 +447,9 @@ const sg=v=>(v>=0?"+":"−")+brl(Math.abs(v)).replace("R$ ","R$ ");
 const cor=p=>p>=100?"g":p>=90?"y":"r";
 const st=p=>p>=100?"Acima da meta":p>=90?"Próximo da meta":"Em atenção";
 let M,d1,atD1,atAcO,atAcB,falta,necDU;
-function compute(){M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
+function normRegs(X){if(!X)return;const n=x=>{x=String(x||"").trim().toUpperCase().replace(/\s+/g," ");return x==="NORDESTE"?"NORDESTE 1":x;};(X.reg||[]).forEach(r=>r[0]=n(r[0]));(X.farol||[]).forEach(f=>f[0]=n(f[0]));}
+function mergeFarol(Dx,R){if(!R||!R.farol||!R.farol.length)return;normRegs(Dx);normRegs(R);R.farol.forEach(([n,p])=>{const f=Dx.farol.find(x=>x[0]===n);if(f){f[1]=p;f.length=2;}else Dx.farol.push([n,p]);});}
+function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
 /* ===== gráficos SVG ===== */
 function lineChart(series,w=360,h=200,opts={}){const pad={l:38,r:8,t:12,b:24};const xs=series[0].pts.length;
  const maxV=opts.max||Math.max(...series.flatMap(s=>s.pts.filter(v=>v!=null)))*1.08;const X=i=>pad.l+(w-pad.l-pad.r)*i/((opts.n||xs)-1);const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;
@@ -491,10 +500,16 @@ async function dolarVivo(){try{const r=await fetch("https://economia.awesomeapi.
  const u=MKT.itens.find(x=>x.id==="usd");const v=+j.bid,p=+j.pctChange;u.valor="R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:3,maximumFractionDigits:3});u.var=(p>=0?"+":"−")+Math.abs(p).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%";u.dir=p>=0?1:-1;
  const dt=new Date(+j.timestamp*1000);u.ref="ao vivo · "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});u.vivo=1;u.fonte="AwesomeAPI (mercado à vista)";pintaMercado();}catch(e){}}
 setInterval(()=>{if(document.visibilityState==="visible")dolarVivo();},300000);
-function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
+function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",ouro:"🥇",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
  const ic2={ipca:"🧾",pib:"🏛️"};const mac=(MKT.macro||[]).map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic2[x.id]||""} ${x.nome}</small><b>${x.valor}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("");
  return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+(mac?`<div class="sub">Economia · oficial IBGE</div>${mac}<div class="sub">Setor e insumos</div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
- `<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Toque em cada item para ver a fonte.</div>`;}
+ (MKT.setores?`<button type="button" class="mktmais" id="mktMais">🌐 Mais mercados <small>agro · aço · minério · biodiesel · portos · veículos · ouro</small></button>`:"")+`<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Toque em cada item para ver a fonte.</div>`;}
+
+function setoresSheet(){if(!MKT||!MKT.setores)return;openSheet(`<div class="sh"><b>Mais mercados</b><button id="xS">×</button></div><p class="note" style="margin:0 4px 10px">Indicadores dos setores que movem a carga do Grupo LOS · atualizados em ${MKT.atualizado}</p>
+ ${MKT.setores.map(x=>`<div class="card setc"><div class="sth"><span class="si">${x.ic}</span><div style="flex:1;min-width:0"><b>${x.nome}</b><small>${x.ref}</small></div><div style="text-align:right"><div class="sv">${x.valor}</div><small class="${x.dir>0?"up":x.dir<0?"dn":""}" style="font-weight:700;color:${x.dir>0?"#22c55e":x.dir<0?"#ff5a5a":"var(--ink2)"}">${x.var}</small></div></div>
+ <ul>${x.itens.map(i=>`<li>${i}</li>`).join("")}</ul><p class="note" style="margin:6px 0 0">Fonte: <b>${x.fonte}</b>${x.link?` · <a href="${x.link}" target="_blank" rel="noopener">abrir</a>`:""}</p></div>`).join("")}`);}
+document.addEventListener("click",e=>{if(e.target.closest("#mktMais")){e.stopPropagation();setoresSheet();}},true);
+
 function pintaMercado(){const a=document.getElementById("mktSide");if(a)a.innerHTML=mktHtml(true);const b=document.getElementById("mktHoje");if(b)b.innerHTML=mktHtml(false);}
 document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(m&&MKT){const x=MKT.itens.concat(MKT.macro||[]).find(i=>i.id===m.dataset.mkt);if(!x)return;
  openSheet(`<div class="sh"><b>${x.nome}</b><button id="xS">×</button></div><div class="card"><div style="font-size:30px;font-weight:800">${x.valor}</div><div class="${x.dir>0?"up":"dn"}" style="font-weight:700;color:${x.dir>0?"#22c55e":"#ff5a5a"}">${x.var}</div><p class="note" style="margin:6px 0 0">${x.ref}</p><p style="margin:12px 0 0;line-height:1.5">${x.nota}</p><p class="note" style="margin:12px 0 0">Fonte: <b>${x.fonte}</b>${x.link?` · <a href="${x.link}" target="_blank" rel="noopener">abrir</a>`:""}</p></div>`);return;}
@@ -603,10 +618,10 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
    <div class="flhl"><em class="g">● ${nG} acima da meta</em><em class="y">● ${nY} próximas</em><em class="r">● ${nR} em atenção</em></div></div></div>
   <div class="flsum"><div class="seg3"><span style="flex:${nG||.0001};background:var(--g)"></span><span style="flex:${nY||.0001};background:var(--y)"></span><span style="flex:${nR||.0001};background:var(--r)"></span></div>
   <div class="flleg"><span><i style="background:var(--g)"></i><b>${nG}</b> acima</span><span><i style="background:var(--y)"></i><b>${nY}</b> próximo</span><span><i style="background:var(--r)"></i><b>${nR}</b> atenção</span></div></div>
-  ${[...f].sort((a,b)=>b[1]-a[1]).map(([n,p])=>{const c=cor(p),r=regByName(n),w=Math.min(100,p/ Math.max(150,...f.map(x=>x[1])) *100),m100=100/Math.max(150,...f.map(x=>x[1]))*100;
+  ${[...f].sort((a,b)=>b[1]-a[1]).map(([n,p,tp])=>{const c=cor(p),r=regByName(n),w=Math.min(100,p/ Math.max(150,...f.map(x=>x[1])) *100),m100=100/Math.max(150,...f.map(x=>x[1]))*100;
    return `<button type="button" class="flr ${c}" data-reg="${n}"><span class="tl3"><i class="${c==="r"?"on":""}"></i><i class="${c==="y"?"on":""}"></i><i class="${c==="g"?"on":""}"></i></span>
    <span class="fln"><b>${n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX")}</b><small>${r?"Mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"><span style="width:${w}%"></span><em style="left:${m100}%"></em></span></span>
-   <span class="flp"><b>${pct(p)}</b><small>D-1</small></span></button>`;}).join("")}
+   <span class="flp"><b>${pct(p)}</b><small>${tp==="m"?"mês":"D-1"}</small></span></button>`;}).join("")}
  </div>
  <h2>Desempenho diário <small>faturamento e atingimento, dia a dia</small></h2>
  ${tickerHtml()}
@@ -873,13 +888,13 @@ async function carregarArquivos(files){let revista=null;
   if(t) pendBI[t]=txt; else if(/MORNING|OPERATIONAL NEWS|Performance por dia/i.test(txt)) revista={f,pages};
   else throw new Error("“"+f.name+"” não é um dos PDFs do Power BI (indicadores_flash ou D-1 Regionais).");}
  if(revista&&!(pendBI.dia&&pendBI.reg)){const R=FarolPDF.parse(revista.pages);
-  if(D&&D.meta&&/Power BI/.test(D.meta.fonte||"")&&isoOf(D.d1.data)>=isoOf(R.d1.data)){const Dx=JSON.parse(JSON.stringify(D));Dx.dds=R.dds||Dx.dds;Dx.editorial=R.editorial||Dx.editorial;Dx.frase=R.frase||Dx.frase;return {Dx,orig:revista.f,textos:true};}
+  if(D&&D.meta&&/Power BI/.test(D.meta.fonte||"")&&isoOf(D.d1.data)>=isoOf(R.d1.data)){const Dx=JSON.parse(JSON.stringify(D));Dx.dds=R.dds||Dx.dds;Dx.editorial=R.editorial||Dx.editorial;Dx.frase=R.frase||Dx.frase;if(isoOf(D.d1.data)===isoOf(R.d1.data))mergeFarol(Dx,R);return {Dx,orig:revista.f,textos:true};}
   return {Dx:R,orig:revista.f};}
  if(pendBI.dia&&pendBI.reg){const ed=edicoes();const base0=D||ed[Object.keys(ed).sort().pop()]||null;const iso=isoOf(FarolPDF.parseBI(pendBI.dia,pendBI.reg,base0).d1.data);
   const ks=Object.keys(ed).filter(k=>k<iso).sort();let prev=ks.length?ed[ks.pop()]:null;
   if(!prev){const senha=LS.get("farolSenha","");for(let i=1;i<=7&&!prev&&senha;i++){const d=new Date(iso+"T12:00:00Z");d.setUTCDate(d.getUTCDate()-i);try{const r=await fetch("data/edicoes/"+d.toISOString().slice(0,10)+".enc",{cache:"no-store"});if(r.ok)prev=await decifrar(await r.text(),senha);}catch(e){}}}
   if(!prev)prev=base0;
-  const Dx=FarolPDF.parseBI(pendBI.dia,pendBI.reg,prev);delete pendBI.dia;delete pendBI.reg;if(revista){const R=FarolPDF.parse(revista.pages);Dx.dds=R.dds||Dx.dds;Dx.editorial=R.editorial||Dx.editorial;Dx.frase=R.frase||Dx.frase;}return {Dx,orig:revista?revista.f:null};}
+  const Dx=FarolPDF.parseBI(pendBI.dia,pendBI.reg,prev);delete pendBI.dia;delete pendBI.reg;if(revista){const R=FarolPDF.parse(revista.pages);Dx.dds=R.dds||Dx.dds;Dx.editorial=R.editorial||Dx.editorial;Dx.frase=R.frase||Dx.frase;if(R.d1&&R.d1.data===Dx.d1.data)mergeFarol(Dx,R);}return {Dx,orig:revista?revista.f:null};}
  return {falta:pendBI.dia?"o PDF de REGIONAIS (indicadores_flash … D-1 REGIONAIS)":"o PDF diário (indicadores_flash … com a tabela por dia)"};}
 $("#pdfIn").addEventListener("change",async e=>{const fs=[...e.target.files];e.target.value="";if(!fs.length)return;toastMsg("Lendo "+fs.length+" arquivo(s)…");
  try{const r=await carregarArquivos(fs);

@@ -13,6 +13,17 @@
    "link": "https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes"
   },
   {
+   "id": "ouro",
+   "nome": "Ouro · onça troy",
+   "valor": "US$ 3.880",
+   "var": "−2,68% no dia",
+   "dir": -1,
+   "ref": "12/11 · 14h01 (NY)",
+   "fonte": "Kitco (mercado à vista)",
+   "nota": "Ouro à vista caiu para US$ 3.880/oz em 12/11 (−US$ 107), com mínima do dia de US$ 3.852 — inflação nos EUA acima do esperado e aposta de alta de juros pelo Fed fortaleceram o dólar. Recorde histórico: US$ 5.589 (28/01/2026).",
+   "link": "https://www.kitco.com/charts/gold"
+  },
+  {
    "id": "diesel",
    "nome": "Diesel S10 · média Brasil",
    "valor": "R$ 7,30/L",
@@ -74,6 +85,127 @@
    "fonte": "IBGE (Contas Nacionais Trimestrais)",
    "nota": "2º trimestre de 2026: +0,5% sobre o 1º (com ajuste sazonal), +2,0% sobre o 2º tri de 2025; 1,9% em 4 trimestres; R$ 3,4 trilhões. Agropecuária +2,8%; transporte, armazenagem e correio +1,1%. Próxima divulgação (3º tri): início de dezembro.",
    "link": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/pib-do-brasil-cresce-05-no-segundo-trimestre-mostra-ibge"
+  }
+ ],
+ "setores": [
+  {
+   "id": "agro",
+   "ic": "🌾",
+   "nome": "Agro · safra de grãos",
+   "valor": "367,1 Mt",
+   "var": "+1,4% (2026/27)",
+   "dir": 1,
+   "ref": "Conab · 1º levantamento (out/26)",
+   "itens": [
+    "Produção de grãos 2026/27 estimada em 367,1 milhões de t (+1,4%)",
+    "Soja pode chegar a 181,6 milhões de t (+0,7%)",
+    "Área plantada: 85,4 milhões de hectares (+2,3%)",
+    "Trigo 2026: 5,7 milhões de t (−27,2%)"
+   ],
+   "fonte": "Conab",
+   "link": "https://www.gov.br/conab/pt-br/assuntos/noticias/primeiro-levantamento-da-safra-de-graos-2026-27-estima-producao-acima-de-367-milhoes-de-toneladas"
+  },
+  {
+   "id": "aco",
+   "ic": "🏭",
+   "nome": "Aço · produção Brasil",
+   "valor": "2,79 Mt",
+   "var": "jan–set −1,7%",
+   "dir": -1,
+   "ref": "setembro/26 · Aço Brasil",
+   "itens": [
+    "Aço bruto em setembro: 2,791 milhões de t",
+    "Jan–set: 24,6 milhões de t (−1,7% a/a)",
+    "Vendas internas em setembro: 1,8 milhão de t (−0,7%)",
+    "Importações de aço: +51,7% em setembro vs agosto (~600 mil t)"
+   ],
+   "fonte": "Instituto Aço Brasil",
+   "link": "https://www.acobrasil.org.br/site/estatistica-mensal/"
+  },
+  {
+   "id": "minerio",
+   "ic": "⛏️",
+   "nome": "Minério de ferro",
+   "valor": "US$ 92,65/t",
+   "var": "−0,42% (Cingapura)",
+   "dir": -1,
+   "ref": "11/11 · contrato dez",
+   "itens": [
+    "Cingapura (dez): US$ 92,65/t",
+    "Dalian (jan): 687,5 iuanes/t (−0,29%)",
+    "Pressão: restrições ambientais e menor produção de aço na China",
+    "Mínima de 2 anos em outubro (US$ 89,85/t)"
+   ],
+   "fonte": "Bolsas de Cingapura e Dalian (via Reuters)",
+   "link": "https://www.infomoney.com.br/mercados/minerio-de-ferro-oscila-diante-da-queda-de-embarques-e-chegadas-aos-portos/"
+  },
+  {
+   "id": "biodiesel",
+   "ic": "🌱",
+   "nome": "Biodiesel",
+   "valor": "B15",
+   "var": "B16 adiado",
+   "dir": 0,
+   "ref": "mistura obrigatória · ANP/CNPE",
+   "itens": [
+    "Mistura obrigatória de 15% desde ago/25 (B15)",
+    "Meta da lei era B16 em março/26 — adiado até testes de viabilidade",
+    "Meta de contratação nov–dez (6º bimestre): 1,29 milhão de m³ (+4,2% a/a)",
+    "Consumo de matérias-primas jan–set/26: 7,92 milhões de m³ (+8,8%)"
+   ],
+   "fonte": "ANP · BiodieselBR",
+   "link": "https://www.biodieselbr.com/"
+  },
+  {
+   "id": "portos",
+   "ic": "⚓",
+   "nome": "Portos · granéis e cimento",
+   "valor": "1,44 bi t",
+   "var": "+2,7% previsto 2026",
+   "dir": 1,
+   "ref": "ANTAQ",
+   "itens": [
+    "Setor aquaviário movimentou 1,4 bilhão de t em 2025 (+6,1%)",
+    "Projeção ANTAQ para 2026: 1,44 bilhão de t (+2,7%)",
+    "Paranaguá/Antonina: granéis sólidos de importação (trigo, clínquer, coque) +39% no 1º semestre/26",
+    "TMIB (BA): 273 mil t de cimento movimentadas em 2025"
+   ],
+   "fonte": "ANTAQ · Portos do Paraná",
+   "link": "https://www.gov.br/antaq/pt-br"
+  },
+  {
+   "id": "auto",
+   "ic": "🚚",
+   "nome": "Automóveis e caminhões",
+   "valor": "265,5 mil",
+   "var": "+1,8% a/a (out)",
+   "dir": 1,
+   "ref": "Anfavea · outubro/26",
+   "itens": [
+    "Emplacamentos em outubro: 265,5 mil (+1,8% a/a; −5,6% vs set)",
+    "Jan–out: 2,52 milhões (+16,1%)",
+    "Caminhões em outubro: 9.915 (−7,0% a/a); no ano 90,8 mil (−4,1%)",
+    "Exportações em outubro: 29,1 mil (−28,3%); importações jan–out +29,5%"
+   ],
+   "fonte": "Anfavea",
+   "link": "https://anfavea.com.br/site/edicoes-em-excel/"
+  },
+  {
+   "id": "ouro_min",
+   "ic": "🥇",
+   "nome": "Mineração de ouro",
+   "valor": "R$ 25,3 bi",
+   "var": "+44,2% (1º sem)",
+   "dir": 1,
+   "ref": "IBRAM · 1º semestre/26",
+   "itens": [
+    "Faturamento do minério de ouro: R$ 25,3 bi no 1º semestre (+44,2%)",
+    "Exportações de ouro: US$ 4,6 bi (+69,3%)",
+    "Setor mineral faturou R$ 150,7 bi no semestre (+8,2%)",
+    "Preço médio da onça no semestre: US$ 4.696 (+52,9%)"
+   ],
+   "fonte": "IBRAM",
+   "link": "https://ibram.org.br/"
   }
  ]
 }

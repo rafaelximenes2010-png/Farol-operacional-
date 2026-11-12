@@ -1,5 +1,44 @@
-{"versoes":[
- {"v":"2026.11.12-c","data":"12/11/2026","itens":["Acesso restrito a e-mails @grupolos.com.br","Central de atualizações","Política de uso registrada no app, com aceite","DDS, Mensagem e Para o dia num único item no topo","Cada análise aparece em uma aba só (sem repetição)"]},
- {"v":"2026.11.12-b","data":"12/11/2026","itens":["Novas análises: calendário do mês, média por dia da semana, momentum e folga, concentração e margem por regional","Painel do computador em colunas, sem espaços vazios","Mercado: PIB e IPCA (IBGE), cimento (SNIC), celulose, diesel (ANP) e dólar ao vivo"]},
- {"v":"2026.11.12-a","data":"12/11/2026","itens":["Gráfico de desempenho diário (faturamento e atingimento)","Farol em estilo executivo e desenho do farol no computador","Instalação por aparelho, convite por WhatsApp e QR code","Texto do WhatsApp no modelo do Morning Report, com 1 farol por regional"]}
-]}
+{
+ "versoes": [
+  {
+   "v": "2026.11.12-d",
+   "data": "12/11/2026",
+   "itens": [
+    "Nordeste 1 e Nordeste 2 sempre no farol e nos resultados",
+    "Farol da revista do dia prevalece sobre o cálculo dos PDFs do BI",
+    "Ouro (onça) no Mercado",
+    "Botão Mais mercados: agro, aço, minério de ferro, biodiesel, portos, veículos e mineração de ouro"
+   ]
+  },
+  {
+   "v": "2026.11.12-c",
+   "data": "12/11/2026",
+   "itens": [
+    "Acesso restrito a e-mails @grupolos.com.br",
+    "Central de atualizações",
+    "Política de uso registrada no app, com aceite",
+    "DDS, Mensagem e Para o dia num único item no topo",
+    "Cada análise aparece em uma aba só (sem repetição)"
+   ]
+  },
+  {
+   "v": "2026.11.12-b",
+   "data": "12/11/2026",
+   "itens": [
+    "Novas análises: calendário do mês, média por dia da semana, momentum e folga, concentração e margem por regional",
+    "Painel do computador em colunas, sem espaços vazios",
+    "Mercado: PIB e IPCA (IBGE), cimento (SNIC), celulose, diesel (ANP) e dólar ao vivo"
+   ]
+  },
+  {
+   "v": "2026.11.12-a",
+   "data": "12/11/2026",
+   "itens": [
+    "Gráfico de desempenho diário (faturamento e atingimento)",
+    "Farol em estilo executivo e desenho do farol no computador",
+    "Instalação por aparelho, convite por WhatsApp e QR code",
+    "Texto do WhatsApp no modelo do Morning Report, com 1 farol por regional"
+   ]
+  }
+ ]
+}

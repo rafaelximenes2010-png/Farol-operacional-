@@ -1,3 +1,5 @@
+/* nome padrão das regionais: Nordeste vira Nordeste 1 */
+function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return n==="NORDESTE"?"NORDESTE 1":n;}
 /* Farol Operacional · leitura do PDF da revista "Morning Operational News"
    Recebe o texto de cada página (pdf.js) e devolve os dados no formato do app.
    Enquanto a API do Power BI não é liberada, o app é alimentado por este PDF. */
@@ -125,8 +127,8 @@
     if (prevOk) {
       // dias entre as edições (se pulou dias, a diferença soma mais de um dia)
       const metaPeriodo = dias.filter(x => { const [a, b] = x[0].split("/").map(Number); const iso = new Date(Date.UTC(ano, b - 1, a)).toISOString().slice(0, 10); return iso > pIso && iso <= dIso; }).reduce((s, x) => s + x[3], 0);
-      farol = regs.map(r => { const p = prev.reg.find(x => x[0] === r[0]); const mp = r[2] * metaPeriodo / metaBI; return p && mp > 0 ? [r[0], Math.round((r[1] - p[1]) / mp * 100)] : null; }).filter(Boolean);
-      if (farol.length < regs.length) av.push("Farol do dia calculado para as regionais presentes na edição anterior.");
+      farol = regs.map(r => { const p = prev.reg.find(x => nReg(x[0]) === nReg(r[0])); const mp = r[2] * metaPeriodo / metaBI; return p && mp > 0 ? [r[0], Math.round((r[1] - p[1]) / mp * 100)] : [r[0], r[3], "m"]; });
+      if (farol.some(f => f[2] === "m")) av.push("Regionais sem edição anterior aparecem no farol com o atingimento do mês.");
     }
     if (!farol.length) { farol = regs.map(r => [r[0], r[3]]); farolTipo = "mes"; av.push("Farol mostra o atingimento parcial do mês: carregue os PDFs todo dia para o farol D-1 por regional."); }
     // ---------- calendário
