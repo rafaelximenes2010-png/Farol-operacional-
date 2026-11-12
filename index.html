@@ -854,7 +854,7 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
  <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar o app</b><small>iPhone, Android e computador</small></div></div>
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};};
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
