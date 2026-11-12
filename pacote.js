@@ -74,7 +74,7 @@
 .rv .rq{background:linear-gradient(135deg,#9b1c1c,#1b2a5a);color:#fff;border-radius:12px;padding:12px 16px;font-weight:800;font-style:italic;font-size:14px}</style>`;
     const hd = (t) => `<div class="hd"><div class="lg"><img src="${LOGO_DATA}" style="height:64px;width:auto"></div><div class="ey">CT LOS · FAROL OPERACIONAL · REVISTA DIÁRIA DE OPERAÇÕES</div><div class="tt">MORNING <span>OPERATIONAL NEWS</span></div><div class="sb">${t}</div></div>`;
     const ft = n => `<div class="ft">Carro parado é prejuízo. Vamos pra cima!<span>Morning Operational News · CT LOS · página ${n} de 2</span></div>`;
-    const resumo = (document.querySelector(".res") || {}).innerText || "";
+    const resumo = (document.querySelector(".lei") || {}).innerText || "";
     const p1 = `<div class="rv">${hd(`Edição de ${new Date().toLocaleDateString("pt-BR")} · Resultado de ${d1.dia}, ${d1.data} · Grupo LOS consolidado`)}<div class="bd">
 <div class="k4"><div class="k"><small>FATURAMENTO D-1</small><b>${mi(d1.fat)}</b><i>meta ${mi(d1.meta)}</i></div><div class="k"><small>ATINGIMENTO D-1</small><b style="color:${corH(atD1)}">${pct(atD1)}</b><i>${sg(d1.fat - d1.meta)}</i></div><div class="k"><small>ACUMULADO DO MÊS</small><b>${mi(M.acum)}</b><i>${pct(atAcO)} orçada · ${pct(atAcB)} BI</i></div><div class="k"><small>PROJEÇÃO DO MÊS</small><b>${mi(M.proj)}</b><i>estimativa</i></div></div>
 <h3>FAROL DO DIA POR REGIONAL</h3><div class="fr">${D.farol.map(([n, p]) => `<div><em style="background:${corH(p)}"></em><small>${n}</small><b style="color:${corH(p)}">${pct(p)}</b></div>`).join("")}</div>
@@ -128,7 +128,7 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
     let png, pdf;
     try { png = await cartao(); document.getElementById("pkPrev").innerHTML = `<img src="${URL.createObjectURL(png)}" style="width:100%;max-width:320px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.2)">`; }
     catch (e) { document.getElementById("pkPrev").textContent = "Não consegui gerar o cartão: " + e.message; }
-    try { pdf = await revistaPDF(); document.getElementById("pkPdf").disabled = false; }
+    try { pdf = (typeof revistaOriginal === "function" && await revistaOriginal()) || await revistaPDF(); document.getElementById("pkPdf").disabled = false; }
     catch (e) { toastMsg("Não consegui gerar a revista: " + e.message); }
     document.getElementById("pkSend").disabled = false; try { logEv("pacote"); } catch (e) {}
     const baixar = (blob, nome) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); a.remove(); };
@@ -141,10 +141,9 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
   }
   async function gerarRevista() {
     if (!D) { toastMsg("Carregue o PDF do dia primeiro."); return; }
-    toastMsg("Gerando a revista…");
-    try { const pdf = await revistaPDF(); const f = new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" });
-      try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: "Morning Operational News · " + d1.data }); return; } } catch (e) { if (e.name === "AbortError") return; }
-      const a = document.createElement("a"); a.href = URL.createObjectURL(pdf); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); toastMsg("Revista gerada: " + f.name);
-    } catch (e) { toastMsg("Não consegui gerar a revista: " + e.message); } }
+    toastMsg("Preparando a revista…");
+    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null; const pdf = orig || await revistaPDF();
+      prontoParaEnviar(orig ? "Revista completa do dia" : "Revista (resumo gerado pelo app)", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), `*Morning Operational News · CT LOS* · resultado de ${d1.data}`, false);
+    } catch (e) { toastMsg("Não consegui preparar a revista: " + e.message); } }
   window.FarolPacote = { abrir, texto, cartao, revistaPDF, gerarRevista };
 })();

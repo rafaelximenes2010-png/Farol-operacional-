@@ -15,8 +15,8 @@
 --g:#1e8e4e;--y:#d08a0e;--r:#c62828;--gs:#e5f4ea;--ys:#fdf2dc;--rs:#fbe5e5;--rad:16px}
 @media (prefers-color-scheme:dark){:root{--bg:#0c1426;--card:#152039;--ink:#eef2fa;--ink2:#a5b0c6;--line:#24324f;--gs:#123524;--ys:#3a2c0c;--rs:#3d1717}}
 *{box-sizing:border-box}html,body{margin:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:84px}
-header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 16px;position:sticky;top:0;z-index:5}
+html,body{height:100%}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none}
+header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 16px;position:relative;z-index:5;flex:none}
 .hrow{display:flex;align-items:center;gap:10px}
 .logo{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
 .logo b{color:var(--red);font-weight:900;font-size:13px;letter-spacing:-.5px}
@@ -28,7 +28,7 @@ header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff
 .datebar{display:flex;align-items:center;gap:8px;margin-left:auto}
 .datebar select{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:10px;padding:6px 8px;font:inherit;font-size:12px}
 .datebar option{color:#000}
-main{padding:14px 14px 0;max-width:980px;margin:0 auto}
+main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px max(14px,calc((100% - 980px)/2)) 90px}
 h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:20px 4px 10px;display:flex;align-items:center;gap:8px}
 h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;font-size:11px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:14px;box-shadow:0 1px 2px rgba(15,35,80,.04)}
@@ -74,7 +74,7 @@ tr.tot td{font-weight:800}
 @media (prefers-color-scheme:dark){.warn{color:#f5d38a}}
 .motto{text-align:center;font-weight:800;font-style:italic;margin:22px 0 6px;color:var(--navy2)}.motto em{color:var(--red);font-style:italic}
 @media (prefers-color-scheme:dark){.motto{color:#9fb6ff}}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:9}
+nav.tabs{position:relative;flex:none;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:9}
 nav.tabs button{flex:1;background:none;border:0;color:var(--ink2);font:inherit;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;cursor:pointer;border-radius:12px}
 nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
@@ -87,7 +87,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .sh{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sh b{font-size:18px;flex:1}.sh button{border:0;background:var(--card);width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--ink);cursor:pointer}
 .al{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.al .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}
 .al b{display:block;font-size:14px}.al small{color:var(--ink2);font-size:12px}
-.share{position:fixed;right:14px;bottom:86px;width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:8;cursor:pointer}
+.share{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:8;cursor:pointer}
 .q{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}
 .q.c{background:var(--rs);color:var(--r)}.q.p{background:var(--ys);color:var(--y)}.q.a{background:var(--gs);color:var(--g)}
 .kpi[data-m],[data-m]{cursor:pointer}.kpi[data-m] .l::after{content:"ⓘ";margin-left:5px;opacity:.55;font-size:11px}
@@ -141,6 +141,25 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .st b{display:block;font-size:14px}.st small{color:var(--ink2);font-size:12px;line-height:1.45}
 .pol h4{margin:14px 0 4px;font-size:14px}.pol p,.pol li{font-size:13.5px;line-height:1.55;color:var(--ink)}.pol ul{padding-left:18px;margin:4px 0}
 .cfg select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)}
+
+.blk{position:relative}.blk h2 .bsh{margin-left:auto;border:0;background:var(--card);border:1px solid var(--line);color:var(--ink2);border-radius:9px;font-size:12px;font-weight:700;padding:4px 9px;cursor:pointer;letter-spacing:0;text-transform:none}
+.blk h2 small{margin-left:8px}.blk h2 .bsh+small,.blk h2 small+.bsh{margin-left:8px}
+.selmode .blk{outline:2px dashed #9fb3dd;outline-offset:4px;border-radius:14px;margin-bottom:8px}
+.selmode .blk.sel{outline:3px solid #25d366;background:rgba(37,211,102,.06)}
+.blk .ck{display:none;position:absolute;top:-4px;right:-4px;width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid #9fb3dd;z-index:2;align-items:center;justify-content:center;font-weight:900;color:#fff}
+.selmode .blk .ck{display:flex}.selmode .blk.sel .ck{background:#25d366;border-color:#25d366}
+.selbar{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));background:#0f2350;color:#fff;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.selbar b{flex:1;font-size:14px}.selbar button{border:0;border-radius:10px;padding:9px 12px;font:inherit;font-weight:800;cursor:pointer}
+.tools{display:flex;justify-content:flex-end;gap:8px;margin:2px 0 -6px}.tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.lei{padding:4px 14px}.lei .row{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.lei .row:last-child{border:0}
+.lei .tag{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:8px;padding:5px 8px;height:fit-content;text-align:center}
+.lei ul{margin:0;padding-left:16px}.lei li{font-size:14px;line-height:1.55;margin-bottom:4px}.lei li:last-child{margin-bottom:0}
+.lei .hd{font-size:16px;font-weight:700;line-height:1.45;padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.lei a{color:inherit;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(27,58,122,.25);cursor:pointer}
+.t-dia{background:#e6efff;color:#1b3a7a}.t-reg{background:#e5f4ea;color:#1e8e4e}.t-mes{background:#efe9ff;color:#5b21b6}.t-rit{background:#fff4d6;color:#8a5a00}.t-pri{background:#fde8e8;color:#b0263a}
+@media (prefers-color-scheme:dark){.t-dia{background:#16264a;color:#a9c1ff}.t-reg{background:#123524;color:#8fe0b0}.t-mes{background:#2e2150;color:#c9b6ff}.t-rit{background:#3a2c0c;color:#f5d38a}.t-pri{background:#3d1717;color:#ff9b9b}}
+.lock{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at 50% 38%,#1f3f86,#0b1a3f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;padding:24px;text-align:center}
+.lock .lg{background:#fff;border-radius:16px;padding:10px 18px}.lock .lg img{height:50px;display:block}.lock button{border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-width:240px}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -150,7 +169,8 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 <input type="file" id="pdfIn" accept="application/pdf" hidden>
 <header>
   <div class="hrow">
-    <div class="logo"><img src="icons/simbolo-los.png" alt="Grupo LOS" style="width:28px;height:28px"></div>
+    <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none;font-size:22px">‹</button>
+    <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
     <button class="inst" id="bInst">Instalar</button><button class="hbtn" id="bAl" aria-label="Alertas">🔔<i></i></button><button class="hbtn" id="bCfg" aria-label="Menu">☰</button>
   </div>
@@ -203,17 +223,20 @@ const C={g:"#1e8e4e",y:"#d08a0e",r:"#c62828"};
 /* ===== telas ===== */
 const regByName=n=>D.reg.find(r=>r[0]===n);
 function resumoHtml(){const f=D.farol,g=f.filter(x=>x[1]>=100),y=f.filter(x=>x[1]>=90&&x[1]<100),r=f.filter(x=>x[1]<90);
- const ag=D.reg.filter(x=>x[3]<100);const best=f.reduce((m,x)=>x[1]>m[1]?x:m);const nm=a=>a.map(x=>`<a data-reg="${x[0]}">${tit(x[0])}</a> (${pct(x[1])})`);
- const lista=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];const L=(id,t)=>`<a data-m="${id}">${t}</a>`;
- const proj=D.proj3.map(x=>x[1]);const pmin=Math.min(...proj),pmax=Math.max(...proj);
- const tom=atD1>=100?"superou a":"ficou abaixo da";
- let h=`<p class="lead">O Grupo LOS faturou ${L("fatD1",brl(d1.fat))} em ${d1.data.slice(0,5)} e ${tom} meta diária, com ${L("atD1",pct(atD1)+" de atingimento")} (${sg(d1.fat-d1.meta)}).</p>`;
- h+=`<p><b>Regionais.</b> ${g.length} de ${f.length} fecharam o dia acima da meta, com destaque para ${nm([best])[0]}.`+(y.length?` ${lista(nm(y))} ${y.length>1?"ficaram":"ficou"} próximo${y.length>1?"s":""} da meta.`:"")+(r.length?` ${lista(nm(r))} ${r.length>1?"exigem":"exige"} plano de recuperação imediato.`:"")+`</p>`;
- h+=`<p><b>Mês.</b> O acumulado soma ${L("acum",brl(M.acum))}, equivalente a ${L("atAc",pct(atAcO)+" da meta orçada proporcional")} (${L("desvio",sg(M.acum-M.metaAcOrc))}) e ${L("atAc",pct(atAcB,1)+" da meta Power BI")}. A meta diária foi atingida em ${L("dias",M.diasMeta+" de "+M.diasTot+" dias")}.</p>`;
- h+=`<p><b>Ritmo.</b> Para cumprir a meta orçada, faltam ${L("falta",mi(falta))} em ${L("du",M.duRest+" dias úteis")}, ou ${L("necDU",mi(necDU)+" por dia útil")}, abaixo da média realizada de ${L("mediaDU",mi(M.mediaDU))}. As projeções indicam fechamento entre ${L("proj","R$ "+pmin.toLocaleString("pt-BR",{minimumFractionDigits:1})+" e "+pmax.toLocaleString("pt-BR",{minimumFractionDigits:1})+" mi")}.</p>`;
- if(ag.length) h+=`<p><b>Prioridade.</b> ${lista(ag.map(x=>`<a data-reg="${x[0]}">${tit(x[0])}</a>`))} ${ag.length>1?"estão":"está"} abaixo da meta proporcional do mês, com ${L("desvio",brl(-ag.reduce((s,x)=>s+Math.min(0,x[6]),0)))} a recuperar até o D-1.</p>`;
- return h;}
-const tit=n=>n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX");
+ const ag=D.reg.filter(x=>x[3]<100);const best=f.reduce((m,x)=>x[1]>m[1]?x:m);const L=(id,t)=>`<a data-m="${id}">${t}</a>`;
+ const nm=x=>`<a data-reg="${x[0]}">${tit(x[0])}</a> (${pct(x[1])})`;const lista=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
+ const pj=D.proj3.map(x=>x[1]),pmin=Math.min(...pj),pmax=Math.max(...pj);const f1=v=>v.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+ const dd=D.dias.map(x=>[x[0],x[2]/x[3]*100]);const bd=dd.reduce((m,x)=>x[1]>m[1]?x:m),wd=dd.reduce((m,x)=>x[1]<m[1]?x:m);
+ const top2=[...D.reg].sort((a,b)=>b[1]-a[1]).slice(0,2),c2=top2.reduce((s,x)=>s+x[1],0)/D.reg.reduce((s,x)=>s+x[1],0)*100;
+ const d2=D.dias.length>1?D.dias[D.dias.length-2][0]:"D-2";
+ const row=(cls,t,items)=>`<div class="row"><span class="tag ${cls}">${t}</span><ul>${items.filter(Boolean).map(i=>`<li>${i}</li>`).join("")}</ul></div>`;
+ return `<div class="hd">${atD1>=100?"Dia acima da meta":"Dia abaixo da meta"}: ${L("fatD1",brl(d1.fat))} faturados em ${d1.data.slice(0,5)}, ${L("atD1",pct(atD1)+" da meta")}.</div>`
+ +row("t-dia","Dia",[`Faturamento de ${L("fatD1",brl(d1.fat))} contra meta de ${brl(d1.meta)}: desvio de ${L("atD1",sg(d1.fat-d1.meta))}.`,d1.vsD2!=null?`Variação de ${L("fatD1",(d1.vsD2>0?"+":"")+pct(d1.vsD2,2))} sobre ${d2}.`:""])
+ +row("t-reg","Regionais",[`${g.length} de ${f.length} no verde: ${lista(g.map(nm))}.`,y.length?`Amarelo: ${lista(y.map(nm))}.`:"",r.length?`Vermelho: ${lista(r.map(nm))}, abaixo da faixa de 90%.`:"",`Destaque do dia: ${nm(best)}.`])
+ +row("t-mes","Mês",[`Acumulado de ${L("acum",brl(M.acum))}: ${L("atAc",pct(atAcO)+" da meta orçada proporcional")} (${L("desvio",sg(M.acum-M.metaAcOrc))}) e ${L("atAc",pct(atAcB,1)+" na régua do Power BI")}.`,`Meta batida em ${L("dias",M.diasMeta+" de "+M.diasTot+" dias")}; melhor dia ${bd[0]} (${pct(bd[1])}), pior ${wd[0]} (${pct(wd[1])}).`,top2.length===2?`${tit(top2[0][0])} e ${tit(top2[1][0])} concentram ${pct(c2,1)} do faturamento do mês.`:""])
+ +row("t-rit","Ritmo",[`Faltam ${L("falta",brl(falta))} para a meta orçada em ${L("du",M.duRest+" dias úteis")}: ${L("necDU",brl(necDU)+" por dia útil")}, ${pct(Math.abs(1-necDU/M.mediaDU)*100,1)} ${necDU<=M.mediaDU?"abaixo":"acima"} da média realizada (${L("mediaDU",brl(M.mediaDU))}).`,`Projeção de fechamento entre ${L("proj","R$ "+f1(pmin)+" e "+f1(pmax)+" mi")} (3 metodologias, estimativa) contra meta orçada de ${mi(M.metaOrc)}.`])
+ +(ag.length?row("t-pri","Prioridade",ag.map(x=>`<a data-reg="${x[0]}">${tit(x[0])}</a>: ${pct(x[3])} no mês, devendo ${brl(-x[6])} até o D-1; precisa de ${brl((x[2]-x[1])/M.duRest)} por dia útil.`)):"");}
+const tit=n=>n;
 function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</b><button id="xS">×</button></div>
  <div class="card dds"><div><div class="k">DDS do dia · ${d1.data}</div><b class="t">🦺 ${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>
  ${D.frase?`<div class="sec">Para o dia</div><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal">— ${D.frase.autor}</div></div>`:""}
@@ -227,14 +250,14 @@ function vHoje(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fil
   <div class="card kpi" data-m="acum"><div class="l">Acumulado do mês</div><div class="v">${mi(M.acum)}</div><div class="s">${pct(atAcO)} da orçada · ${pct(atAcB)} BI</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Projeção do mês <span class="est">estimativa</span></div><div class="v">${mi(M.proj)}</div><div class="s">${pct(M.proj/M.metaOrc*100)} da orçada · ${pct(M.proj/M.metaBI*100)} BI</div></div>
  </div>
- <div class="card load" style="margin-top:12px"><div class="ic">⇪</div><div><b>Edição de ${d1.data}</b><small>${D.meta.modo==="api"?"Power BI ao vivo":D.meta.modo==="equipe"?"publicada para a equipe":"lida do PDF neste aparelho"}</small></div><button class="btn" data-pdf>Carregar PDF</button></div>
+${ehAdmin()?`<div class="card load" style="margin-top:12px"><div class="ic">⇪</div><div><b>Edição de ${d1.data}</b><small>${D.meta.modo==="api"?"Power BI ao vivo":D.meta.modo==="equipe"?"publicada para a equipe":"lida do PDF neste aparelho"}</small></div><button class="btn" data-pdf>Carregar PDF</button></div>`:""}
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a">📰 Gerar revista</button><button class="btn" data-pacote style="background:#25d366">📲 Pacote WhatsApp</button></div>
  ${D.avisos&&D.avisos.length?`<p class="note" style="margin:8px 4px 0">Nota de conferência: ${D.avisos.join(" ")}</p>`:""}
  <h2>🦺 Segurança em primeiro lugar</h2>
  ${D.dds?`<div class="card dds" id="ddsCard" style="cursor:pointer"><div><div class="k">DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:`<div class="card">Sem mensagem de segurança nesta edição.</div>`}
  ${D.editorial?`<h2>Mensagem do dia</h2><div class="card edit"><div class="k">Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
- <h2>Resumo do dia <small>toque nos números para entender</small></h2>
- <div class="card res">${resumoHtml()}</div>
+ <h2>Leitura do dia <small>toque nos números</small></h2>
+ <div class="card lei">${resumoHtml()}</div>
  <h2>Farol do dia · D-1 <small>verde ≥100 · amarelo 90–99 · vermelho &lt;90</small></h2>
  <div class="farol">${f.map(([n,p])=>`<button class="fr ${cor(p)}" data-reg="${n}"><div class="b"></div><div class="n">${n}</div><div class="p">${pct(p)}</div></button>`).join("")}</div>
  <div class="fcount"><div class="cg"><b>${nG}</b>acima da meta</div><div class="cy"><b>${nY}</b>próximo</div><div class="cr"><b>${nR}</b>em atenção</div></div>
@@ -414,7 +437,7 @@ async function lerPDF(file){const lib=await pdfjs();const doc=await lib.getDocum
   for(const it of c.items){const y=Math.round(it.transform[5]);if(y0!==null&&Math.abs(y-y0)>2)out+="\n";else if(out&&!out.endsWith(" "))out+=" ";out+=it.str;y0=y;}pages.push(out);}
  return FarolPDF.parse(pages);}
 $("#pdfIn").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;toastMsg("Lendo o PDF…");
- try{const Dx=await lerPDF(f);guardar(Dx);logEv("carregado");D=Dx;compute();paintHead();show("hoje");toastMsg("Edição de "+Dx.d1.data+" carregada.");pubOffer();}
+ try{const Dx=await lerPDF(f);guardar(Dx);logEv("carregado");pdfSalvar(isoOf(Dx.d1.data),f);D=Dx;compute();paintHead();show("hoje");toastMsg("Edição de "+Dx.d1.data+" carregada.");const gh=LS.get("farolGh",null);if(gh&&gh.token&&LS.get("farolAutoPub",1)){await publicar();}pubOffer();}
  catch(err){openSheet(`<div class="sh"><b>Não consegui ler o PDF</b><button id="xS">×</button></div><div class="card">${err.message}</div><p class="note">Use o PDF da revista Morning Operational News gerado no dia.</p>`);}});
 /* --- publicar para a equipe no GitHub (criptografado com a senha da equipe) --- */
 const enc=new TextEncoder(),dec=new TextDecoder();const b64=u=>btoa(String.fromCharCode(...u)),ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -425,8 +448,8 @@ async function cifrar(obj,senha){const salt=crypto.getRandomValues(new Uint8Arra
 async function decifrar(txt,senha){const j=JSON.parse(txt);const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(j.iv)},await chave(senha,ub64(j.salt)),ub64(j.ct));return JSON.parse(dec.decode(pt));}
 async function carregarPublicada(){if(!location.protocol.startsWith("http"))return null;
  let txt;try{const r=await fetch("data/ultimo.enc?t="+Date.now(),{cache:"no-store"});if(!r.ok)return null;txt=await r.text();}catch(e){return null;}
- let senha=LS.get("farolSenha","");for(let tent=0;tent<3;tent++){if(!senha) senha=await pedirSenha(tent>0);if(!senha)return null;
-  try{const Dx=await decifrar(txt,senha);LS.set("farolSenha",senha);Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);return Dx;}catch(e){senha="";LS.set("farolSenha","");}}
+ let senha=LS.get("farolSenha","");if(senha&&fid.on){const ok=await telaBloqueio();if(!ok)senha="";}let novaSenha=!senha;for(let tent=0;tent<3;tent++){if(!senha) senha=await pedirSenha(tent>0);if(!senha)return null;
+  try{const Dx=await decifrar(txt,senha);LS.set("farolSenha",senha);if(novaSenha)setTimeout(oferecerFaceId,1500);Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);return Dx;}catch(e){senha="";novaSenha=true;LS.set("farolSenha","");}}
  return null;}
 function pedirSenha(erro){return new Promise(res=>{openSheet(`<div class="sh"><b>Acesso da equipe</b></div><div class="card cfg"><p class="note" style="margin:0">Digite a senha da equipe CT LOS para ver os indicadores.${erro?` <b style="color:var(--r)">Senha incorreta.</b>`:""}</p>
  <label for="sP">Senha</label><input id="sP" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false"><label style="display:flex;gap:6px;align-items:center;font-weight:500;margin-top:8px"><input type="checkbox" id="sShow" style="width:auto"> Mostrar senha</label><button class="btn" id="sOk" style="margin-top:10px;width:100%">Entrar</button></div>`);
@@ -437,7 +460,7 @@ async function ghPut(cfg,path,content,msg){const url=`https://api.github.com/rep
  if(!r.ok) throw new Error("GitHub "+r.status+": "+((await r.json()).message||""));}
 async function publicar(){const cfg=LS.get("farolGh",null);if(!cfg||!cfg.repo||!cfg.token||!cfg.senha){cfgSheet();return;}
  toastMsg("Publicando para a equipe…");try{const c=await cifrar(D,cfg.senha);const iso=isoOf(d1.data);
-  const pf=cfg.pasta||"";await ghPut(cfg,pf+"data/edicoes/"+iso+".enc",c,"Farol: edição "+d1.data);await ghPut(cfg,pf+"data/ultimo.enc",c,"Farol: última edição "+d1.data);
+  const pf=cfg.pasta||"";await ghPut(cfg,pf+"data/edicoes/"+iso+".enc",c,"Farol: edição "+d1.data);const orig=await pdfLer(iso);if(orig)await ghPut(cfg,pf+"data/revistas/"+iso+".enc",await cifrarBytes(new Uint8Array(await orig.arrayBuffer()),cfg.senha),"Farol: revista "+d1.data);await ghPut(cfg,pf+"data/ultimo.enc",c,"Farol: última edição "+d1.data);
   logEv("publicado");toastMsg("Publicado! A equipe já vê a edição de "+d1.data+".");}catch(e){toastMsg("Falhou: "+e.message);}}
 function pubOffer(){const gh=LS.get("farolGh",null);openSheet(`<div class="sh"><b>Edição de ${d1.data} pronta</b><button id="xS">×</button></div><div class="card">O PDF foi lido. O que fazer agora?</div>
  <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a">📰 Gerar revista (PDF)</button>
@@ -526,29 +549,132 @@ function central(){const l=LS.get("farolLog",{}),gh=LS.get("farolGh",null),fez=k
  ${st(!!D,"Edição em uso",D?`${d1.data} · ${D.meta.fonte}`:"Nenhuma")}
  ${st(Object.keys(edicoes()).length>0,"Histórico neste aparelho",Object.keys(edicoes()).length+" edição(ões)")}
  ${st(!!(gh&&gh.token),"Publicação para a equipe",gh&&gh.token?"Configurada · "+gh.repo:"Não configurada",!(gh&&gh.token))}</div>
- <button class="btn sec2" id="cCfg" style="width:100%;margin-top:10px">Configurações avançadas</button>`);
- $("#cPub").onclick=()=>{document.querySelector(".sheet").remove();publicar();};$("#cCfg").onclick=()=>{document.querySelector(".sheet").remove();cfgSheet();};}
+ <div class="sec">Ajustes</div><div style="display:grid;gap:8px"><button class="btn" id="cEdit">✏️ Editar textos da edição (DDS, mensagem, frase)</button><button class="btn sec2" id="cFid">${fid.on?"🔓 Face ID ativo · desativar":"🔓 Ativar Face ID neste aparelho"}</button><button class="btn sec2" id="cCfg">Configurações avançadas</button></div>`);
+ $("#cPub").onclick=()=>{document.querySelector(".sheet").remove();publicar();};$("#cEdit").onclick=()=>{document.querySelector(".sheet").remove();editarTextos();};$("#cFid").onclick=async()=>{document.querySelector(".sheet").remove();if(fid.on){LS.set("farolFaceId",null);toastMsg("Face ID desativado.");}else await fidAtivar();};$("#cCfg").onclick=()=>{document.querySelector(".sheet").remove();cfgSheet();};}
 /* ===== MENU ===== */
 function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button id="xS">×</button></div><div class="menu">
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
- <div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, fontes de dados e publicação</small></div></div>
+ ${ehAdmin()?`<div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
  <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar e convidar</b><small>iPhone, Android, computador e WhatsApp</small></div></div>
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));$("#mCen").onclick=go(central);$("#mPol").onclick=go(politica);$("#mIns").onclick=go(cfgSheet);
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=go(cfgSheet);
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
+
+/* ===== NAVEGAÇÃO COM VOLTAR ===== */
+const pilha=[];
+function irPara(t){if(t===cur)return;pilha.push(cur);try{history.pushState({t},"")}catch(e){}show(t);}
+function voltar(){const sh=document.querySelector(".sheet");if(sh){sh.remove();return;}if(document.body.classList.contains("selmode")){selSair();return;}
+ const t=pilha.pop();if(t)show(t);else if(cur!=="hoje")show("hoje");}
+window.addEventListener("popstate",()=>voltar());
+/* ===== BLOCOS COMPARTILHÁVEIS (cada gráfico/quadro) ===== */
+function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h2")];
+ hs.forEach(h=>{const b=document.createElement("div");b.className="blk";m.insertBefore(b,h);let n=h;const mv=[];while(n&&!(n!==h&&(n.tagName==="H2"||n.classList&&n.classList.contains("motto")))){mv.push(n);n=n.nextElementSibling;}
+  mv.forEach(x=>b.appendChild(x));b.dataset.title=(h.childNodes[0].textContent||"").trim();
+  const bt=document.createElement("button");bt.className="bsh";bt.type="button";bt.textContent="↗ Enviar";bt.setAttribute("data-bsh","");h.appendChild(bt);
+  const ck=document.createElement("span");ck.className="ck";ck.textContent="✓";b.prepend(ck);});
+ if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
+const corVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
+async function blocoPNG(blks){await new Promise(r=>{if(window.html2canvas)return r();const s2=document.createElement("script");s2.src="vendor/html2canvas.min.js";s2.onload=r;document.head.appendChild(s2);});
+ const W=430,box=document.createElement("div");box.style.cssText="position:fixed;left:0;top:0;width:"+W+"px;z-index:-5;background:"+corVar("--bg")+";padding:14px;pointer-events:none";
+ blks.forEach(b=>{const c=b.cloneNode(true);c.querySelectorAll(".bsh,.ck").forEach(x=>x.remove());c.classList.remove("sel");c.style.outline="none";c.style.marginBottom="10px";box.appendChild(c);});
+ box.querySelectorAll("svg *").forEach(el=>["fill","stroke"].forEach(a=>{const v=el.getAttribute(a);if(v&&v.includes("var(")){el.setAttribute(a,corVar(v.match(/var\((--[^)]+)\)/)[1]));}}));
+ document.body.appendChild(box);await new Promise(r=>setTimeout(r,120));
+ const cv=await window.html2canvas(box,{scale:2,backgroundColor:corVar("--bg"),scrollX:0,scrollY:0,windowWidth:W});box.remove();
+ const k=2,band=96*k,out=document.createElement("canvas");out.width=cv.width;out.height=cv.height+band+40*k;const x=out.getContext("2d");
+ const g=x.createLinearGradient(0,0,out.width,0);g.addColorStop(0,"#0b1a3f");g.addColorStop(1,"#2346a0");x.fillStyle=g;x.fillRect(0,0,out.width,band);
+ x.fillStyle="#fff";x.beginPath();x.roundRect(14*k,16*k,150*k,64*k,12*k);x.fill();
+ const lg=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src="icons/logo-los.png";});const lh=52*k,lw=lg.width*lh/lg.height;x.drawImage(lg,14*k+(150*k-lw)/2,22*k,lw,lh);
+ x.fillStyle="#fff";x.font=`800 ${17*k}px system-ui,sans-serif`;x.fillText("Farol Operacional · CT LOS",178*k,44*k);x.fillStyle="rgba(255,255,255,.8)";x.font=`500 ${13*k}px system-ui,sans-serif`;x.fillText(`D-1: ${d1.dia}, ${d1.data}`,178*k,66*k);
+ x.drawImage(cv,0,band);x.fillStyle="#0f2350";x.fillRect(0,out.height-40*k,out.width,40*k);x.fillStyle="#fff";x.font=`800 italic ${13*k}px system-ui,sans-serif`;x.textAlign="center";x.fillText("Carro parado é prejuízo. Vamos pra cima!",out.width/2,out.height-15*k);
+ return new Promise(r=>out.toBlob(r,"image/png"));}
+function prontoParaEnviar(titulo,arquivo,txt,previa){const url=URL.createObjectURL(arquivo);
+ openSheet(`<div class="sh"><b>${titulo}</b><button id="xS">×</button></div>${previa?`<div class="card" style="text-align:center"><img src="${url}" style="width:100%;max-width:340px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.15)"></div>`:`<div class="card">📄 <b>${arquivo.name}</b><br><small class="note">${(arquivo.size/1024/1024).toFixed(1)} MB</small></div>`}
+ <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" id="psEnv" style="background:#25d366">📲 Enviar (WhatsApp, e-mail…)</button><button class="btn sec2" id="psSal">⬇ Salvar no aparelho</button></div>`);
+ $("#psEnv").onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[arquivo]})){await navigator.share({files:[arquivo],text:txt});return;}}catch(e){if(e.name==="AbortError")return;}
+  window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank");};
+ $("#psSal").onclick=()=>{const a=document.createElement("a");a.href=url;a.download=arquivo.name;document.body.appendChild(a);a.click();a.remove();};}
+async function enviarBlocos(blks){if(!blks.length){toastMsg("Selecione ao menos um quadro.");return;}toastMsg("Preparando a imagem…");
+ try{const png=await blocoPNG(blks);const nome="Farol_"+blks.map(b=>b.dataset.title).join("_").normalize("NFD").replace(/[^\w]+/g,"_").slice(0,60)+"_"+isoOf(d1.data)+".png";
+  prontoParaEnviar(blks.length>1?blks.length+" quadros prontos":blks[0].dataset.title,new File([png],nome,{type:"image/png"}),`*Farol Operacional · CT LOS* · ${blks.map(b=>b.dataset.title).join(" · ")} · D-1 ${d1.data}`,true);}
+ catch(e){toastMsg("Não consegui gerar a imagem: "+e.message);}}
+function selEntrar(){document.body.classList.add("selmode");let bar=document.querySelector(".selbar");if(!bar){bar=document.createElement("div");bar.className="selbar";
+ bar.innerHTML='<b id="selN">Toque nos quadros para marcar</b><button type="button" id="selCancel" style="background:rgba(255,255,255,.15);color:#fff">Cancelar</button><button type="button" id="selSend" style="background:#25d366;color:#fff">Enviar</button>';document.body.appendChild(bar);
+ $("#selCancel").onclick=selSair;$("#selSend").onclick=()=>{const b=[...document.querySelectorAll(".blk.sel")];selSair();enviarBlocos(b);};}}
+function selSair(){document.body.classList.remove("selmode");document.querySelectorAll(".blk.sel").forEach(b=>b.classList.remove("sel"));document.querySelector(".selbar")?.remove();}
+function selConta(){const n=document.querySelectorAll(".blk.sel").length;const e=$("#selN");if(e)e.textContent=n?n+" quadro(s) marcado(s)":"Toque nos quadros para marcar";}
+/* ===== REVISTA ORIGINAL (PDF completo) ===== */
+function idb(){return new Promise((ok,err)=>{const r=indexedDB.open("farol",1);r.onupgradeneeded=()=>r.result.createObjectStore("pdf");r.onsuccess=()=>ok(r.result);r.onerror=()=>err(r.error);});}
+async function pdfSalvar(iso,blob){try{const db=await idb();await new Promise(r=>{const t=db.transaction("pdf","readwrite");t.objectStore("pdf").put(blob,iso);t.oncomplete=r;t.onerror=r;});}catch(e){}}
+async function pdfLer(iso){try{const db=await idb();return await new Promise(r=>{const q=db.transaction("pdf").objectStore("pdf").get(iso);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null);});}catch(e){return null;}}
+const u8b64=u=>{let s2="";for(let i=0;i<u.length;i+=32768)s2+=String.fromCharCode(...u.subarray(i,i+32768));return btoa(s2);};
+async function cifrarBytes(u,senha){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},await chave(senha,salt),u));return JSON.stringify({v:1,salt:u8b64(salt),iv:u8b64(iv),ct:u8b64(ct)});}
+async function decifrarBytes(txt,senha){const j=JSON.parse(txt);return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(j.iv)},await chave(senha,ub64(j.salt)),ub64(j.ct)));}
+async function revistaOriginal(){const iso=isoOf(d1.data);let b=await pdfLer(iso);if(b)return b;
+ const senha=LS.get("farolSenha","");if(!senha)return null;try{const r=await fetch("data/revistas/"+iso+".enc",{cache:"no-store"});if(!r.ok)return null;const u=await decifrarBytes(await r.text(),senha);b=new Blob([u],{type:"application/pdf"});pdfSalvar(iso,b);return b;}catch(e){return null;}}
+/* ===== EDIÇÃO DE TEXTOS NA CENTRAL ===== */
+function editarTextos(){if(!D){toastMsg("Carregue uma edição primeiro.");return;}const dd=D.dds||{},ed=D.editorial||{},fr=D.frase||{};
+ openSheet(`<div class="sh"><b>Editar textos da edição ${d1.data}</b><button id="xS">×</button></div><div class="card cfg">
+ <b>DDS · Segurança</b><label>Título</label><input id="eDt" value="${(dd.titulo||"").replace(/"/g,"&quot;")}"><label>Texto</label><textarea id="eDx" rows="5" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)">${dd.texto||""}</textarea><label>Assinatura</label><input id="eDa" value="${dd.autor||"Rafael Ximenes"}">
+ <b style="display:block;margin-top:16px">Mensagem do dia</b><label>Texto</label><textarea id="eEx" rows="4" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)">${ed.texto||""}</textarea><label>Assinatura</label><input id="eEa" value="${ed.autor||"Rafael Ximenes"}">
+ <b style="display:block;margin-top:16px">Frase do dia</b><label>Frase</label><input id="eFx" value="${(fr.texto||"").replace(/"/g,"&quot;")}"><label>Autor</label><input id="eFa" value="${fr.autor||""}">
+ <div style="display:flex;gap:8px;margin-top:14px"><button class="btn" id="eSave" style="flex:1">Salvar</button><button class="btn" id="eSavePub" style="flex:1;background:#1e8e4e">Salvar e publicar</button></div></div>`);
+ const salvar=()=>{D.dds={titulo:$("#eDt").value.trim(),texto:$("#eDx").value.trim(),autor:$("#eDa").value.trim()};D.editorial=$("#eEx").value.trim()?{texto:$("#eEx").value.trim(),autor:$("#eEa").value.trim()}:null;
+  D.frase=$("#eFx").value.trim()?{texto:$("#eFx").value.trim(),autor:$("#eFa").value.trim()}:null;guardar(D);document.querySelector(".sheet").remove();show(cur);toastMsg("Textos atualizados.");};
+ $("#eSave").onclick=salvar;$("#eSavePub").onclick=()=>{salvar();publicar();};}
+/* ===== FACE ID (WebAuthn) ===== */
+const fid={get on(){return !!LS.get("farolFaceId",null)}};
+async function fidDisponivel(){try{return !!(window.PublicKeyCredential&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());}catch(e){return false;}}
+async function fidAtivar(){const u=perfil()||{nome:"Usuário",email:"usuario@farol"};
+ try{const c=await navigator.credentials.create({publicKey:{rp:{name:"Farol Operacional"},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:u.email||u.nome,displayName:u.nome},
+  challenge:crypto.getRandomValues(new Uint8Array(32)),pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"preferred"},timeout:60000}});
+  LS.set("farolFaceId",u8b64(new Uint8Array(c.rawId)));toastMsg("Face ID ativado. Na próxima abertura, é só olhar para o celular.");return true;}
+ catch(e){toastMsg("Face ID não ativado ("+e.name+").");return false;}}
+async function fidVerificar(){try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:"public-key",id:ub64(LS.get("farolFaceId",""))}],userVerification:"required",timeout:60000}});return true;}catch(e){return false;}}
+function telaBloqueio(){return new Promise(res=>{const d=document.createElement("div");d.className="lock";const n=primeiroNome();
+ d.innerHTML=`<div class="lg"><img src="icons/logo-los.png" alt="Grupo LOS"></div><b style="font-size:20px">Farol Operacional</b><div style="opacity:.8">${n?`Olá, ${n}. `:""}Desbloqueie para ver os indicadores.</div><button type="button" id="lkF" style="background:#fff;color:#0f2350">🔓 Desbloquear com Face ID</button><button type="button" id="lkS" style="background:rgba(255,255,255,.14);color:#fff">Usar a senha da equipe</button>`;
+ document.body.appendChild(d);$("#lkF").onclick=async()=>{if(await fidVerificar()){d.remove();res(true);}else toastMsg("Não reconheci. Tente de novo ou use a senha.");};
+ $("#lkS").onclick=()=>{d.remove();LS.set("farolSenha","");res(false);};});}
+async function oferecerFaceId(){if(fid.on||LS.get("farolFaceIdNao",0)||!(await fidDisponivel()))return;
+ openSheet(`<div class="sh"><b>Entrar com Face ID?</b><button id="xS">×</button></div><div class="card">Na próxima vez, o Farol abre com o Face ID (ou a digital), sem digitar a senha da equipe.</div>
+ <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" id="fOk">Ativar Face ID</button><button class="btn sec2" id="fNo">Agora não</button></div>`);
+ $("#fOk").onclick=async()=>{document.querySelector(".sheet")?.remove();await fidAtivar();};$("#fNo").onclick=()=>{LS.set("farolFaceIdNao",1);document.querySelector(".sheet")?.remove();};}
+
+/* ===== ADMINISTRADOR ===== */
+const ADMIN_NOMES=["rafael ximenes"];
+function ehAdmin(){const u=perfil();return !!(u&&(u.admin||ADMIN_NOMES.includes((u.nome||"").trim().toLowerCase())));}
+function adminSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Farol-operacional-",pasta:"",branch:"main",token:"",senha:LS.get("farolSenha","")});
+ openSheet(`<div class="sh"><b>Entrada do administrador</b><button id="xS">×</button></div><div class="card cfg">
+ <p class="note" style="margin:0">Administrador: <b>${(perfil()||{}).nome||"Rafael Ximenes"}</b>. Com o token configurado, cada PDF carregado é publicado sozinho e todos os celulares e computadores recebem a edição nova ao abrir o app.</p>
+ <label>Token do GitHub (fine-grained · só o repositório Farol-operacional- · Contents: Read and write)</label><input id="aTok" type="password" value="${g.token}" placeholder="github_pat_…" autocapitalize="off" autocorrect="off" spellcheck="false">
+ <label>Senha da equipe (usada para criptografar)</label><input id="aPw" type="password" value="${g.senha||LS.get("farolSenha","")}" autocapitalize="off" autocorrect="off" spellcheck="false">
+ <label style="display:flex;gap:8px;align-items:center;font-weight:500;margin-top:10px"><input type="checkbox" id="aAuto" style="width:auto" ${LS.get("farolAutoPub",1)?"checked":""}> Publicar automaticamente ao carregar o PDF</label>
+ <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="aSave" style="flex:1">Salvar e testar</button></div><p class="note" id="aMsg"></p>
+ <details style="margin-top:6px"><summary class="note" style="cursor:pointer">Como criar o token (1 vez)</summary><ol class="note" style="padding-left:18px;line-height:1.6">
+ <li>No Safari, entre em github.com › foto › <b>Settings</b> › <b>Developer settings</b> › <b>Personal access tokens</b> › <b>Fine-grained tokens</b> › <b>Generate new token</b>.</li>
+ <li>Nome: Farol · Expiração: 1 ano · <b>Only select repositories</b> › Farol-operacional-.</li>
+ <li>Permissions › Repository › <b>Contents: Read and write</b> › Generate token.</li><li>Copie o código (github_pat_…) e cole acima.</li></ol></details></div>`);
+ $("#aSave").onclick=async()=>{const v={repo:"rafaelximenes2010-png/Farol-operacional-",pasta:"",branch:"main",token:$("#aTok").value.trim(),senha:$("#aPw").value};LS.set("farolGh",v);LS.set("farolAutoPub",$("#aAuto").checked?1:0);
+  $("#aMsg").textContent="Testando…";try{const r=await fetch(`https://api.github.com/repos/${v.repo}`,{headers:{Authorization:"Bearer "+v.token}});const j=await r.json();
+   $("#aMsg").innerHTML=r.ok&&j.permissions&&j.permissions.push?"✅ Token válido. Publicação automática pronta.":"❌ Token sem permissão de escrita ("+(j.message||r.status)+").";}catch(e){$("#aMsg").textContent="❌ "+e.message;}};}
+/* ===== ATUALIZAÇÃO AUTOMÁTICA NOS APARELHOS ===== */
+async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=await fetch("data/ultimo.enc?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const txt=await r.text();
+ const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
+  Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);D=Dx;compute();paintHead();show(cur);toastMsg("Edição atualizada: "+Dx.d1.data);}}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNovaEdicao();});setInterval(checarNovaEdicao,5*60*1000);
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
-function show(t){cur=t;$("#main").innerHTML=D?V[t]():vazio();document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));window.scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintHead(){if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
  $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:D.meta.modo==="equipe"?"Edição da equipe":"PDF do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
  const ks=Object.keys(edicoes()).sort().reverse();$("#dSel").innerHTML=ks.map(k=>`<option value="${k}" ${k===isoOf(d1.data)?"selected":""}>${k.slice(8)}/${k.slice(5,7)}</option>`).join("");}
-function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue a revista do dia</b><p class="note">Enquanto a API do Power BI não é liberada, o app é alimentado pelo PDF da Morning Operational News.</p><button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button></div>`;}
-document.querySelector("nav.tabs").onclick=e=>{const b=e.target.closest("button");if(b) show(b.dataset.t);};
+function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue a revista do dia</b><p class="note">Enquanto a API do Power BI não é liberada, o app é alimentado pelo PDF da Morning Operational News.</p>${ehAdmin()?`<button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button>`:`<p class="note">Aguarde a publicação da edição pelo administrador.</p>`}</div>`;}
+document.querySelector("nav.tabs").onclick=e=>{const b=e.target.closest("button");if(b) irPara(b.dataset.t);};
+$("#bBack").onclick=()=>voltar();
 document.addEventListener("click",e=>{if(e.target.closest("[data-revista]")){document.querySelector(".sheet")?.remove();FarolPacote.gerarRevista();return;}if(e.target.closest("[data-pacote]")){document.querySelector(".sheet")?.remove();FarolPacote.abrir();return;}if(e.target.closest("[data-pdf]")){document.querySelector(".sheet")?.remove();$("#pdfIn").click();}});
-$("#main").addEventListener("click",e=>{if(e.target.closest("[data-pdf]"))return;if(e.target.closest("#ddsCard")) return ddsSheet();const m=e.target.closest("[data-m]");if(m) return mSheet(m.dataset.m);const r=e.target.closest("[data-reg]");if(r) regSheet(r.dataset.reg);});
+$("#main").addEventListener("click",e=>{if(e.target.closest("[data-selmode]"))return selEntrar();if(document.body.classList.contains("selmode")){const b=e.target.closest(".blk");if(b){b.classList.toggle("sel");selConta();}return;}const bs=e.target.closest("[data-bsh]");if(bs)return enviarBlocos([bs.closest(".blk")]);if(e.target.closest("[data-pdf]"))return;if(e.target.closest("#ddsCard")) return ddsSheet();const m=e.target.closest("[data-m]");if(m) return mSheet(m.dataset.m);const r=e.target.closest("[data-reg]");if(r) regSheet(r.dataset.reg);});
 $("#bAl").onclick=()=>D?alertsSheet():toastMsg("Carregue uma edição primeiro.");$("#bCfg").onclick=menu;$("#bInst").onclick=doInstall;
 $("#dSel").onchange=()=>{const e=edicoes()[$("#dSel").value];if(e){D=e;LS.set("farolAtual",$("#dSel").value);compute();paintHead();show(cur);}};
 $("#bSh").onclick=()=>FarolPacote.abrir();
