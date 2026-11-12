@@ -515,18 +515,18 @@ const XTRA={
  mom(){const d=D.dias;if(!d||d.length<4)return"";let st=0;for(let i=d.length-1;i>=0&&d[i][2]>=d[i][3];i--)st++;let best=0,c=0;d.forEach(r=>{c=r[2]>=r[3]?c+1:0;best=Math.max(best,c);});
   const l3=d.slice(-3),l3p=l3.reduce((s,r)=>s+r[2],0)/l3.reduce((s,r)=>s+r[3],0)*100,mp=M.acum/M.metaAcBI*100,folga=(M.acum-M.metaAcOrc)/(M.metaMediaRest||M.metaOrc/30),esf=necDU/M.mediaDU*100;
   const card=(l,v,sub,inf,col)=>`<div class="xk" data-info="${inf}"><small>${l}</small><b style="${col?"color:"+col:""}">${v}</b><span>${sub}</span></div>`;
-  return {t:"Momentum e folga",s:"como o mês está andando",h:`<div class="card xmom">${card("Sequência na meta",st+" dia"+(st===1?"":"s"),"recorde do mês: "+best,"Dias seguidos, até o D-1, com faturamento igual ou acima da meta do dia.",st?"#22c55e":"#ff5a5a")}
+  return {t:"Momentum e folga",s:"como o mês está andando",mob:1,h:`<div class="card xmom">${card("Sequência na meta",st+" dia"+(st===1?"":"s"),"recorde do mês: "+best,"Dias seguidos, até o D-1, com faturamento igual ou acima da meta do dia.",st?"#22c55e":"#ff5a5a")}
   ${card("Últimos 3 dias",pct(l3p),"vs "+pct(mp)+" no mês","Atingimento somado dos 3 últimos dias comparado ao do mês inteiro (régua Power BI). Acima = acelerando.",xCor(l3p))}
   ${card("Folga acumulada",(folga>=0?"+":"")+folga.toLocaleString("pt-BR",{maximumFractionDigits:1})+" dias","de meta média restante","Quanto o acumulado está acima da meta orçada proporcional, convertido em dias de meta média dos dias úteis restantes.",folga>=0?"#22c55e":"#ff5a5a")}
   ${card("Índice de esforço",pct(esf),"necessário ÷ realizado","Ritmo diário necessário para a meta orçada dividido pela média realizada por dia útil. Abaixo de 100% = a meta sai mantendo o ritmo atual.",esf<=100?"#22c55e":esf<=110?"#f5b400":"#ff5a5a")}</div>`};},
  conc(){const r=[...D.reg].sort((a,b)=>b[1]-a[1]),t=r.reduce((s,x)=>s+x[1],0);if(!t)return"";const pal=["#5b9bff","#22c55e","#b18cff","#f5b400","#ff7a7a","#2dd4bf","#f472b6","#a3e635","#94a3b8","#fb923c"];
   const t3=r.slice(0,3).reduce((s,x)=>s+x[1],0)/t*100;
-  return {t:"Concentração do faturamento",s:"participação no acumulado",h:`<div class="card xcon"><div class="xst">${r.map((x,i)=>`<i style="width:${x[1]/t*100}%;background:${pal[i%10]}" data-info="<b>${tit(x[0])}</b><br>${brl(x[1])} · ${pct(x[1]/t*100,1)} do mês"></i>`).join("")}</div>
+  return {t:"Concentração do faturamento",s:"participação no acumulado",mob:1,h:`<div class="card xcon"><div class="xst">${r.map((x,i)=>`<i style="width:${x[1]/t*100}%;background:${pal[i%10]}" data-info="<b>${tit(x[0])}</b><br>${brl(x[1])} · ${pct(x[1]/t*100,1)} do mês"></i>`).join("")}</div>
   <p class="note" style="margin:8px 0 6px">Top 3 regionais = <b>${pct(t3,1)}</b> do faturamento do mês.</p><div class="xll">${r.map((x,i)=>`<span><i style="background:${pal[i%10]}"></i>${tit(x[0])} <b>${pct(x[1]/t*100,1)}</b></span>`).join("")}</div></div>`};},
  mg(){const r=[...D.reg].filter(x=>x[4]!=null).sort((a,b)=>b[4]-a[4]);if(!r.length)return"";const mx=Math.max(...r.map(x=>x[4]),1);
-  return {t:"Margem de terceiros por regional",s:"média do grupo "+pct(M.mgT,2),h:`<div class="card xsem">${r.map(x=>`<div class="xr" data-info="<b>${tit(x[0])}</b><br>Margem terceiros ${pct(x[4],2)} · agregados ${pct(x[5],2)}<br>Quadrante: ${x[7]||"—"}"><span style="width:110px">${tit(x[0])}</span><span class="xb"><i style="width:${Math.max(2,x[4]/mx*100)}%;background:${x[4]>=M.mgT?"#22c55e":"#f5b400"}"></i></span><b>${pct(x[4],2)}</b></div>`).join("")}</div>`};},
+  return {t:"Margem de terceiros por regional",s:"média do grupo "+pct(M.mgT,2),mob:1,h:`<div class="card xsem">${r.map(x=>`<div class="xr" data-info="<b>${tit(x[0])}</b><br>Margem terceiros ${pct(x[4],2)} · agregados ${pct(x[5],2)}<br>Quadrante: ${x[7]||"—"}"><span style="width:110px">${tit(x[0])}</span><span class="xb"><i style="width:${Math.max(2,x[4]/mx*100)}%;background:${x[4]>=M.mgT?"#22c55e":"#f5b400"}"></i></span><b>${pct(x[4],2)}</b></div>`).join("")}</div>`};},
 };
-const XTRA_POR={hoje:["mom","cal","sem","conc","mg"],mes:["cal","mom","sem"],reg:["conc","mg"],proj:["mom","sem"],orc:["mom"]};
+const XTRA_POR={hoje:["mom"],mes:["cal","sem"],reg:["conc","mg"],proj:[],orc:[]};
 function xtraHtml(t){return (XTRA_POR[t]||[]).map(k=>{let o;try{o=XTRA[k]();}catch(e){o="";}return o?`<h2 class="xtra${o.mob?" xmob":""}">${o.t} <small>${o.s}</small></h2>${o.h}`:"";}).join("");}
 
 
@@ -544,7 +544,7 @@ function msgSheet(){openSheet(`<div class="sh"><b>Mensagens do dia</b><button id
 document.addEventListener("click",e=>{if(e.target.closest("#msgBar"))msgSheet();});
 
 /* ===== Pregão do mês (gráfico estilo bolsa) ===== */
-let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}
+let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}if(tkModo==="acum")tkModo="dia";
 function tkSerie(m){const d=D.dias;let a=0,b=0;
  if(m==="ating") return {pts:d.map(x=>x[2]/x[3]*100),fmt:v=>pct(v),ref:d.map(()=>100),refN:"meta",tit:"Atingimento do dia"};
  if(m==="acum") return {pts:d.map(x=>(a+=x[2])),fmt:v=>mi(v),ref:d.map(x=>(b+=x[3])),refN:"meta acumulada",tit:"Faturamento acumulado"};
@@ -569,7 +569,7 @@ function tkHead(m,i){const S=tkSerie(m),P=S.pts,n=P.length;i=i==null?n-1:i;const
  return `<div><div class="l">${S.tit}</div><div class="v">${S.fmt(v)}</div>${c}</div><div class="dt">${d[0]} · ${d[1]}<br>${S.refN}: ${S.fmt(S.ref[i])}</div>`;}
 function tickerHtml(){if(!D.dias||D.dias.length<2)return"";const m=tkModo,P=D.dias.map(x=>x[2]),tot=P.reduce((a,b)=>a+b,0);
  return `<div class="card tk" id="tk"><div class="tkh">${tkHead(m)}</div>
- <div class="tkt">${[["dia","Diário"],["ating","% da meta"],["acum","Acumulado"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
+ <div class="tkt">${[["dia","Diário"],["ating","% da meta"]].map(([k,t])=>`<button type="button" data-tk="${k}" class="${k===m?"on":""}">${t}</button>`).join("")}</div>
  <div id="tkg">${tkSvg(m)}</div>
  <div class="tkf"><div data-info="Maior faturamento diário do mês até o D-1."><small>Máx</small><b>${mi(Math.max(...P))}</b></div><div data-info="Menor faturamento diário do mês (domingos e feriados puxam para baixo)."><small>Mín</small><b>${mi(Math.min(...P))}</b></div><div data-info="Média simples de todos os dias corridos do mês até o D-1. A média por dia útil está no Ritmo."><small>Média</small><b>${mi(tot/P.length)}</b></div><div data-info="Dias em que o faturamento igualou ou superou a meta daquele dia."><small>Na meta</small><b>${D.dias.filter(x=>x[2]>=x[3]).length}/${D.dias.length}</b></div></div></div>`;}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();tkModo=b.dataset.tk;LS.set("farolTk",tkModo);const t=document.getElementById("tk");if(!t)return;
@@ -614,9 +614,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  ${ag.length?ag.map(r=>{const fl=r[2]-r[1];return `<div class="card act" data-reg="${r[0]}"><div class="t"><span>${r[0]}</span><span class="pill r">${pct(r[3])} no mês</span></div>
   <div class="grid3"><div><small>Devendo até D-1</small><b class="dn">${brl(-r[6])}</b></div><div><small>Falta p/ meta</small><b>${mi(fl)}</b></div><div><small>Necessário/dia útil</small><b>${brl(fl/M.duRest)}</b></div></div></div>`}).join(""):`<div class="card">Todas as regionais acima da meta proporcional. 👏</div>`}
  ${D.farol.filter(f=>f[1]<90&&!regByName(f[0])).map(f=>`<div class="card act" style="margin-top:8px" data-reg="${f[0]}"><div class="t"><span>${f[0]}</span><span class="pill r">${pct(f[1])} no dia</span></div><div class="note" style="margin:6px 0 0">Farol vermelho no D-1. Sem linha de fechamento do mês nos dados recebidos.</div></div>`).join("")}
- <h2>Ritmo para a meta</h2>
- <div class="card" data-m="necDU"><div class="grid3" style="margin:0"><div><small>Falta (orçada)</small><b>${mi(falta)}</b></div><div><small>Dias úteis</small><b>${M.duRest}</b></div><div><small>Necessário/dia útil</small><b>${mi(necDU)}</b></div></div>
- <div class="note">A média realizada por dia útil é ${mi(M.mediaDU)}: o ritmo necessário está ${pct((1-necDU/M.mediaDU)*100,1)} abaixo do que já vem sendo feito.</div></div>
+
  <h2>Arquivos do dia <small>edição de ${d1.data}</small></h2>
  <div class="card acts" style="padding:0">
  <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
