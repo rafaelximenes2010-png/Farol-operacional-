@@ -545,7 +545,7 @@ function msgSheet(){openSheet(`<div class="sh"><b>Mensagens do dia</b><button id
  $("#msCp").onclick=async()=>{try{await navigator.clipboard.writeText(msgTexto());toastMsg("Mensagens copiadas.");}catch(e){prompt("Copie:",msgTexto());}};}
 document.addEventListener("click",e=>{if(e.target.closest("#msgBar"))msgSheet();});
 
-/* ===== Pregão do mês (gráfico estilo bolsa) ===== */
+/* ===== Desempenho diário (gráfico de linha) ===== */
 let tkModo="dia";try{tkModo=JSON.parse(localStorage.getItem("farolTk"))||"dia";}catch(e){}if(tkModo==="acum")tkModo="dia";
 function tkSerie(m){const d=D.dias;let a=0,b=0;
  if(m==="ating") return {pts:d.map(x=>x[2]/x[3]*100),fmt:v=>pct(v),ref:d.map(()=>100),refN:"meta",tit:"Atingimento do dia"};
@@ -608,7 +608,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
    <span class="fln"><b>${n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX")}</b><small>${r?"Mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"><span style="width:${w}%"></span><em style="left:${m100}%"></em></span></span>
    <span class="flp"><b>${pct(p)}</b><small>D-1</small></span></button>`;}).join("")}
  </div>
- <h2>Pregão do mês <small>dia a dia, como na bolsa</small></h2>
+ <h2>Desempenho diário <small>faturamento e atingimento, dia a dia</small></h2>
  ${tickerHtml()}
  <h2>Leitura do dia <small>toque nos números</small></h2>
  <div class="card lei">${resumoHtml()}</div>
