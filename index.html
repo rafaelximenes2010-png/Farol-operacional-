@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0f2350">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-180.png">
@@ -15,7 +15,7 @@
 --g:#1e8e4e;--y:#d08a0e;--r:#c62828;--gs:#e5f4ea;--ys:#fdf2dc;--rs:#fbe5e5;--rad:16px}
 @media (prefers-color-scheme:dark){:root{--bg:#0c1426;--card:#152039;--ink:#eef2fa;--ink2:#a5b0c6;--line:#24324f;--gs:#123524;--ys:#3a2c0c;--rs:#3d1717}}
 *{box-sizing:border-box}html,body{margin:0}
-html,body{height:100%}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none}
+html,body{height:100%;overflow-x:hidden;max-width:100vw}body{touch-action:pan-y;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none}
 header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 16px;position:relative;z-index:5;flex:none}
 .hrow{display:flex;align-items:center;gap:10px}
 .logo{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
@@ -28,7 +28,7 @@ header{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff
 .datebar{display:flex;align-items:center;gap:8px;margin-left:auto}
 .datebar select{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:10px;padding:6px 8px;font:inherit;font-size:12px}
 .datebar option{color:#000}
-main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px max(14px,calc((100% - 980px)/2)) 90px}
+main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px max(14px,calc((100% - 980px)/2)) 90px}
 h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:20px 4px 10px;display:flex;align-items:center;gap:8px}
 h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;font-size:11px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:14px;box-shadow:0 1px 2px rgba(15,35,80,.04)}
@@ -55,7 +55,7 @@ h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;f
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .grid3 div{background:var(--bg);border-radius:10px;padding:8px}.grid3 small{display:block;font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
 .grid3 b{font-size:14px}
-.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -14px;padding:0 14px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;touch-action:pan-x pan-y;overscroll-behavior-x:contain}
 table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}
 th{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);text-align:right;padding:8px 8px;border-bottom:1px solid var(--line)}
 td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}
@@ -160,7 +160,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 @media (prefers-color-scheme:dark){.t-dia{background:#16264a;color:#a9c1ff}.t-reg{background:#123524;color:#8fe0b0}.t-mes{background:#2e2150;color:#c9b6ff}.t-rit{background:#3a2c0c;color:#f5d38a}.t-pri{background:#3d1717;color:#ff9b9b}}
 .lock{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at 50% 38%,#1f3f86,#0b1a3f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;padding:24px;text-align:center}
 .lock .lg{background:#fff;border-radius:16px;padding:10px 18px}.lock .lg img{height:50px;display:block}.lock button{border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-width:240px}
-.sim .seg button{font-size:12px;padding:9px 4px}.simg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}.simg>div{min-width:0}.simg small{display:block;font-size:11px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+#ccSeg{flex-wrap:wrap}#ccSeg button{flex:1 1 30%;font-size:12px}.sim .seg button{font-size:12px;padding:9px 4px}.simg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}.simg>div{min-width:0}.simg small{display:block;font-size:11px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.stp button{border:0;background:var(--bg);width:38px;height:44px;font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}
 .stp input{flex:1;min-width:0;width:100%;border:0;text-align:center;font:inherit;font-size:18px;font-weight:800;background:transparent;color:var(--ink);padding:0}.stp span{font-weight:700;color:var(--ink2);padding-right:4px}
 .simr{margin-top:12px;background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border-radius:14px;padding:14px 16px}.simr small{opacity:.8;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.simr b{display:block;font-size:30px;margin:2px 0}.simr div{font-size:12.5px;opacity:.85}
@@ -401,9 +401,9 @@ function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);
  return `<h2>Super meta 2026 · ponte do ano <small>realizado + projeção + orçado</small></h2>
  <div class="card" data-m="superano">${ponteAno(A,meta)}<div class="note">Ano projetado em <b>${mi(A.tot)}</b> = <b>${pct(pcA,1)}</b> da meta orçada (${mi(meta)}): <b>${faixaTxt(fA)}</b>.${prox?` Para ${prox[0]} faltam <b>${mi(meta*(1+prox[1]/100)-A.tot)}</b>.`:""}</div></div>
  <h2>Faixas do ano · quanto falta</h2><div class="card fx2">${FAIXAS.map(f=>{const v=meta*(1+f[1]/100),ok=A.tot>=v;return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Projetado: ${pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${ok?"✓ atingida":"faltam "+mi(v-A.tot)}</small></div>`;}).join("")}</div>
- <h2>Cenários de fechamento 2026 <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} pelas 3 projeções</small></h2><div class="card"><div class="tw"><table><thead><tr><th>Cenário</th><th>${D.orc[A.mI]?D.orc[A.mI][0]:"Mês"}</th><th>2026</th><th>% meta</th><th>Faixa</th></tr></thead><tbody>
- ${pj.map(([n,v])=>{const t=A.real+v+A.fut,pc=t/meta*100;return `<tr><td><b>${n}</b></td><td>${mi(v)}</td><td>${mi(t)}</td><td>${pct(pc,1)}</td><td><span class="pill ${faixaAting(pc)>=1?"g":faixaAting(pc)===0?"y":"r"}">${faixaAting(pc)<0?"abaixo":faixaAting(pc)===0?"meta":FAIXAS[faixaAting(pc)][0]}</span></td></tr>`;}).join("")}</tbody></table></div>
- <div class="note">Realizado ${A.nFech} meses fechados (${mi(A.real)}) + mês atual projetado + meses seguintes no orçado. Super meta: +5%, +7% e +10% sobre a meta orçada do ano.</div></div>
+ <h2>Cenários de fechamento 2026 <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} pelas 3 projeções</small></h2><div class="card fx2">
+ ${pj.map(([n,v])=>{const t=A.real+v+A.fut,pc=t/meta*100,fx=faixaAting(pc);return `<div class="r ${fx>=1?"ok":""}"><b>${n}</b><span class="v">${mi(t)}</span><small>${D.orc[A.mI]?D.orc[A.mI][0]:"Mês"}: ${mi(v)} · ${pct(pc,1)} da meta</small><small style="text-align:right;font-weight:800;color:${fx>=1?"var(--g)":fx===0?"var(--y)":"var(--r)"}">${fx<0?"abaixo da meta":fx===0?"meta":"faixa "+FAIXAS[fx][0]}</small></div>`;}).join("")}
+ <p class="note" style="margin:4px 2px 0">Realizado ${A.nFech} meses fechados (${mi(A.real)}) + mês atual projetado + meses seguintes no orçado.</p></div>
  <h2>Super meta do mês · ponte <small>meta orçada → +5% → +7% → +10%</small></h2>
  <div class="card" data-m="supermes">${ponteSVG(M.metaOrc,pmin,M.acum)}<div class="note">Projeção conservadora do mês (${mi(pmin)}) = ${pct(pcm,1)} da meta orçada do mês: <b>${faixaTxt(faixaAting(pcm))}</b>.</div></div>
  <h2>Faixas do mês · quanto falta</h2><div class="card fx2">${FAIXAS.map(f=>{const v=M.metaOrc*(1+f[1]/100),fl=Math.max(0,v-M.acum),okp=pmin>=v;return `<div class="r ${okp?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(M.acum/v*100)} · projeção ${okp?"✓ atinge":pct(pmin/v*100)}</small><small style="text-align:right">${fl?brl(fl/M.duRest)+"/dia útil":"✓"}</small></div>`;}).join("")}</div>
