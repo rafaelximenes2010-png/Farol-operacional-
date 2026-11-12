@@ -34,6 +34,7 @@ ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:
 </style>
 </head>
 <body>
+<button type="button" id="bVolta" aria-label="Voltar" style="position:fixed;top:calc(12px + env(safe-area-inset-top));left:12px;z-index:20;border:0;border-radius:12px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font:inherit;font-weight:700;font-size:15px;padding:9px 14px;cursor:pointer">← Voltar</button>
 <div class="top"><div style="background:#fff;border-radius:20px;display:inline-block;padding:14px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:200px;height:auto;display:block;box-shadow:none;border-radius:0"></div><h1>Farol Operacional</h1><p>CT LOS · Grupo LOS · indicadores do dia no celular e no computador</p></div>
 <div class="wrap">
   <div class="card ok" id="jaInst" hidden>✓ O app já está instalado neste aparelho. <a href="./">Abrir o Farol</a></div>
@@ -99,6 +100,7 @@ document.getElementById("bCard").onclick=async()=>{try{const bl=await (await fet
  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:TXT});return;}}catch(e){if(e.name==="AbortError")return;}
  const a=document.createElement("a");a.href="icons/convite-instalar.png";a.download="Convite_Farol_Operacional.png";document.body.appendChild(a);a.click();a.remove();};
 
+document.getElementById("bVolta").onclick=()=>{try{if(document.referrer&&new URL(document.referrer).origin===location.origin&&history.length>1){history.back();return;}}catch(e){}location.href="./";};
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>

@@ -309,6 +309,27 @@ html,body{height:100dvh}
  .flhl .g{color:#22c55e}.flhl .y{color:#f5b400}.flhl .r{color:#ff5a5a}
  .fl .flsum{display:none}
 }
+
+/* ===================== PAINEL DO COMPUTADOR · grade de 12 colunas ===================== */
+@media (min-width:1024px){
+ main{grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-auto-flow:row dense;gap:20px!important;align-items:stretch;padding:22px 28px 48px}
+ main>*{grid-column:1/-1!important}
+ main>.tools{display:flex;justify-content:flex-end;margin:0 0 -8px!important}
+ main>.blk{grid-column:span 6!important;display:flex;flex-direction:column;min-width:0}
+ main>.blk.wide{grid-column:1/-1!important}
+ main>.blk.tall{grid-row:span 2}
+ main>.blk>.card,main>.blk>.kpis{margin-bottom:0}
+ main>.blk>.card:last-child{flex:1}
+ main>.blk h2{margin:0 2px 10px;min-height:30px;white-space:nowrap;font-size:12px}
+ main>.blk h2 small{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:11.5px;opacity:.85}
+ main>.blk h2 .bsh{font-size:0;padding:0;width:30px;height:30px;display:grid;place-items:center;flex:none}
+ main>.blk h2 .bsh::before{content:"↗";font-size:15px}
+ main>.blk .card{border-radius:16px}
+ main>.blk.wide .tw{overflow:visible}main>.blk.wide table{white-space:normal}
+ main>.blk.wide td,main>.blk.wide th{white-space:nowrap}
+}
+@media (min-width:1500px){main[data-c="3"]>.blk{grid-column:span 4!important}main[data-c]>.blk.wide{grid-column:1/-1!important}main[data-c="3"]>.blk.s6{grid-column:span 6!important}}
+@media (min-width:1024px){main>.blk.s12{grid-column:1/-1!important}main>.blk.s12 svg.chart,main>.blk.wide svg.chart{max-height:360px}main>.blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}main>.blk .kpis .kpi .v{font-size:clamp(20px,1.7vw,28px);word-break:break-word}}
 </style>
 </head>
 <body>
@@ -781,26 +802,30 @@ function cfgSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Farol-
  <div style="display:flex;gap:8px;margin-top:10px"><button class="btn" id="gSave">Salvar</button><button class="btn sec2" id="gPub">Publicar edição atual</button></div></div>
  <div class="card cfg" style="margin-top:10px"><b>3. API do Power BI (quando a TI liberar)</b><label for="cApi">Endereço da API</label><input id="cApi" placeholder="https://farol-api.seudominio.com.br" value="${API.base}">
  <button class="btn sec2" id="cSave" style="margin-top:10px">Salvar e testar</button><p class="note" id="cMsg">Fonte atual: <b>${D?D.meta.fonte:"nenhuma"}</b></p></div>
- <div class="card cfg" style="margin-top:10px"><b>Instalar o app</b><p class="note" style="margin:6px 0 0"><b>iPhone:</b> Safari › Compartilhar › "Adicionar à Tela de Início".<br><b>Android:</b> Chrome › ⋮ › "Instalar app".<br><b>Computador:</b> Chrome/Edge › ícone de instalar na barra de endereço.</p>
- <button class="btn" id="cInst" style="margin-top:8px;${deferredInstall?"":"display:none"}">Instalar agora</button> <a class="btn sec2" href="instalar.html" style="display:inline-block;margin-top:8px;text-decoration:none">Página de download (QR code)</a> <a class="btn" id="cWa" target="_blank" style="display:inline-block;margin-top:8px;text-decoration:none;background:#25d366">Convidar pelo WhatsApp</a></div>`);
+ `);
  const gv=()=>({repo:$("#gRepo").value.trim(),pasta:$("#gRepo").value.includes("concordancia")?"farol/":"",token:$("#gTok").value.trim(),senha:$("#gPw").value,branch:"main"});
  $("#gSave").onclick=()=>{LS.set("farolGh",gv());LS.set("farolSenha",gv().senha);toastMsg("Salvo neste aparelho.");};
  $("#gPub").onclick=()=>{LS.set("farolGh",gv());if(!D){toastMsg("Carregue um PDF primeiro.");return;}publicar();};
  $("#cSave").onclick=async()=>{API.base=$("#cApi").value.trim();$("#cMsg").textContent="Testando…";const Dx=await loadData();if(Dx){D=Dx;compute();show(cur);paintHead();}$("#cMsg").innerHTML="Fonte atual: <b>"+(D?D.meta.fonte:"nenhuma")+"</b>";};
  const ib=$("#cInst");if(ib) ib.onclick=doInstall;
- $("#cWa").href="https://wa.me/?text="+encodeURIComponent(TXT_CONVITE());}
+ if($("#cWa"))$("#cWa").href="https://wa.me/?text="+encodeURIComponent(TXT_CONVITE());}
 
 /* ===== convite de instalação: WhatsApp + QR code ===== */
 const LINK_INST=new URL("instalar.html",location.href).href.replace(/\?.*$/,"");
 const TXT_CONVITE=()=>`🚦 *Farol Operacional · CT LOS*\nOs indicadores do dia no seu celular e no computador.\n\n📲 *Instale em 10 segundos:*\n${LINK_INST}\n\n• *iPhone:* abra no Safari › ⋯ ou Compartilhar › _Adicionar à Tela de Início_\n• *Android:* abra no Chrome › _Instalar app_\n• *Computador:* Chrome ou Edge › ⊕ _Instalar_\n\n🔒 A senha da equipe vai em outra mensagem.`;
-async function convidarSheet(){openSheet(`<div class="sh"><b>Convidar para instalar</b><button id="xS">×</button></div>
+async function convidarSheet(){const inst=matchMedia("(display-mode: standalone)").matches||matchMedia("(display-mode: window-controls-overlay)").matches||navigator.standalone,pf=plataforma();
+ const passos={iphone:"Safari › ⋯ ou Compartilhar ⬆︎ › <b>Adicionar à Tela de Início</b> › Adicionar",ipad:"Safari › Compartilhar ⬆︎ (no topo) › <b>Adicionar à Tela de Início</b>",android:"Chrome › ⋮ › <b>Instalar app</b>",macsafari:"Menu Arquivo › <b>Adicionar ao Dock…</b>",firefox:"Abra no <b>Chrome</b> ou no <b>Edge</b> para instalar",inapp:"Abra este link no <b>Safari</b> ou no <b>Chrome</b> para instalar",desktop:"Chrome ou Edge › ícone <b>⊕ Instalar</b> na barra de endereço"}[pf];
+ openSheet(`<div class="sh"><b>Instalar e convidar</b><button id="xS">×</button></div>
+ <div class="card" style="display:flex;gap:12px;align-items:center"><img src="icons/icone-96.png" alt="" style="width:46px;height:46px;border-radius:12px;flex:none"><div style="flex:1"><b>Neste aparelho</b><br><small class="note">${inst?"✓ O Farol já está instalado aqui.":deferredInstall?"Instala em 1 toque, sem loja.":passos}</small></div>${!inst&&deferredInstall?`<button class="btn" id="cvIn" style="background:#22c55e;flex:none;width:auto;padding:10px 16px">⬇ Instalar</button>`:""}</div>
+ <h2 style="margin:16px 4px 8px">Convidar a equipe</h2>
  <div class="card" style="text-align:center"><img src="icons/convite-instalar.png" alt="Cartão de convite com QR code" style="width:100%;max-width:300px;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)">
  <p class="note" style="margin:10px 0 0">Mostre o QR code na tela ou imprima: a câmera do celular abre a página e o aparelho é reconhecido sozinho (iPhone, Android ou computador).</p></div>
  <div style="display:grid;gap:8px;margin-top:10px">
  <button class="btn" id="cvWa" style="background:#25d366">💬 Enviar convite no WhatsApp</button>
  <button class="btn sec2" id="cvSh">🖼️ Enviar cartão com QR code (imagem + texto)</button>
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn sec2" id="cvCp">🔗 Copiar link</button><a class="btn sec2" href="icons/convite-instalar.png" download="Convite_Farol_Operacional.png" style="text-align:center;text-decoration:none">⬇ Baixar QR</a></div>
- <a class="btn sec2" href="instalar.html" style="text-align:center;text-decoration:none">Abrir página de instalação</a></div>`);
+ <a class="btn sec2" href="instalar.html" style="text-align:center;text-decoration:none">Passo a passo com imagens (página de instalação)</a></div>`);
+ if($("#cvIn"))$("#cvIn").onclick=()=>{document.querySelector(".sheet")?.remove();doInstall();};
  $("#cvWa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(TXT_CONVITE()),"_blank");
  $("#cvCp").onclick=async()=>{try{await navigator.clipboard.writeText(LINK_INST);toastMsg("Link copiado.");}catch(e){prompt("Copie o link:",LINK_INST);}};
  $("#cvSh").onclick=async()=>{try{const b=await (await fetch("icons/convite-instalar.png")).blob(),f=new File([b],"Convite_Farol_Operacional.png",{type:"image/png"});
@@ -874,11 +899,11 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
  ${ehAdmin()?`<div class="card mi" data-pdf><span class="ic">📤</span><div><b>Atualização de indicadores</b><small>2 PDFs do Power BI + revista (DDS e mensagem) · até a API entrar</small></div></div><div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
- <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Convidar para instalar</b><small>WhatsApp, QR code e cartão de convite</small></div></div>
- <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar o app</b><small>iPhone, Android e computador</small></div></div>
+ <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Instalar e convidar</b><small>Instalar neste aparelho · WhatsApp · QR code</small></div></div>
+ 
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);if($("#mIns"))$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
@@ -893,6 +918,10 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
   mv.forEach(x=>b.appendChild(x));b.dataset.title=(h.childNodes[0].textContent||"").trim();
   const bt=document.createElement("button");bt.className="bsh";bt.type="button";bt.textContent="↗ Enviar";bt.setAttribute("data-bsh","");h.appendChild(bt);
   const ck=document.createElement("span");ck.className="ck";ck.textContent="✓";b.prepend(ck);});
+ {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".fl,.gerl"));});
+  const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
+  const nw=bl.filter(b=>!b.classList.contains("wide")),k=c3?3:2,r=n%k;nw.forEach(b=>b.classList.remove("s12","s6"));
+  if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
 const corVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#888";
 async function blocoPNG(blks){await new Promise(r=>{if(window.html2canvas)return r();const s2=document.createElement("script");s2.src="vendor/html2canvas.min.js";s2.onload=r;document.head.appendChild(s2);});
