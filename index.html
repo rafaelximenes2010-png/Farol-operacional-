@@ -764,7 +764,23 @@ function cfgSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Farol-
  $("#gPub").onclick=()=>{LS.set("farolGh",gv());if(!D){toastMsg("Carregue um PDF primeiro.");return;}publicar();};
  $("#cSave").onclick=async()=>{API.base=$("#cApi").value.trim();$("#cMsg").textContent="Testando…";const Dx=await loadData();if(Dx){D=Dx;compute();show(cur);paintHead();}$("#cMsg").innerHTML="Fonte atual: <b>"+(D?D.meta.fonte:"nenhuma")+"</b>";};
  const ib=$("#cInst");if(ib) ib.onclick=doInstall;
- $("#cWa").href="https://wa.me/?text="+encodeURIComponent("🚦 *Farol Operacional · CT LOS*\nInstale o app (celular ou computador):\n"+new URL("instalar.html",location.href).href+"\nA senha da equipe vai em outra mensagem.");}
+ $("#cWa").href="https://wa.me/?text="+encodeURIComponent(TXT_CONVITE());}
+
+/* ===== convite de instalação: WhatsApp + QR code ===== */
+const LINK_INST=new URL("instalar.html",location.href).href.replace(/\?.*$/,"");
+const TXT_CONVITE=()=>`🚦 *Farol Operacional · CT LOS*\nOs indicadores do dia no seu celular e no computador.\n\n📲 *Instale em 10 segundos:*\n${LINK_INST}\n\n• *iPhone:* abra no Safari › ⋯ ou Compartilhar › _Adicionar à Tela de Início_\n• *Android:* abra no Chrome › _Instalar app_\n• *Computador:* Chrome ou Edge › ⊕ _Instalar_\n\n🔒 A senha da equipe vai em outra mensagem.`;
+async function convidarSheet(){openSheet(`<div class="sh"><b>Convidar para instalar</b><button id="xS">×</button></div>
+ <div class="card" style="text-align:center"><img src="icons/convite-instalar.png" alt="Cartão de convite com QR code" style="width:100%;max-width:300px;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)">
+ <p class="note" style="margin:10px 0 0">Mostre o QR code na tela ou imprima: a câmera do celular abre a página e o aparelho é reconhecido sozinho (iPhone, Android ou computador).</p></div>
+ <div style="display:grid;gap:8px;margin-top:10px">
+ <button class="btn" id="cvWa" style="background:#25d366">💬 Enviar convite no WhatsApp</button>
+ <button class="btn sec2" id="cvSh">🖼️ Enviar cartão com QR code (imagem + texto)</button>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn sec2" id="cvCp">🔗 Copiar link</button><a class="btn sec2" href="icons/convite-instalar.png" download="Convite_Farol_Operacional.png" style="text-align:center;text-decoration:none">⬇ Baixar QR</a></div>
+ <a class="btn sec2" href="instalar.html" style="text-align:center;text-decoration:none">Abrir página de instalação</a></div>`);
+ $("#cvWa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(TXT_CONVITE()),"_blank");
+ $("#cvCp").onclick=async()=>{try{await navigator.clipboard.writeText(LINK_INST);toastMsg("Link copiado.");}catch(e){prompt("Copie o link:",LINK_INST);}};
+ $("#cvSh").onclick=async()=>{try{const b=await (await fetch("icons/convite-instalar.png")).blob(),f=new File([b],"Convite_Farol_Operacional.png",{type:"image/png"});
+  prontoParaEnviar("Cartão de convite",f,TXT_CONVITE(),true);}catch(e){toastMsg("Não consegui preparar o cartão.");}};}
 /* ===== INSTALAÇÃO (PWA) ===== */
 let deferredInstall=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("#bInst").style.display="inline-block";});
@@ -834,11 +850,11 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
  <div class="card mi" id="mPerf"><span class="ic">👤</span><div><b>${u?u.nome:"Meu perfil"}</b><small>${u?(u.cargo||"")+" · "+u.regional:"Cadastre-se"}</small></div></div>
  ${ehAdmin()?`<div class="card mi" data-pdf><span class="ic">📤</span><div><b>Atualização de indicadores</b><small>2 PDFs do Power BI + revista (DDS e mensagem) · até a API entrar</small></div></div><div class="card mi" id="mAdm"><span class="ic">🛡️</span><div><b>Entrada do administrador</b><small>Token, senha da equipe e publicação automática</small></div></div><div class="card mi" id="mCen"><span class="ic">⚙️</span><div><b>Central de Automação</b><small>Rotina do dia, ajustes e publicação</small></div></div>`:""}
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
- <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Convidar pelo WhatsApp</b><small>Envia o link de instalação em 1 toque</small></div></div>
+ <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Convidar para instalar</b><small>WhatsApp, QR code e cartão de convite</small></div></div>
  <div class="card mi" id="mIns"><span class="ic">📲</span><div><b>Instalar o app</b><small>iPhone, Android e computador</small></div></div>
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
- $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{window.open("https://wa.me/?text="+encodeURIComponent("🚦 *Farol Operacional · CT LOS*\nInstale o app (celular ou computador):\n"+new URL("instalar.html",location.href).href+"\nA senha da equipe vai em outra mensagem."),"_blank");};
+ $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};};
  $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */

@@ -35,22 +35,24 @@ ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:
 <div class="top"><div style="background:#fff;border-radius:20px;display:inline-block;padding:14px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:200px;height:auto;display:block;box-shadow:none;border-radius:0"></div><h1>Farol Operacional</h1><p>CT LOS · Grupo LOS · indicadores do dia no celular e no computador</p></div>
 <div class="wrap">
   <div class="card ok" id="jaInst" hidden>✓ O app já está instalado neste aparelho. <a href="./">Abrir o Farol</a></div>
+  <div id="det" style="text-align:center;margin:0 auto 12px;font-size:13px;color:#0f2350;background:#fff;border:1px solid #e3e7ef;border-radius:999px;padding:8px 14px;box-shadow:0 4px 14px rgba(15,35,80,.15)"></div>
+  <div class="card" id="inapp" hidden style="background:#fff4d6;color:#7a5200;font-weight:600"></div>
   <div class="tabs"><button data-p="ios">iPhone</button><button data-p="android">Android</button><button data-p="pc">Computador</button></div>
 
   <div class="card" data-sec="ios">
     <ol>
-      <li><span>Abra este endereço no <b>Safari</b> (no Chrome do iPhone também funciona pelo menu Compartilhar).</span></li>
-      <li><span>Toque em <span class="k">Compartilhar ⬆︎</span> na barra de baixo.</span></li>
-      <li><span>Role e toque em <span class="k">Adicionar à Tela de Início ⊞</span>.</span></li>
-      <li><span>Toque em <span class="k">Adicionar</span>. O ícone do Farol aparece na tela do iPhone.</span></li>
+      <li><span id="ios1">Toque em <span class="k">⋯</span> na barra do Safari (ou direto em <span class="k">Compartilhar ⬆︎</span>).</span></li>
+      <li><span>Toque em <span class="k">Compartilhar ⬆︎</span> e role até <span class="k">Adicionar à Tela de Início ⊞</span>.</span></li>
+      <li><span>Deixe <span class="k">Abrir como App Web</span> ligado e toque em <span class="k">Adicionar</span>.</span></li>
+      <li><span>Pronto: o ícone do Farol aparece na tela. Abra por ele, não pelo Safari.</span></li>
     </ol>
   </div>
   <div class="card" data-sec="android">
     <button class="big" id="bInst" hidden>⬇ Instalar o Farol</button>
     <ol id="andSteps">
-      <li><span>Abra este endereço no <b>Chrome</b>.</span></li>
-      <li><span>Toque no menu <span class="k">⋮</span> no canto de cima.</span></li>
-      <li><span>Toque em <span class="k">Instalar app</span> (ou "Adicionar à tela inicial").</span></li>
+      <li><span id="and1">Abra este endereço no <b>Chrome</b>.</span></li>
+      <li><span id="and2">Toque no menu <span class="k">⋮</span> no canto de cima.</span></li>
+      <li><span id="and3">Toque em <span class="k">Instalar app</span> (ou "Adicionar à tela inicial").</span></li>
       <li><span>Confirme em <span class="k">Instalar</span>. O ícone aparece junto dos seus apps.</span></li>
     </ol>
   </div>
@@ -64,8 +66,9 @@ ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:
     </ol>
   </div>
 
-  <div class="card qr"><img src="icons/qr-instalar.svg" alt="QR code para baixar o app"><p><b>Aponte a câmera do celular</b> para o código para abrir esta página e instalar.<br><span class="note">rafaelximenes2010-png.github.io/Farol-operacional-</span></p></div>
-  <a class="big" id="bWa" style="background:#25d366;text-align:center;text-decoration:none;margin-bottom:12px">Enviar convite pelo WhatsApp</a>
+  <div class="card qr" style="display:block;text-align:center"><img src="icons/convite-instalar.png" alt="Cartão de convite com QR code" style="width:100%;max-width:320px;border-radius:14px"><p style="margin:10px 0 0"><b>Aponte a câmera do celular</b> para o QR code: a página abre e reconhece o aparelho sozinha.</p></div>
+  <a class="big" id="bWa" style="background:#25d366;text-align:center;text-decoration:none;margin-bottom:8px">💬 Enviar convite pelo WhatsApp</a>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"><button class="big" id="bCard" style="background:#0f2350;font-size:15px;padding:14px">🖼️ Enviar cartão QR</button><button class="big" id="bCp" style="background:#0f2350;font-size:15px;padding:14px">🔗 Copiar link</button></div>
   <p class="note" style="text-align:center">Na primeira vez, o app pede a senha da equipe CT LOS. Os números ficam protegidos e não são públicos.</p>
   <p style="text-align:center"><a href="./" style="font-weight:700;color:#1b3a7a">Abrir o Farol no navegador →</a></p>
 </div>
@@ -77,8 +80,23 @@ if((matchMedia("(display-mode: standalone)").matches||navigator.standalone)&&pla
 let dp=null;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;["bInst","bInst2"].forEach(id=>document.getElementById(id).hidden=false);});
 ["bInst","bInst2"].forEach(id=>document.getElementById(id).onclick=async()=>{if(!dp){const ua=navigator.userAgent;const msg=/Edg\//.test(ua)?"No Edge: clique no ícone ⊕ (Aplicativo disponível) na barra de endereço, ou menu ··· › Aplicativos › Instalar este site como aplicativo.":/Chrome\//.test(ua)?"No Chrome: clique no ícone ⊕ Instalar no fim da barra de endereço, ou menu ⋮ › Transmitir, salvar e compartilhar › Instalar página como app.":/Safari\//.test(ua)?"No Safari do Mac: menu Arquivo › Adicionar ao Dock.":"Abra este endereço no Google Chrome ou no Microsoft Edge para instalar.";document.getElementById("pcHint").innerHTML="<b>"+msg+"</b>";return;}dp.prompt();const r=await dp.userChoice;if(r.outcome==="accepted")document.getElementById("jaInst").hidden=false;dp=null;});
 window.addEventListener("appinstalled",()=>document.getElementById("jaInst").hidden=false);
-const LINK=new URL("instalar.html",location.href).href;
-document.getElementById("bWa").href="https://wa.me/?text="+encodeURIComponent("🚦 *Farol Operacional · CT LOS*\nInstale o app (celular ou computador):\n"+LINK+"\nA senha da equipe vai em outra mensagem.");
+const LINK=new URL("instalar.html",location.href).href.replace(/\?.*$/,"");
+const ios=plat==="ios",crios=/CriOS/.test(ua),fxios=/FxiOS/.test(ua),edgios=/EdgiOS/.test(ua),samsung=/SamsungBrowser/.test(ua),inapp=/FBAN|FBAV|Instagram|WhatsApp|Line\/|LinkedInApp|GSA\//.test(ua);
+const nav=inapp?"navegador interno de outro app":crios?"Chrome":fxios?"Firefox":edgios||/Edg\//.test(ua)?"Edge":samsung?"Samsung Internet":/Firefox/.test(ua)?"Firefox":/Chrome\//.test(ua)?"Chrome":/Safari/.test(ua)?"Safari":"navegador";
+document.getElementById("det").innerHTML="Reconhecido: <b>"+({ios:/iPad/.test(ua)||navigator.maxTouchPoints>1&&/Macintosh/.test(ua)?"iPad":"iPhone",android:"Android",pc:/Mac/.test(ua)?"Mac":/Windows/.test(ua)?"Windows":"Computador"})[plat]+" · "+nav+"</b> · os passos abaixo já são para este aparelho";
+if(ios&&(crios||edgios||fxios))document.getElementById("ios1").innerHTML="Toque em <span class=\"k\">Compartilhar ⬆︎</span> na barra de endereço do "+nav+".";
+if(samsung){document.getElementById("and1").innerHTML="Você está no <b>Samsung Internet</b>: funciona também.";document.getElementById("and2").innerHTML="Toque no menu <span class=\"k\">≡</span> embaixo.";document.getElementById("and3").innerHTML="Toque em <span class=\"k\">Adicionar página a</span> › <span class=\"k\">Tela inicial</span>.";}
+if(inapp){const b=document.getElementById("inapp");b.hidden=false;const intent=plat==="android"?"intent://"+location.host+location.pathname+"#Intent;scheme=https;package=com.android.chrome;end":"";
+ b.innerHTML="⚠ Você abriu o link <b>dentro do WhatsApp/Instagram</b>. Para instalar, abra no "+(ios?"<b>Safari</b>: toque em ⋯ ou na bússola e escolha “Abrir no Safari”.":"<b>Chrome</b>.")+(intent?"<a class=\"big\" href=\""+intent+"\" style=\"display:block;text-align:center;text-decoration:none;margin-top:10px;background:#0f2350\">Abrir no Chrome</a>":"")+"<button type=\"button\" id=\"cpI\" class=\"big\" style=\"margin-top:8px;background:#7a5200;font-size:15px;padding:12px\">Copiar o link</button>";
+ document.getElementById("cpI").onclick=async e=>{try{await navigator.clipboard.writeText(location.href);e.target.textContent="Link copiado ✓ — cole no navegador";}catch(x){}};}
+const TXT="🚦 *Farol Operacional · CT LOS*\nOs indicadores do dia no seu celular e no computador.\n\n📲 *Instale em 10 segundos:*\n"+LINK+"\n\n• *iPhone:* abra no Safari › ⋯ ou Compartilhar › _Adicionar à Tela de Início_\n• *Android:* abra no Chrome › _Instalar app_\n• *Computador:* Chrome ou Edge › ⊕ _Instalar_\n\n🔒 A senha da equipe vai em outra mensagem.";
+document.getElementById("bWa").href="https://wa.me/?text="+encodeURIComponent(TXT);
+document.getElementById("bCp").onclick=async e=>{try{await navigator.clipboard.writeText(LINK);e.target.textContent="Copiado ✓";}catch(x){prompt("Copie o link:",LINK);}};
+document.getElementById("bCard").onclick=async()=>{try{const bl=await (await fetch("icons/convite-instalar.png")).blob(),f=new File([bl],"Convite_Farol_Operacional.png",{type:"image/png"});
+ try{await navigator.clipboard.writeText(TXT);}catch(x){}
+ if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:TXT});return;}}catch(e){if(e.name==="AbortError")return;}
+ const a=document.createElement("a");a.href="icons/convite-instalar.png";a.download="Convite_Farol_Operacional.png";document.body.appendChild(a);a.click();a.remove();};
+
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
