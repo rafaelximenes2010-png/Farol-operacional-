@@ -316,7 +316,7 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  ${D.reg.map(x=>{const fl=x[2]-x[1];const q=x[7];return `<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td class="${x[6]>=0?"up":"dn"}">${x[6]>=0?"+":"−"}${mi(Math.abs(x[6])).replace("R$ ","R$ ")}</td><td>${mi(x[2]*x[3]/100)}</td><td>${mi(fl)}</td><td>${brl(fl/M.duRest)}</td><td>${q==="—"?"—":`<span class="q ${q==="Crítico"?"c":q==="Proteger margem"?"p":"a"}">${q}</span>`}</td></tr>`}).join("")}
  </tbody></table></div></div>`;}
 function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);const sO=closed.reduce((s,x)=>s+x[1],0),sR=closed.reduce((s,x)=>s+x[3],0);
- return `<div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
+ return vSuper()+`<div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
  <div class="kpis">
   <div class="card kpi hero" data-m="ano"><div class="l">Realizado no ano</div><div class="v">${mi(sR)}</div><div class="s">10 meses fechados</div></div>
   <div class="card kpi" data-m="ano"><div class="l">Ating. orçada (ano)</div><div class="v up">${pct(sR/sO*100,1)}</div><div class="s">${sg(sR-sO)}</div></div>
@@ -350,6 +350,63 @@ function alertsSheet(){const L=[];
  openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}`);}
 function openSheet(h){const s=document.createElement("div");s.className="sheet";s.innerHTML=`<div>${h}</div>`;document.body.appendChild(s);
  s.addEventListener("click",e=>{if(e.target===s||e.target.id==="xS") s.remove();});}
+/* =SUPER= */
+/* ===== SUPER META (5% · 7% · 10%) e REMUNERAÇÃO VARIÁVEL ===== */
+const FAIXAS=[["Meta",0],["+5%",5],["+7%",7],["+10%",10]];
+const CARGOS=[["Diretoria",[2,.5,.5,1]],["Gerente Nacional",[2,.25,.25,.5]],["Demais Gerentes e Coordenadores",[1,.25,.25,.5]]];
+const faixaAting=pc=>pc>=110?3:pc>=107?2:pc>=105?1:pc>=100?0:-1;
+function bonusMax(cargo,f){const c=CARGOS.find(x=>x[0]===cargo)[1];return f<0?0:c.slice(0,f+1).reduce((a,b)=>a+b,0);}
+const pctEbitda=e=>e<80?0:Math.min(e,120);
+function ponteSVG(base,proj,acum,w=360,h=230){const pad={l:34,r:6,t:20,b:34};const lv=FAIXAS.map(f=>base*(1+f[1]/100));const top=Math.max(proj,lv[3])*1.06,bot=base*.86;
+ const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const items=[["Meta",bot,base,"#0f2350"],["+5%",lv[0],lv[1],"#3f6c99"],["+7%",lv[1],lv[2],"#6f8fd0"],["+10%",lv[2],lv[3],"#b8862e"],["Exced.",lv[3],Math.max(proj,lv[3]),proj>lv[3]?"#1e8e4e":"#9aa3b5"],["Projeção",bot,proj,"#7c3aed"]];
+ const bw=(w-pad.l-pad.r)/items.length;let g="";
+ [bot,base,lv[3],top].forEach(v=>{g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e7ef"/><text x="${pad.l-4}" y="${Y(v)+3}" font-size="8.5" text-anchor="end" fill="#5b6478">${Math.round(v/1e6)}</text>`;});
+ items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.15,ww=bw*.7,y1=Y(it[2]),y0=Y(it[1]);g+=`<rect x="${x}" y="${Math.min(y1,y0)}" width="${ww}" height="${Math.max(2,Math.abs(y0-y1))}" rx="3" fill="${it[3]}"/>`;
+  const val=i===0||i===5?mi(it[2]).replace("R$ ",""):"+"+((it[2]-it[1])/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1});
+  g+=`<text x="${x+ww/2}" y="${Math.min(y1,y0)-4}" font-size="8.5" font-weight="700" text-anchor="middle" fill="${it[3]}">${val}</text><text x="${x+ww/2}" y="${h-pad.b+13}" font-size="9" text-anchor="middle" fill="#5b6478">${it[0]}</text>`;
+  if(i<4) g+=`<line x1="${x+ww}" x2="${x+bw}" y1="${y1}" y2="${y1}" stroke="#9aa3b5" stroke-dasharray="2 2"/>`;});
+ if(acum!=null&&acum>bot){g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(acum)}" y2="${Y(acum)}" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${w-pad.r}" y="${Y(acum)-4}" font-size="8.5" text-anchor="end" fill="#c62828">realizado ${mi(acum)}</text>`;}
+ g+=`<text x="${pad.l}" y="${h-6}" font-size="8.5" fill="#5b6478">R$ milhões · faixas sobre a meta orçada</text>`;
+ return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
+function faixasTabela(base,real,proj,duRest){return `<div class="tw"><table><thead><tr><th>Faixa</th><th>Valor</th><th>Realizado</th><th>Projeção</th>${duRest!=null?"<th>Falta</th><th>Necessário/dia útil</th>":""}</tr></thead><tbody>
+ ${FAIXAS.map(f=>{const v=base*(1+f[1]/100),fl=Math.max(0,v-real);return `<tr><td><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b></td><td>${mi(v)}</td><td><span class="pill ${real>=v?"g":"r"}">${pct(real/v*100)}</span></td><td><span class="pill ${proj>=v?"g":proj>=v*.97?"y":"r"}">${proj>=v?"✓ atinge":pct(proj/v*100)}</span></td>${duRest!=null?`<td>${fl?mi(fl):"✓"}</td><td>${fl?brl(fl/duRest):"—"}</td>`:""}</tr>`;}).join("")}</tbody></table></div>`;}
+function anoProj(novVal){const mI=D.orc.findIndex(x=>x[5]);const fech=D.orc.filter(x=>x[3]!=null&&!x[5]);const real=fech.reduce((a,x)=>a+x[3],0);
+ const futuros=D.orc.slice(mI+1).reduce((a,x)=>a+(x[1]||0),0);return {real,nov:novVal,fut:futuros,tot:real+novVal+futuros,mI,nFech:fech.length};}
+function ponteAno(A,meta,w=360,h=250){const pad={l:30,r:74,t:22,b:30};const lv=FAIXAS.map(f=>meta*(1+f[1]/100));const top=Math.max(A.tot,lv[3])*1.03,bot=Math.min(A.real,meta)*.9;
+ const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const mes=D.orc[A.mI]?D.orc[A.mI][0]:"Mês";const prox=D.orc.slice(A.mI+1).map(x=>x[0]).join("–")||"—";
+ const it=[["Real. até "+(D.orc[A.mI-1]||["—"])[0],bot,A.real,"#0f2350"],["+"+mes+" (proj.)",A.real,A.real+A.nov,"#1e8e4e"],["+"+prox+" (orç.)",A.real+A.nov,A.tot,"#6fbf8a"],["Ano projetado",bot,A.tot,"#0f2350"]];
+ const bw=(w-pad.l-pad.r)/it.length;let g="";
+ lv.forEach((v,i)=>{const c=["#c62828","#d08a0e","#b8862e","#8a6a00"][i];g+=`<line x1="${pad.l}" x2="${w-pad.r+4}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-width="${i?1.2:1.6}" ${i?'stroke-dasharray="5 3"':""}/><text x="${w-pad.r+6}" y="${Y(v)+3}" font-size="8.5" font-weight="700" fill="${c}">${(v/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} ${FAIXAS[i][0]==="Meta"?"meta":FAIXAS[i][0]}</text>`;});
+ it.forEach((q,i)=>{const x=pad.l+i*bw+bw*.16,ww=bw*.68,y1=Y(q[2]),y0=Y(q[1]);g+=`<rect x="${x}" y="${Math.min(y0,y1)}" width="${ww}" height="${Math.max(3,Math.abs(y0-y1))}" rx="3" fill="${q[3]}"/>`;
+  const lab=i===0||i===3?(q[2]/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1}):"+"+((q[2]-q[1])/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+  g+=`<text x="${x+ww/2}" y="${Math.min(y0,y1)-5}" font-size="9.5" font-weight="800" text-anchor="middle" fill="${q[3]}">${lab}</text><text x="${x+ww/2}" y="${h-pad.b+12}" font-size="8" text-anchor="middle" fill="#5b6478">${q[0]}</text>`;});
+ g+=`<text x="${pad.l}" y="${h-4}" font-size="8" fill="#5b6478">R$ milhões · linhas = meta orçada do ano e super metas</text>`;return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
+function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);const A=anoProj(M.proj);const pcA=A.tot/meta*100,fA=faixaAting(pcA);
+ const faixaTxt=f=>f<0?"abaixo da meta":f===0?"meta (100%)":"faixa super "+FAIXAS[f][0];const prox=fA<3?FAIXAS[fA+1]:null;
+ const pmin=Math.min(...pj.map(x=>x[1])),pcm=pmin/M.metaOrc*100;
+ return `<h2>Super meta 2026 · ponte do ano <small>realizado + projeção + orçado</small></h2>
+ <div class="card" data-m="superano">${ponteAno(A,meta)}<div class="note">Ano projetado em <b>${mi(A.tot)}</b> = <b>${pct(pcA,1)}</b> da meta orçada (${mi(meta)}): <b>${faixaTxt(fA)}</b>.${prox?` Para ${prox[0]} faltam <b>${mi(meta*(1+prox[1]/100)-A.tot)}</b>.`:""}</div></div>
+ <h2>Faixas do ano · quanto falta</h2><div class="card"><div class="tw"><table><thead><tr><th>Faixa</th><th>Valor do ano</th><th>Projetado</th><th>Falta</th></tr></thead><tbody>
+ ${FAIXAS.map(f=>{const v=meta*(1+f[1]/100);return `<tr><td><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b></td><td>${mi(v)}</td><td><span class="pill ${A.tot>=v?"g":"r"}">${A.tot>=v?"✓ "+pct(A.tot/v*100):pct(A.tot/v*100)}</span></td><td>${A.tot>=v?"✓ atingida":mi(v-A.tot)}</td></tr>`;}).join("")}</tbody></table></div></div>
+ <h2>Cenários de fechamento 2026 <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} pelas 3 projeções</small></h2><div class="card"><div class="tw"><table><thead><tr><th>Cenário</th><th>${D.orc[A.mI]?D.orc[A.mI][0]:"Mês"}</th><th>2026</th><th>% meta</th><th>Faixa</th></tr></thead><tbody>
+ ${pj.map(([n,v])=>{const t=A.real+v+A.fut,pc=t/meta*100;return `<tr><td><b>${n}</b></td><td>${mi(v)}</td><td>${mi(t)}</td><td>${pct(pc,1)}</td><td><span class="pill ${faixaAting(pc)>=1?"g":faixaAting(pc)===0?"y":"r"}">${faixaAting(pc)<0?"abaixo":faixaAting(pc)===0?"meta":FAIXAS[faixaAting(pc)][0]}</span></td></tr>`;}).join("")}</tbody></table></div>
+ <div class="note">Realizado ${A.nFech} meses fechados (${mi(A.real)}) + mês atual projetado + meses seguintes no orçado. Super meta: +5%, +7% e +10% sobre a meta orçada do ano.</div></div>
+ <h2>Super meta do mês · ponte <small>meta orçada → +5% → +7% → +10%</small></h2>
+ <div class="card" data-m="supermes">${ponteSVG(M.metaOrc,pmin,M.acum)}<div class="note">Projeção conservadora do mês (${mi(pmin)}) = ${pct(pcm,1)} da meta orçada do mês: <b>${faixaTxt(faixaAting(pcm))}</b>.</div></div>
+ <h2>Faixas do mês · quanto falta</h2><div class="card">${faixasTabela(M.metaOrc,M.acum,pmin,M.duRest)}</div>
+ <h2>Remuneração variável · potencial <small>salários (fixo + variável)</small></h2>
+ <div class="card"><div class="tw"><table><thead><tr><th>Cargo</th><th>Meta 100%</th><th>+5%</th><th>+7%</th><th>+10%</th><th>Total</th><th>Máx. na faixa</th></tr></thead><tbody>
+ ${CARGOS.map(cg=>`<tr><td><b>${cg[0]}</b></td>${cg[1].map((v,i)=>`<td style="${i<=fA?"background:var(--gs);font-weight:800":""}">${v.toLocaleString("pt-BR")}</td>`).join("")}<td><b>${cg[1].reduce((a,b)=>a+b,0)}</b></td><td><b>${bonusMax(cg[0],fA).toLocaleString("pt-BR")}</b></td></tr>`).join("")}</tbody></table></div>
+ <div class="note">Verde = faixas garantidas pela projeção do ano (${pct(pcA,1)}). Etapa 1 (faturamento) define o máximo elegível, com faixas cumulativas. Etapa 2 (EBITDA): abaixo de 80% não paga; de 80% a 120% paga proporcional; acima de 120% limita a 120%.</div></div>
+ <h2>Simulador do bônus</h2>
+ <div class="card cfg"><label>Cargo</label><select id="smC">${CARGOS.map(c=>`<option ${c[0]==="Gerente Nacional"?"selected":""}>${c[0]}</option>`).join("")}</select>
+ <label>Atingimento do faturamento do ano (%)</label><input id="smF" type="number" inputmode="decimal" value="${pcA.toFixed(1)}">
+ <label>Atingimento do EBITDA (%)</label><input id="smE" type="number" inputmode="decimal" value="100">
+ <div id="smR" class="big" style="margin-top:12px"></div><div class="note" id="smN"></div></div>`;}
+function simular(){const c=$("#smC");if(!c)return;const f=faixaAting(+$("#smF").value||0),mx=bonusMax(c.value,f),pe=pctEbitda(+$("#smE").value||0),v=mx*pe/100;
+ $("#smR").textContent=v.toLocaleString("pt-BR",{maximumFractionDigits:2})+" salário(s)";$("#smN").textContent=`Faixa: ${f<0?"abaixo da meta (não elegível)":FAIXAS[f][0]==="Meta"?"meta 100%":"super meta "+FAIXAS[f][0]} · máximo elegível ${mx.toLocaleString("pt-BR")} salário(s) × EBITDA aplicado ${pe}%.`;}
+document.addEventListener("input",e=>{if(e.target.closest("#smC,#smF,#smE"))simular();});document.addEventListener("change",e=>{if(e.target.id==="smC")simular();});
+
 /* ===== DRILL-DOWN: "Entenda este número" ===== */
 const SRC={bi:'<span class="src bi">● Power BI · indicadores_flash</span>',reg:'<span class="src bi">● Power BI · Fechamento por regional</span>',
  orc:'<span class="src orc">● Orçamento · orcamento_ano.xlsx</span>',calc:'<span class="src calc">● Calculado no app</span>',est:'<span class="src est2">● Estimativa</span>'};
@@ -408,6 +465,13 @@ function metric(id){const diasUteis=D.dias.filter(x=>!["sáb","dom"].includes(x[
   return{t:x[0]+"/26",v:x[3]!=null?brl(x[3]):"—",src:x[5]?SRC.bi:SRC.orc,what:fin?"Mês fechado: realizado contra as metas.":x[5]?"Mês em andamento (parcial até o D-1).":"Mês futuro: só a meta orçada.",
    cmp:cmp("meta Power BI",x[2]?mi(x[2]):"—","meta orçada",mi(x[1])),
    rows:[["Atingimento orçada",fin?pct(x[3]/x[1]*100,1):"—"],["Desvio vs orçada",fin?sg(x[3]-x[1]):"—"],["AGRO",x[4]!=null?brl(x[4]):"—"],["Realizado sem AGRO",x[4]!=null?brl(x[3]-x[4]):"—"]]};}
+ T.supermes={t:"Super meta do mês",v:mi(M.metaOrc*1.1),src:SRC.orc,what:"Faixas de superação sobre a meta orçada do mês: +5%, +7% e +10%. A ponte mostra quanto cada faixa acrescenta e onde a projeção termina.",
+   rows:FAIXAS.map(f=>[f[0]==="Meta"?"Meta 100%":"Super meta "+f[0],mi(M.metaOrc*(1+f[1]/100))]).concat([["Realizado até o D-1",mi(M.acum)],["Projeção conservadora",mi(Math.min(...D.proj3.map(x=>x[1]))*1e6)]]),
+   note:"Regra da remuneração variável: faixas cumulativas sobre a meta (Etapa 1), ajustadas pelo EBITDA (Etapa 2)."};
+ {const A=anoProj(M.proj),meta=D.metaAno;T.superano={t:"Super meta 2026",v:mi(A.tot),src:SRC.est,what:"Fechamento projetado do ano: meses fechados (realizado) + mês atual (projeção Power BI) + meses seguintes (orçado), comparado com a meta orçada do ano e as super metas.",
+  fx:`Ano projetado = ${mi(A.real)} + ${mi(A.nov)} + ${mi(A.fut)} = ${mi(A.tot)}
+Atingimento = ${mi(A.tot)} ÷ ${mi(meta)} = ${pct(A.tot/meta*100,1)}`,
+  rows:FAIXAS.map(f=>[f[0]==="Meta"?"Meta orçada do ano":"Super meta "+f[0],mi(meta*(1+f[1]/100))])};}
  return T[id];}
 function mSheet(id){const m=metric(id);if(!m)return;
  openSheet(`<div class="sh"><b>${m.t}</b><button id="xS">×</button></div>
@@ -665,7 +729,7 @@ async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=awai
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNovaEdicao();});setInterval(checarNovaEdicao,5*60*1000);
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]():vazio();if(D)blocar();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintHead(){if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
  $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:D.meta.modo==="equipe"?"Edição da equipe":"PDF do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
