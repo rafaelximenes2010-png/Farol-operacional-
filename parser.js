@@ -80,3 +80,74 @@
   root.FarolPDF = { parse };
   if (typeof module !== "undefined") module.exports = { parse };
 })(typeof window !== "undefined" ? window : globalThis);
+
+/* ===== Leitura dos 2 PDFs padrão do Power BI (indicadores_flash) ===== */
+(function (root) {
+  const num = s => s == null ? null : +String(s).replace(/[R$\s]/g, "").replace(/\./g, "").replace(",", ".").replace("%", "");
+  const SEM = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"], AB = ["dom","seg","ter","qua","qui","sex","sáb"];
+  const FER = ["01-01","04-03","04-21","05-01","09-07","10-12","11-02","11-15","11-20","12-25"];
+  const util = d => { const w = d.getUTCDay(), md = d.toISOString().slice(5, 10); return w > 0 && w < 6 && !FER.includes(md); };
+  const tipo = txt => /Fechamento por regional/i.test(txt) ? "reg" : /Faturamento do dia/i.test(txt) ? "dia" : null;
+  function parseBI(dia, reg, prev) {
+    const av = [];
+    // ---------- arquivo 1: performance diária
+    const dias = []; let m; const reD = /^\s*(\d\d\/\d\d)\s+([\d.]+)\s+([\d.]+)\s+\d+%\s+[\d.]+\s+([\d,]+)%(?:\s+([\d,]+)%)?\s*$/gm;
+    while ((m = reD.exec(dia))) dias.push([m[1], null, num(m[2]), num(m[3]), num(m[4]), m[5] ? num(m[5]) : null]);
+    if (!dias.length) throw new Error("Não encontrei a tabela diária no PDF “indicadores_flash”.");
+    const ano = +((dia.match(/(\d\d)\/(\d\d)\/(20\d\d),/) || [])[3] || new Date().getFullYear());
+    dias.forEach(x => { const [d, mm] = x[0].split("/").map(Number); x[1] = AB[new Date(Date.UTC(ano, mm - 1, d)).getUTCDay()]; });
+    const tot = dia.match(/Total\s+([\d.]+)\s+([\d.]+)\s+(\d+)%\s+[\d.]+\s+([\d,]+)%\s+([\d,]+)%/);
+    const head = dia.match(/R\$\s*([\d.]+)\s+R\$\s*([\d.]+)\s+.*?R\$\s*([\d.]+)\s+(\d+)%\s*\n?\s*(\d+)%/s);
+    const base = num((dia.match(/Base\s*\n?\s*([\d.]{9,})/) || [])[1]);
+    const last = dias[dias.length - 1], prv = dias[dias.length - 2];
+    const [dd, mm] = last[0].split("/").map(Number); const d1d = new Date(Date.UTC(ano, mm - 1, dd));
+    const acum = tot ? num(tot[1]) : dias.reduce((s, x) => s + x[2], 0), metaAcBI = tot ? num(tot[2]) : dias.reduce((s, x) => s + x[3], 0);
+    const proj = head ? num(head[3]) : null; if (!proj) av.push("Projeção do Power BI não encontrada.");
+    // ---------- arquivo 2: fechamento por regional e por gerente
+    const secR = (reg.split(/Fechamento por regional/i)[1] || "").split(/\n\s*Total\s/)[0];
+    const totR = ((reg.split(/Fechamento por regional/i)[1] || "").match(/\n\s*Total\s+([\d.]+)\s+([\d.]+)/) || []);
+    const regs = []; let semReg = 0;
+    secR.split("\n").forEach(l => { const r = l.match(/^\s*([A-ZÇÃÁÉÍÓÚÂÊÔ][A-ZÇÃÁÉÍÓÚÂÊÔ0-9\/ \-]*?)\s+([\d.]+)\s+([\d.]+)\s+(\d+)%\s+(\d+)%\s+(?:([\d,]+)%)?(?:\s+([\d,]+)%)?/);
+      if (r) { const fat = num(r[2]), meta = num(r[3]), parc = +r[5]; regs.push([r[1].trim(), fat, meta, parc, r[6] ? num(r[6]) : null, r[7] ? num(r[7]) : null, Math.round(fat - fat / (parc / 100)), "—"]); }
+      else { const z = l.match(/^\s*([\d.]{5,})\s+([\d,]+)%/); if (z) semReg += num(z[1]); } });
+    if (!regs.length) throw new Error("Não encontrei o “Fechamento por regional” no PDF de regionais.");
+    regs.forEach(r => { r[7] = r[3] < 100 ? "Crítico" : (r[4] != null && r[4] < 3) ? "Proteger margem" : "Alavancar"; });
+    const ger = []; const secG = (reg.split(/Fechamento por gerente/i)[1] || "").split(/Fechamento por regional/i)[0].split(/\n\s*Total\s/)[0];
+    secG.split("\n").forEach(l => { const r = l.match(/^\s*([A-ZÇÃÁÉÍÓÚÂÊÔ][A-ZÇÃÁÉÍÓÚÂÊÔ ()\-.]+?)\s+([\d.]+)\s+([\d.]+)\s+(\d+)%\s+(\d+)%\s+([\d,]+)%/); if (r) ger.push([r[1].trim(), num(r[2]), num(r[3]), +r[5], num(r[6])]); });
+    const metaBI = num(totR[2]) || (prev && prev.mes.metaBI);
+    const somaReg = regs.reduce((s, x) => s + x[1], 0) + semReg, totReg = num(totR[1]);
+    if (semReg) av.push(`${(semReg).toLocaleString("pt-BR")} em linha sem regional no Power BI.`);
+    if (totReg && Math.abs(totReg - acum) > 1000) av.push(`Total por regional (${totReg.toLocaleString("pt-BR")}) difere do acumulado diário (${acum.toLocaleString("pt-BR")}) em ${Math.abs(totReg - acum).toLocaleString("pt-BR")}.`);
+    // ---------- farol D-1 por regional: diferença do acumulado em relação à edição anterior
+    const ratio = last[3] / metaBI; let farol = []; let farolTipo = "dia";
+    const pIso = prev ? prev.d1.data.split("/").reverse().join("-") : null, dIso = d1d.toISOString().slice(0, 10);
+    const prevOk = prev && pIso < dIso && prev.reg && prev.reg.length;
+    if (prevOk) {
+      // dias entre as edições (se pulou dias, a diferença soma mais de um dia)
+      const metaPeriodo = dias.filter(x => { const [a, b] = x[0].split("/").map(Number); const iso = new Date(Date.UTC(ano, b - 1, a)).toISOString().slice(0, 10); return iso > pIso && iso <= dIso; }).reduce((s, x) => s + x[3], 0);
+      farol = regs.map(r => { const p = prev.reg.find(x => x[0] === r[0]); const mp = r[2] * metaPeriodo / metaBI; return p && mp > 0 ? [r[0], Math.round((r[1] - p[1]) / mp * 100)] : null; }).filter(Boolean);
+      if (farol.length < regs.length) av.push("Farol do dia calculado para as regionais presentes na edição anterior.");
+    }
+    if (!farol.length) { farol = regs.map(r => [r[0], r[3]]); farolTipo = "mes"; av.push("Farol mostra o atingimento parcial do mês: carregue os PDFs todo dia para o farol D-1 por regional."); }
+    // ---------- calendário
+    const uteis = dias.filter(x => { const [a, b] = x[0].split("/").map(Number); return util(new Date(Date.UTC(ano, b - 1, a))); }).length;
+    let duRest = 0; const t = new Date(d1d); t.setUTCDate(t.getUTCDate() + 1); while (t.getUTCMonth() === d1d.getUTCMonth()) { if (util(t)) duRest++; t.setUTCDate(t.getUTCDate() + 1); }
+    const mediaDU = acum / Math.max(1, uteis);
+    // ---------- orçamento (mantém a tabela anual e atualiza o mês corrente)
+    const orc = prev && prev.orc ? JSON.parse(JSON.stringify(prev.orc)) : Array.from({ length: 12 }, (_, i) => [["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][i], null, null, null, null]);
+    const mi = d1d.getUTCMonth(); orc.forEach((r, i) => { if (i === mi) { r[1] = base || r[1]; r[2] = metaBI; r[3] = acum; r[5] = true; } });
+    const metaOrc = orc[mi][1] || base;
+    const metaAcOrc = metaOrc * metaAcBI / metaBI;
+    const ds = `${String(dd).padStart(2, "0")}/${String(mm).padStart(2, "0")}/${ano}`;
+    return {
+      meta: { modo: "pdf", fonte: "Power BI (indicadores_flash + regionais)", atualizado: ds, farolTipo },
+      d1: { data: ds, dia: SEM[d1d.getUTCDay()], fat: last[2], meta: last[3], vsD2: prv ? (last[2] / prv[2] - 1) * 100 : null },
+      mes: { acum, metaAcOrc, metaAcBI, metaOrc, metaBI, proj, mgT: tot ? num(tot[4]) : null, mgA: tot ? num(tot[5]) : null, mediaDU, diasMeta: dias.filter(x => x[2] >= x[3]).length, diasTot: dias.length, duRest, metaMediaRest: (metaBI - metaAcBI) / Math.max(1, duRest) },
+      proj3: [["Power BI", proj / 1e6], ["Calendário de metas", acum / metaAcBI * metaBI / 1e6], ["Ritmo por dia útil", (acum + mediaDU * duRest) / 1e6]],
+      farol, reg: regs, ger, dias, orc, metaAno: (prev && prev.metaAno) || null,
+      dds: prev && prev.dds || null, editorial: prev && prev.editorial || null, frase: prev && prev.frase || null, avisos: av
+    };
+  }
+  root.FarolPDF = Object.assign(root.FarolPDF || {}, { parseBI, tipo });
+  if (typeof module !== "undefined") module.exports = Object.assign(module.exports || {}, { parseBI, tipo });
+})(typeof window !== "undefined" ? window : globalThis);

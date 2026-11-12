@@ -217,13 +217,29 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
  .instcard .go:hover{filter:brightness(1.08)}.instcard .x{background:none;border:0;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 6px}
  #instHow{font-size:13.5px;margin-top:6px;color:#ffe08a;font-weight:700}
  .inst{background:#22c55e!important;color:#fff!important;padding:9px 16px!important;font-size:13.5px!important;border-radius:12px!important}}
+.acts{padding:4px 0}.acts .a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;font:inherit;color:var(--ink);text-align:left}
+.acts .a:last-child{border-bottom:0}.acts .a:hover{background:var(--bg)}.acts .a .i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--bg);color:var(--navy2)}
+.acts .a .i svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.acts .a b{display:block;font-size:14px}.acts .a small{color:var(--ink2);font-size:12px}.acts .a .chev{margin-left:auto;color:var(--ink2);font-size:18px}
+.fl{padding:6px 14px 8px}.flsum{padding:10px 0 8px;border-bottom:1px solid var(--line);margin-bottom:2px}
+.seg3{display:flex;height:10px;border-radius:999px;overflow:hidden;gap:3px}.seg3 span{border-radius:999px;min-width:0}.seg3 span[style*="flex:0.0001"]{display:none}
+.flleg{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--ink2)}.flleg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.flleg b{color:var(--ink);font-size:14px;margin-right:3px}
+.flr{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:12px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 0;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.flr:last-child{border-bottom:0}
+.tl3{display:flex;flex-direction:column;gap:3px;background:#141824;border-radius:9px;padding:4px 6px;width:26px;align-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.tl3 i{width:12px;height:12px;border-radius:50%;background:#2b3040}
+.tl3 i:nth-child(1).on{background:#ff3b30;box-shadow:0 0 8px 2px rgba(255,59,48,.75)}.tl3 i:nth-child(2).on{background:#ffb800;box-shadow:0 0 8px 2px rgba(255,184,0,.75)}.tl3 i:nth-child(3).on{background:#2fd16b;box-shadow:0 0 8px 2px rgba(47,209,107,.75)}
+.fln{min-width:0}.fln b{display:block;font-size:14.5px;letter-spacing:.2px}.fln small{display:block;color:var(--ink2);font-size:12px;margin-top:1px}
+.flbar{display:block;position:relative;height:6px;border-radius:999px;background:var(--bg);margin-top:7px;overflow:visible}.flbar span{position:absolute;inset:0 auto 0 0;border-radius:999px}.flbar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2);opacity:.6;border-radius:2px}
+.flr.g .flbar span{background:linear-gradient(90deg,#1e8e4e,#2fd16b)}.flr.y .flbar span{background:linear-gradient(90deg,#b8770a,#ffb800)}.flr.r .flbar span{background:linear-gradient(90deg,#a01f1f,#ff5a4f)}
+.flp{font-size:22px;font-weight:900;letter-spacing:-.5px;min-width:72px;text-align:right}.flr.g .flp{color:var(--g)}.flr.y .flp{color:var(--y)}.flr.r .flp{color:var(--r)}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
 <body>
 <div id="splash"><div class="tl"><i class="r"></i><i class="y"></i><i class="g"></i></div>
 <div class="sp-brand"><div class="lg"><img src="icons/logo-los.png" alt="Grupo LOS"></div><b>Farol Operacional</b><small>CT LOS · indicadores do dia</small></div></div>
-<input type="file" id="pdfIn" accept="application/pdf" hidden>
+<input type="file" id="pdfIn" accept="application/pdf" multiple hidden>
 <header>
   <div class="hrow">
     <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -310,17 +326,22 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
   <div class="card kpi" data-m="acum"><div class="l">Acumulado do mês</div><div class="v">${mi(M.acum)}</div><div class="s">${pct(atAcO)} da orçada · ${pct(atAcB)} BI</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Projeção do mês <span class="est">estimativa</span></div><div class="v">${mi(M.proj)}</div><div class="s">${pct(M.proj/M.metaOrc*100)} da orçada · ${pct(M.proj/M.metaBI*100)} BI</div></div>
  </div>
-${ehAdmin()?`<div class="card load" style="margin-top:12px"><div class="ic">⇪</div><div><b>Edição de ${d1.data}</b><small>${D.meta.modo==="api"?"Power BI ao vivo":D.meta.modo==="equipe"?"publicada para a equipe":"lida do PDF neste aparelho"}</small></div><button class="btn" data-pdf>Carregar PDF</button></div>`:""}
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a"><span class="ib"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>Gerar revista</button><button class="btn" data-pacote style="background:#25d366"><span class="ib"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span>Pacote WhatsApp</button></div>
+
  ${D.avisos&&D.avisos.length?`<p class="note" style="margin:8px 4px 0">Nota de conferência: ${D.avisos.join(" ")}</p>`:""}
  <h2>🦺 Segurança em primeiro lugar</h2>
  ${D.dds?`<div class="card dds" id="ddsCard" style="cursor:pointer"><div><div class="k">DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:`<div class="card">Sem mensagem de segurança nesta edição.</div>`}
  ${D.editorial?`<h2>Mensagem do dia</h2><div class="card edit"><div class="k">Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
  <h2>Leitura do dia <small>toque nos números</small></h2>
  <div class="card lei">${resumoHtml()}</div>
- <h2>Farol do dia · D-1 <small>verde ≥100 · amarelo 90–99 · vermelho &lt;90</small></h2>
- <div class="farol">${f.map(([n,p])=>`<button class="fr ${cor(p)}" data-reg="${n}"><div class="b"></div><div class="n">${n}</div><div class="p">${pct(p)}</div></button>`).join("")}</div>
- <div class="fcount"><div class="cg"><b>${nG}</b>acima da meta</div><div class="cy"><b>${nY}</b>próximo</div><div class="cr"><b>${nR}</b>em atenção</div></div>
+ <h2>${D.meta&&D.meta.farolTipo==="mes"?"Farol do mês · regionais":"Farol do dia · D-1"} <small>${D.meta&&/Power BI/.test(D.meta.fonte||"")&&D.meta.farolTipo!=="mes"?"variação do acumulado ÷ meta do dia":"verde ≥100 · amarelo 90–99 · vermelho &lt;90"}</small></h2>
+ <div class="card fl">
+  <div class="flsum"><div class="seg3"><span style="flex:${nG||.0001};background:var(--g)"></span><span style="flex:${nY||.0001};background:var(--y)"></span><span style="flex:${nR||.0001};background:var(--r)"></span></div>
+  <div class="flleg"><span><i style="background:var(--g)"></i><b>${nG}</b> acima</span><span><i style="background:var(--y)"></i><b>${nY}</b> próximo</span><span><i style="background:var(--r)"></i><b>${nR}</b> atenção</span></div></div>
+  ${[...f].sort((a,b)=>b[1]-a[1]).map(([n,p])=>{const c=cor(p),r=regByName(n),w=Math.min(100,p/ Math.max(150,...f.map(x=>x[1])) *100),m100=100/Math.max(150,...f.map(x=>x[1]))*100;
+   return `<button type="button" class="flr ${c}" data-reg="${n}"><span class="tl3"><i class="${c==="r"?"on":""}"></i><i class="${c==="y"?"on":""}"></i><i class="${c==="g"?"on":""}"></i></span>
+   <span class="fln"><b>${n}</b><small>${r?"mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"><span style="width:${w}%"></span><em style="left:${m100}%"></em></span></span>
+   <span class="flp">${pct(p)}</span></button>`;}).join("")}
+ </div>
  <h2>Onde agir hoje <small>abaixo da meta proporcional do mês</small></h2>
  ${ag.length?ag.map(r=>{const fl=r[2]-r[1];return `<div class="card act" data-reg="${r[0]}"><div class="t"><span>${r[0]}</span><span class="pill r">${pct(r[3])} no mês</span></div>
   <div class="grid3"><div><small>Devendo até D-1</small><b class="dn">${brl(-r[6])}</b></div><div><small>Falta p/ meta</small><b>${mi(fl)}</b></div><div><small>Necessário/dia útil</small><b>${brl(fl/M.duRest)}</b></div></div></div>`}).join(""):`<div class="card">Todas as regionais acima da meta proporcional. 👏</div>`}
@@ -328,6 +349,12 @@ ${ehAdmin()?`<div class="card load" style="margin-top:12px"><div class="ic">⇪<
  <h2>Ritmo para a meta</h2>
  <div class="card" data-m="necDU"><div class="grid3" style="margin:0"><div><small>Falta (orçada)</small><b>${mi(falta)}</b></div><div><small>Dias úteis</small><b>${M.duRest}</b></div><div><small>Necessário/dia útil</small><b>${mi(necDU)}</b></div></div>
  <div class="note">A média realizada por dia útil é ${mi(M.mediaDU)}: o ritmo necessário está ${pct((1-necDU/M.mediaDU)*100,1)} abaixo do que já vem sendo feito.</div></div>
+ <h2>Atualização e arquivos <small>edição de ${d1.data}</small></h2>
+ <div class="card acts" style="padding:0">
+ ${ehAdmin()?`<button type="button" class="a" data-pdf><span class="i"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><div><b>Atualizar números</b><small>Selecione os 2 PDFs do Power BI · ${D.meta.modo==="equipe"?"publicada para a equipe":D.meta.modo==="api"?"Power BI ao vivo":"lida neste aparelho"}</small></div><span class="chev">›</span></button>`:""}
+ <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
+ <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
+ </div>
  ${D.frase?`<h2>Para o dia</h2><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
  <p class="motto">Carro parado é <em>prejuízo</em>. Vamos pra cima!</p>`;}
 function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3];ac.push(a);am.push(b);});
@@ -355,6 +382,7 @@ function vReg(){const r=[...D.reg].sort((a,b)=>b[3]-a[3]);const mx=Math.max(...r
  ${D.reg.map(x=>`<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2].toLocaleString("pt-BR")}</td><td>${pct(x[1]/x[2]*100)}</td><td><span class="pill ${cor(x[3])}">${pct(x[3])}</span></td><td>${pct(x[4],2)}</td><td>${pct(x[5],2)}</td></tr>`).join("")}
  </tbody></table></div>
  ${(()=>{const sf=D.farol.filter(f=>!regByName(f[0])).map(f=>f[0]);const dif=M.acum-D.reg.reduce((s,x)=>s+x[1],0);return sf.length?`<div class="warn">⚠ ${sf.join(" e ")} aparecem no farol do dia, mas não no fechamento do mês. As linhas exibidas somam ${brl(dif)} a menos que o acumulado do grupo.</div>`:""})()}</div>
+ ${D.ger&&D.ger.length?`<h2>Fechamento por gerente <small>atingimento parcial</small></h2><div class="card fx2">${[...D.ger].sort((a,b)=>b[3]-a[3]).map(g=>`<div class="r ${g[3]>=100?"ok":""}"><b>${g[0].replace(/\b(\w)(\w*)/g,(m,a,b)=>a+b.toLowerCase()).replace(/\(pa\)/i,"(PA)")}</b><span class="v" style="color:${C[cor(g[3])]}">${pct(g[3])}</span><small>${mi(g[1])} de ${mi(g[2])} · margem terc. ${pct(g[4],2)}</small><small style="text-align:right">${g[3]<100?"faltam "+mi(g[2]-g[1]):"✓ no ritmo"}</small></div>`).join("")}</div>`:""}
  <p class="note">Toque numa regional para ver os detalhes.</p>`;}
 function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>{a+=x[2];real.push(a);});
  for(let i=0;i<n;i++){metaL.push(M.metaOrc*(i+1)/n);projL.push(i<9?null:M.acum+(M.proj-M.acum)*(i-9)/(n-10));}
@@ -558,13 +586,29 @@ async function loadData(){
 /* --- leitura do PDF (pdf.js) --- */
 let pdfjsP=null;
 function pdfjs(){return pdfjsP||(pdfjsP=import(new URL("vendor/pdf.min.mjs",location.href).href).then(m=>{m.GlobalWorkerOptions.workerSrc=new URL("vendor/pdf.worker.min.mjs",location.href).href;return m;}));}
-async function lerPDF(file){const lib=await pdfjs();const doc=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;const pages=[];
+async function textoPDF(file){const lib=await pdfjs();const doc=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;const pages=[];
  for(let i=1;i<=doc.numPages;i++){const c=await (await doc.getPage(i)).getTextContent();let out="",y0=null;
   for(const it of c.items){const y=Math.round(it.transform[5]);if(y0!==null&&Math.abs(y-y0)>2)out+="\n";else if(out&&!out.endsWith(" "))out+=" ";out+=it.str;y0=y;}pages.push(out);}
- return FarolPDF.parse(pages);}
-$("#pdfIn").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;toastMsg("Lendo o PDF…");
- try{const Dx=await lerPDF(f);guardar(Dx);logEv("carregado");pdfSalvar(isoOf(Dx.d1.data),f);D=Dx;compute();paintHead();show("hoje");toastMsg("Edição de "+Dx.d1.data+" carregada.");const gh=LS.get("farolGh",null);if(gh&&gh.token&&LS.get("farolAutoPub",1)){await publicar();}pubOffer();}
- catch(err){openSheet(`<div class="sh"><b>Não consegui ler o PDF</b><button id="xS">×</button></div><div class="card">${err.message}</div><p class="note">Use o PDF da revista Morning Operational News gerado no dia.</p>`);}});
+ return pages;}
+async function lerPDF(file){return FarolPDF.parse(await textoPDF(file));}
+const pendBI={};
+async function carregarArquivos(files){let revista=null;
+ for(const f of files){const pages=await textoPDF(f),txt=pages.join("\n"),t=FarolPDF.tipo(txt);
+  if(t) pendBI[t]=txt; else if(/MORNING|OPERATIONAL NEWS|Performance por dia/i.test(txt)) revista={f,pages};
+  else throw new Error("“"+f.name+"” não é um dos PDFs do Power BI (indicadores_flash ou D-1 Regionais).");}
+ if(revista){const Dx=FarolPDF.parse(revista.pages);return {Dx,orig:revista.f};}
+ if(pendBI.dia&&pendBI.reg){const ed=edicoes();const base0=D||ed[Object.keys(ed).sort().pop()]||null;const iso=isoOf(FarolPDF.parseBI(pendBI.dia,pendBI.reg,base0).d1.data);
+  const ks=Object.keys(ed).filter(k=>k<iso).sort();let prev=ks.length?ed[ks.pop()]:null;
+  if(!prev){const senha=LS.get("farolSenha","");for(let i=1;i<=7&&!prev&&senha;i++){const d=new Date(iso+"T12:00:00Z");d.setUTCDate(d.getUTCDate()-i);try{const r=await fetch("data/edicoes/"+d.toISOString().slice(0,10)+".enc",{cache:"no-store"});if(r.ok)prev=await decifrar(await r.text(),senha);}catch(e){}}}
+  if(!prev)prev=base0;
+  const Dx=FarolPDF.parseBI(pendBI.dia,pendBI.reg,prev);delete pendBI.dia;delete pendBI.reg;return {Dx,orig:null};}
+ return {falta:pendBI.dia?"o PDF de REGIONAIS (indicadores_flash … D-1 REGIONAIS)":"o PDF diário (indicadores_flash … com a tabela por dia)"};}
+$("#pdfIn").addEventListener("change",async e=>{const fs=[...e.target.files];e.target.value="";if(!fs.length)return;toastMsg("Lendo "+fs.length+" arquivo(s)…");
+ try{const r=await carregarArquivos(fs);
+  if(r.falta){openSheet(`<div class="sh"><b>Falta 1 arquivo</b><button id="xS">×</button></div><div class="card">Recebi um dos PDFs do Power BI. Agora envie ${r.falta}.</div><button class="btn" data-pdf style="width:100%;margin-top:10px">Escolher o outro PDF</button>`);return;}
+  const Dx=r.Dx;Dx.meta=Object.assign(Dx.meta||{},{modo:"pdf"});guardar(Dx);logEv("carregado");if(r.orig)pdfSalvar(isoOf(Dx.d1.data),r.orig);D=Dx;compute();paintHead();show("hoje");toastMsg("Edição de "+Dx.d1.data+" atualizada.");
+  const gh=LS.get("farolGh",null);if(gh&&gh.token&&LS.get("farolAutoPub",1)){await publicar();}pubOffer();}
+ catch(err){openSheet(`<div class="sh"><b>Não consegui ler</b><button id="xS">×</button></div><div class="card">${err.message}</div><p class="note">Envie os 2 PDFs padrão do Power BI: <b>indicadores_flash</b> (tabela por dia) e <b>indicadores_flash … D-1 REGIONAIS</b>. Pode selecionar os dois de uma vez.</p>`);}});
 /* --- publicar para a equipe no GitHub (criptografado com a senha da equipe) --- */
 const enc=new TextEncoder(),dec=new TextDecoder();const b64=u=>btoa(String.fromCharCode(...u)),ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function chave(senha,salt){const k=await crypto.subtle.importKey("raw",enc.encode(senha),"PBKDF2",false,["deriveKey"]);
@@ -813,7 +857,7 @@ function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
  $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:D.meta.modo==="equipe"?"Edição da equipe":"PDF do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
  const ks=Object.keys(edicoes()).sort().reverse();$("#dSel").innerHTML=ks.map(k=>`<option value="${k}" ${k===isoOf(d1.data)?"selected":""}>${k.slice(8)}/${k.slice(5,7)}</option>`).join("");}
-function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue a revista do dia</b><p class="note">Enquanto a API do Power BI não é liberada, o app é alimentado pelo PDF da Morning Operational News.</p>${ehAdmin()?`<button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button>`:`<p class="note">Aguarde a publicação da edição pelo administrador.</p>`}</div>`;}
+function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue os números do dia</b><p class="note">Selecione os 2 PDFs padrão do Power BI: indicadores_flash e D-1 Regionais.</p>${ehAdmin()?`<button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button>`:`<p class="note">Aguarde a publicação da edição pelo administrador.</p>`}</div>`;}
 document.querySelector("nav.tabs").onclick=e=>{const b=e.target.closest("button");if(b) irPara(b.dataset.t);};
 $("#bBack").onclick=()=>voltar();
 document.addEventListener("click",e=>{if(e.target.closest("[data-revista]")){document.querySelector(".sheet")?.remove();FarolPacote.gerarRevista();return;}if(e.target.closest("[data-pacote]")){document.querySelector(".sheet")?.remove();FarolPacote.abrir();return;}if(e.target.closest("[data-pdf]")){document.querySelector(".sheet")?.remove();$("#pdfIn").click();}});
