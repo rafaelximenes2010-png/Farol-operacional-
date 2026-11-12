@@ -233,6 +233,9 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .flbar{display:block;position:relative;height:6px;border-radius:999px;background:var(--bg);margin-top:7px;overflow:visible}.flbar span{position:absolute;inset:0 auto 0 0;border-radius:999px}.flbar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2);opacity:.6;border-radius:2px}
 .flr.g .flbar span{background:linear-gradient(90deg,#1e8e4e,#2fd16b)}.flr.y .flbar span{background:linear-gradient(90deg,#b8770a,#ffb800)}.flr.r .flbar span{background:linear-gradient(90deg,#a01f1f,#ff5a4f)}
 .flp{font-size:22px;font-weight:900;letter-spacing:-.5px;min-width:72px;text-align:right}.flr.g .flp{color:var(--g)}.flr.y .flp{color:var(--y)}.flr.r .flp{color:var(--r)}
+.tipchart [data-tip]{transition:opacity .15s}.tipchart.sel [data-tip]{opacity:.45}.tipchart.sel [data-tip].on{opacity:1}
+.tipbox{margin-top:8px;background:var(--bg);border:1px solid var(--line);border-left:4px solid #7c5cff;border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.5;animation:tipIn .18s ease}
+@keyframes tipIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .proto{background:#fff3cd;color:#6b4e00;text-align:center;font-size:11px;padding:5px;font-weight:600}
 </style>
 </head>
@@ -445,30 +448,41 @@ const CARGOS=[["Diretoria",[2,.5,.5,1]],["Gerente Nacional",[2,.25,.25,.5]],["De
 const faixaAting=pc=>pc>=110?3:pc>=107?2:pc>=105?1:pc>=100?0:-1;
 function bonusMax(cargo,f){const c=CARGOS.find(x=>x[0]===cargo)[1];return f<0?0:c.slice(0,f+1).reduce((a,b)=>a+b,0);}
 const pctEbitda=e=>e<80?0:Math.min(e,120);
-function ponteSVG(base,proj,acum,w=360,h=230){const pad={l:34,r:6,t:20,b:34};const lv=FAIXAS.map(f=>base*(1+f[1]/100));const top=Math.max(proj,lv[3])*1.06,bot=base*.86;
- const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const items=[["Meta",bot,base,"#0f2350"],["+5%",lv[0],lv[1],"#3f6c99"],["+7%",lv[1],lv[2],"#6f8fd0"],["+10%",lv[2],lv[3],"#b8862e"],["Exced.",lv[3],Math.max(proj,lv[3]),proj>lv[3]?"#1e8e4e":"#9aa3b5"],["Projeção",bot,proj,"#7c3aed"]];
+function ponteSVG(base,proj,acum,w=360,h=290){const pad={l:34,r:8,t:26,b:40};const lv=FAIXAS.map(f=>base*(1+f[1]/100));const top=Math.max(proj,lv[3])*1.06,bot=base*.86;
+ const f1=v=>(v/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+ const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const items=[["Meta",bot,base,"#3f6fd8",`<b>Meta orçada do mês: R$ ${f1(base)} mi</b><br>Valor do orçamento para o mês. Abaixo disso não há elegibilidade.`],
+  ["+5%",lv[0],lv[1],"#3f6c99",`<b>Super meta +5%: R$ ${f1(lv[1])} mi</b><br>Degrau de R$ ${f1(lv[1]-lv[0])} mi acima da meta.`],["+7%",lv[1],lv[2],"#6f8fd0",`<b>Super meta +7%: R$ ${f1(lv[2])} mi</b><br>Mais R$ ${f1(lv[2]-lv[1])} mi sobre o +5%.`],
+  ["+10%",lv[2],lv[3],"#b8862e",`<b>Super meta +10%: R$ ${f1(lv[3])} mi</b><br>Faixa máxima: mais R$ ${f1(lv[3]-lv[2])} mi sobre o +7%.`],
+  ["Exced.",lv[3],Math.max(proj,lv[3]),proj>lv[3]?"#1e8e4e":"#9aa3b5",`<b>Excedente: R$ ${f1(Math.max(0,proj-lv[3]))} mi</b><br>Quanto a projeção passa da super meta +10%.`],
+  ["Projeção",bot,proj,"#7c5cff",`<b>Projeção conservadora: R$ ${f1(proj)} mi</b><br>Menor das 3 projeções do mês (${pct(proj/base*100,1)} da meta orçada).`]];
  const bw=(w-pad.l-pad.r)/items.length;let g="";
- [bot,base,lv[3],top].forEach(v=>{g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e3e7ef"/><text x="${pad.l-4}" y="${Y(v)+3}" font-size="8.5" text-anchor="end" fill="#5b6478">${Math.round(v/1e6)}</text>`;});
- items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.15,ww=bw*.7,y1=Y(it[2]),y0=Y(it[1]);g+=`<rect x="${x}" y="${Math.min(y1,y0)}" width="${ww}" height="${Math.max(2,Math.abs(y0-y1))}" rx="3" fill="${it[3]}"/>`;
-  const val=i===0||i===5?mi(it[2]).replace("R$ ",""):"+"+((it[2]-it[1])/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1});
-  g+=`<text x="${x+ww/2}" y="${Math.min(y1,y0)-4}" font-size="8.5" font-weight="700" text-anchor="middle" fill="${it[3]}">${val}</text><text x="${x+ww/2}" y="${h-pad.b+13}" font-size="9" text-anchor="middle" fill="#5b6478">${it[0]}</text>`;
+ [bot,base,lv[3],top].forEach(v=>{g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--line)"/><text x="${pad.l-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" style="fill:var(--ink2)">${Math.round(v/1e6)}</text>`;});
+ items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.12,ww=bw*.76,y1=Y(it[2]),y0=Y(it[1]);g+=`<rect x="${x}" y="${Math.min(y1,y0)}" width="${ww}" height="${Math.max(3,Math.abs(y0-y1))}" rx="4" fill="${it[3]}" data-tip="${it[4].replace(/"/g,"&quot;")}" style="cursor:pointer"/>`;
+  const val=i===0||i===5?f1(it[2]):"+"+((it[2]-it[1])/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1});
+  g+=`<text x="${x+ww/2}" y="${Math.min(y1,y0)-6}" font-size="11.5" font-weight="900" text-anchor="middle" style="fill:${i===0||i===5?"var(--ink)":it[3]}">${val}</text><text x="${x+ww/2}" y="${h-pad.b+16}" font-size="10.5" font-weight="600" text-anchor="middle" style="fill:var(--ink2)">${it[0]}</text>`;
   if(i<4) g+=`<line x1="${x+ww}" x2="${x+bw}" y1="${y1}" y2="${y1}" stroke="#9aa3b5" stroke-dasharray="2 2"/>`;});
- if(acum!=null&&acum>bot){g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(acum)}" y2="${Y(acum)}" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${w-pad.r}" y="${Y(acum)-4}" font-size="8.5" text-anchor="end" fill="#c62828">realizado ${mi(acum)}</text>`;}
- g+=`<text x="${pad.l}" y="${h-6}" font-size="8.5" fill="#5b6478">R$ milhões · faixas sobre a meta orçada</text>`;
- return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
+ if(acum!=null&&acum>bot){g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(acum)}" y2="${Y(acum)}" stroke="#ef4444" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${w-pad.r}" y="${Y(acum)-5}" font-size="10.5" font-weight="700" text-anchor="end" fill="#ef4444" data-tip="<b>Realizado até o D-1: R$ ${f1(acum)} mi</b><br>${pct(acum/base*100)} da meta orçada do mês.">realizado ${mi(acum)}</text>`;}
+ g+=`<text x="${pad.l}" y="${h-6}" font-size="10" style="fill:var(--ink2)">R$ milhões · toque nas barras para entender</text>`;
+ return `<svg class="chart tipchart" viewBox="0 0 ${w} ${h}">${g}</svg><div class="tipbox" hidden></div>`;}
 function faixasTabela(base,real,proj,duRest){return `<div class="tw"><table><thead><tr><th>Faixa</th><th>Valor</th><th>Realizado</th><th>Projeção</th>${duRest!=null?"<th>Falta</th><th>Necessário/dia útil</th>":""}</tr></thead><tbody>
  ${FAIXAS.map(f=>{const v=base*(1+f[1]/100),fl=Math.max(0,v-real);return `<tr><td><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b></td><td>${mi(v)}</td><td><span class="pill ${real>=v?"g":"r"}">${pct(real/v*100)}</span></td><td><span class="pill ${proj>=v?"g":proj>=v*.97?"y":"r"}">${proj>=v?"✓ atinge":pct(proj/v*100)}</span></td>${duRest!=null?`<td>${fl?mi(fl):"✓"}</td><td>${fl?brl(fl/duRest):"—"}</td>`:""}</tr>`;}).join("")}</tbody></table></div>`;}
 function anoProj(novVal){const mI=D.orc.findIndex(x=>x[5]);const fech=D.orc.filter(x=>x[3]!=null&&!x[5]);const real=fech.reduce((a,x)=>a+x[3],0);
  const futuros=D.orc.slice(mI+1).reduce((a,x)=>a+(x[1]||0),0);return {real,nov:novVal,fut:futuros,tot:real+novVal+futuros,mI,nFech:fech.length};}
-function ponteAno(A,meta,w=360,h=250){const pad={l:30,r:74,t:22,b:30};const lv=FAIXAS.map(f=>meta*(1+f[1]/100));const top=Math.max(A.tot,lv[3])*1.03,bot=Math.min(A.real,meta)*.9;
- const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const mes=D.orc[A.mI]?D.orc[A.mI][0]:"Mês";const prox=D.orc.slice(A.mI+1).map(x=>x[0]).join("–")||"—";
- const it=[["Real. até "+(D.orc[A.mI-1]||["—"])[0],bot,A.real,"#0f2350"],["+"+mes+" (proj.)",A.real,A.real+A.nov,"#1e8e4e"],["+"+prox+" (orç.)",A.real+A.nov,A.tot,"#6fbf8a"],["Ano projetado",bot,A.tot,"#0f2350"]];
+function ponteAno(A,meta,w=360,h=320){const pad={l:12,r:84,t:30,b:40};const lv=FAIXAS.map(f=>meta*(1+f[1]/100));const top=Math.max(A.tot,lv[3])*1.03,bot=Math.min(A.real,meta)*.9;
+ const Y=v=>pad.t+(h-pad.t-pad.b)*(1-(v-bot)/(top-bot));const mes=D.orc[A.mI]?D.orc[A.mI][0]:"Mês";const ult=(D.orc[A.mI-1]||["—"])[0];const prox=D.orc.slice(A.mI+1).map(x=>x[0]).join("–")||"—";
+ const f1=v=>(v/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+ const it=[["Real. até "+ult,bot,A.real,"#3f6fd8",`<b>Realizado jan–${ult.toLowerCase()}: R$ ${f1(A.real)} mi</b><br>Faturamento dos ${A.nFech} meses já fechados do ano. É a base firme da ponte.`],
+  ["+"+mes+" (proj.)",A.real,A.real+A.nov,"#1e8e4e",`<b>${mes} projetado: +R$ ${f1(A.nov)} mi</b><br>Projeção do Power BI para o mês em andamento (realizado até o D-1 + estimativa até o fim do mês).`],
+  ["+"+prox+" (orç.)",A.real+A.nov,A.tot,"#6fbf8a",`<b>${prox} no orçado: +R$ ${f1(A.fut)} mi</b><br>Meses que ainda não começaram entram pelo valor do orçamento (meta orçada).`],
+  ["Ano projetado",bot,A.tot,"#7c5cff",`<b>Ano projetado: R$ ${f1(A.tot)} mi = ${pct(A.tot/meta*100,1)} da meta</b><br>Soma da ponte. Comparado com as linhas: meta orçada do ano e super metas +5%, +7% e +10%.`]];
  const bw=(w-pad.l-pad.r)/it.length;let g="";
- lv.forEach((v,i)=>{const c=["#c62828","#d08a0e","#b8862e","#8a6a00"][i];g+=`<line x1="${pad.l}" x2="${w-pad.r+4}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-width="${i?1.2:1.6}" ${i?'stroke-dasharray="5 3"':""}/><text x="${w-pad.r+6}" y="${Y(v)+3}" font-size="8.5" font-weight="700" fill="${c}">${(v/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} ${FAIXAS[i][0]==="Meta"?"meta":FAIXAS[i][0]}</text>`;});
- it.forEach((q,i)=>{const x=pad.l+i*bw+bw*.16,ww=bw*.68,y1=Y(q[2]),y0=Y(q[1]);g+=`<rect x="${x}" y="${Math.min(y0,y1)}" width="${ww}" height="${Math.max(3,Math.abs(y0-y1))}" rx="3" fill="${q[3]}"/>`;
-  const lab=i===0||i===3?(q[2]/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1}):"+"+((q[2]-q[1])/1e6).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
-  g+=`<text x="${x+ww/2}" y="${Math.min(y0,y1)-5}" font-size="9.5" font-weight="800" text-anchor="middle" fill="${q[3]}">${lab}</text><text x="${x+ww/2}" y="${h-pad.b+12}" font-size="8" text-anchor="middle" fill="#5b6478">${q[0]}</text>`;});
- g+=`<text x="${pad.l}" y="${h-4}" font-size="8" fill="#5b6478">R$ milhões · linhas = meta orçada do ano e super metas</text>`;return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
+ lv.forEach((v,i)=>{const c=["#ef4444","#f59e0b","#eab308","#d4a017"][i];g+=`<line x1="${pad.l}" x2="${w-pad.r+4}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-width="${i?1.3:2}" ${i?'stroke-dasharray="6 4"':""}/><text x="${w-pad.r+8}" y="${Y(v)+4}" font-size="11" font-weight="800" fill="${c}" data-tip="${i?`<b>Super meta ${FAIXAS[i][0]}: R$ ${f1(v)} mi</b><br>Meta orçada do ano + ${FAIXAS[i][1]}%. ${A.tot>=v?"✓ A projeção do ano atinge esta faixa.":"Faltam R$ "+f1(v-A.tot)+" mi."}`:`<b>Meta orçada do ano: R$ ${f1(v)} mi</b><br>Soma da meta orçada de janeiro a dezembro (orçamento 2026).`}">${f1(v)} ${i?FAIXAS[i][0]:"meta"}</text>`;});
+ it.forEach((q,i)=>{const x=pad.l+i*bw+bw*.14,ww=bw*.72,y1=Y(q[2]),y0=Y(q[1]),yt=Math.min(y0,y1);
+  g+=`<rect x="${x}" y="${yt}" width="${ww}" height="${Math.max(3,Math.abs(y0-y1))}" rx="5" fill="${q[3]}" data-tip="${q[4].replace(/"/g,"&quot;")}" style="cursor:pointer"/>`;
+  const lab=i===0||i===3?f1(q[2]):"+"+f1(q[2]-q[1]);
+  g+=`<text x="${x+ww/2}" y="${yt-7}" font-size="13" font-weight="900" text-anchor="middle" class="svt" style="fill:${i===0||i===3?"var(--ink)":q[3]}">${lab}</text><text x="${x+ww/2}" y="${h-pad.b+16}" font-size="10.5" font-weight="600" text-anchor="middle" style="fill:var(--ink2)">${q[0]}</text>`;});
+ g+=`<text x="${pad.l}" y="${h-6}" font-size="10" style="fill:var(--ink2)">R$ milhões · toque nas barras e nas linhas para entender</text>`;
+ return `<svg class="chart tipchart" viewBox="0 0 ${w} ${h}">${g}</svg><div class="tipbox" hidden></div>`;}
 function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);const A=anoProj(M.proj);const pcA=A.tot/meta*100,fA=faixaAting(pcA);
  const faixaTxt=f=>f<0?"abaixo da meta":f===0?"meta (100%)":"faixa super "+FAIXAS[f][0];const prox=fA<3?FAIXAS[fA+1]:null;
  const pmin=Math.min(...pj.map(x=>x[1])),pcm=pmin/M.metaOrc*100;
@@ -861,7 +875,7 @@ function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" a
 document.querySelector("nav.tabs").onclick=e=>{const b=e.target.closest("button");if(b) irPara(b.dataset.t);};
 $("#bBack").onclick=()=>voltar();
 document.addEventListener("click",e=>{if(e.target.closest("[data-revista]")){document.querySelector(".sheet")?.remove();FarolPacote.gerarRevista();return;}if(e.target.closest("[data-pacote]")){document.querySelector(".sheet")?.remove();FarolPacote.abrir();return;}if(e.target.closest("[data-pdf]")){document.querySelector(".sheet")?.remove();$("#pdfIn").click();}});
-$("#main").addEventListener("click",e=>{if(e.target.closest("[data-selmode]"))return selEntrar();if(document.body.classList.contains("selmode")){const b=e.target.closest(".blk");if(b){b.classList.toggle("sel");selConta();}return;}const bs=e.target.closest("[data-bsh]");if(bs)return enviarBlocos([bs.closest(".blk")]);if(e.target.closest("[data-pdf]"))return;if(e.target.closest("#ddsCard")) return ddsSheet();const m=e.target.closest("[data-m]");if(m) return mSheet(m.dataset.m);const r=e.target.closest("[data-reg]");if(r) regSheet(r.dataset.reg);});
+$("#main").addEventListener("click",e=>{const tp=e.target.closest(".tipchart [data-tip]");if(tp&&!document.body.classList.contains("selmode")){e.stopPropagation();const sv=tp.closest("svg"),bx=sv.nextElementSibling;sv.classList.add("sel");sv.querySelectorAll(".on").forEach(x=>x.classList.remove("on"));tp.classList.add("on");if(bx){bx.innerHTML=tp.getAttribute("data-tip");bx.hidden=false;}return;}if(e.target.closest("[data-selmode]"))return selEntrar();if(document.body.classList.contains("selmode")){const b=e.target.closest(".blk");if(b){b.classList.toggle("sel");selConta();}return;}const bs=e.target.closest("[data-bsh]");if(bs)return enviarBlocos([bs.closest(".blk")]);if(e.target.closest("[data-pdf]"))return;if(e.target.closest("#ddsCard")) return ddsSheet();const m=e.target.closest("[data-m]");if(m) return mSheet(m.dataset.m);const r=e.target.closest("[data-reg]");if(r) regSheet(r.dataset.reg);});
 $("#bAl").onclick=()=>D?alertsSheet():toastMsg("Carregue uma edição primeiro.");$("#bCfg").onclick=menu;$("#bInst").onclick=doInstall;
 $("#dSel").onchange=()=>{const e=edicoes()[$("#dSel").value];if(e){D=e;LS.set("farolAtual",$("#dSel").value);compute();paintHead();show(cur);}};
 $("#bSh").onclick=()=>FarolPacote.abrir();
