@@ -1,14 +1,6 @@
 {
  "alertas": [
   {
-   "id": "ouro-30/09/2019",
-   "nivel": "info",
-   "titulo": "Ouro cai 4,00%",
-   "texto": "Ouro na B3: R$ 204,00 por grama em 30/09/2019 (série oficial do Banco Central).",
-   "data": "12/11/2026",
-   "em": "2026-11-12T21:40:33.146Z"
-  },
-  {
    "id": "ipca-10/2026",
    "nivel": "importante",
    "titulo": "IPCA de outubro: 0,14%",

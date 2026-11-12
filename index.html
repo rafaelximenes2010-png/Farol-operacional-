@@ -510,9 +510,9 @@ async function dolarVivo(){if(!MKT)return;const it=id=>MKT.itens.find(x=>x.id===
   const r=await fetch(`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@a,dataFinalCotacao=@b)?@a='${f(ini)}'&@b='${f(hj)}'&$format=json&$orderby=dataHoraCotacao%20desc&$top=2`,{cache:"no-store"});
   const v=(await r.json()).value;if(v&&v.length){const u=it("usd"),a=v[0].cotacaoVenda,p=v[1]?(a/v[1].cotacaoVenda-1)*100:0,dt=new Date(v[0].dataHoraCotacao.replace(" ","T"));
    u.valor="R$ "+nf(a,4);u.var=(p>=0?"+":"−")+nf(Math.abs(p),2)+"%";u.dir=p>=0?1:-1;u.ref=dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})+" "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+" · Banco Central";u.vivo=1;mud=1;}}catch(e){}
- try{const s=await sgs(432,1),u=it("selic");u.valor=nf(s[0].v,2)+"% a.a.";u.ref="vigente em "+s[0].d.slice(0,5)+" · Banco Central";u.vivo=1;mud=1;}catch(e){}
+ try{const s=await sgs(432,1),u=it("selic");u.valor=nf(s[0].v,2)+"% a.a.";u.ref="meta vigente · Copom/Banco Central";u.vivo=1;mud=1;}catch(e){}
  try{const [m,a]=await Promise.all([sgs(433,1),sgs(13522,1)]),u=it("ipca");if(u){u.valor=nf(m[0].v,2)+"%";u.var="12 meses: "+nf(a[0].v,2)+"%";u.ref=m[0].d.slice(3)+" · IBGE/BCB";u.vivo=1;mud=1;}}catch(e){}
- try{const g=await sgs(4,2),u=it("ouro");if(g.length){const a=g[g.length-1].v,p=g.length>1?(a/g[0].v-1)*100:0;u.valor="R$ "+nf(a,2)+"/g";u.var=(p>=0?"+":"−")+nf(Math.abs(p),2)+"% no dia";u.dir=p>=0?1:-1;u.ref=g[g.length-1].d.slice(0,5)+" · B3 via Banco Central";u.vivo=1;mud=1;}}catch(e){}
+ try{const g=await sgs(4,2),u=it("ouro"),_d=g.length?g[g.length-1].d.split("/"):null;if(g.length&&(Date.now()-new Date(+_d[2],_d[1]-1,+_d[0]))<7*864e5){const a=g[g.length-1].v,p=g.length>1?(a/g[0].v-1)*100:0;u.valor="R$ "+nf(a,2)+"/g";u.var=(p>=0?"+":"−")+nf(Math.abs(p),2)+"% no dia";u.dir=p>=0?1:-1;u.ref=g[g.length-1].d.slice(0,5)+" · B3 via Banco Central";u.vivo=1;mud=1;}}catch(e){}
  if(mud)pintaMercado();}
 setInterval(()=>{if(document.visibilityState==="visible")dolarVivo();},300000);
 function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",selic:"🏦",ouro:"🥇",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};

@@ -24,7 +24,7 @@ try {
 // Selic
 try { const s = await sgs(432, 1), u = it("selic"), ant = parseFloat(String(u.valor).replace(",", "."));
   if (!isNaN(ant) && Math.abs(ant - s[0].v) > 0.001) alerta("selic-" + s[0].d, "importante", `Selic ${s[0].v > ant ? "sobe" : "cai"} para ${nf(s[0].v, 2)}% a.a.`, `Decisão do Copom (Banco Central): de ${nf(ant, 2)}% para ${nf(s[0].v, 2)}% ao ano. Afeta custo de financiamento de frota.`);
-  Object.assign(u, { valor: nf(s[0].v, 2) + "% a.a.", ref: "vigente em " + s[0].d.slice(0, 5) + " · Banco Central" }); log.push("selic ok");
+  Object.assign(u, { valor: nf(s[0].v, 2) + "% a.a.", ref: "meta vigente · Copom/Banco Central" }); log.push("selic ok");
 } catch (e) { log.push("selic erro"); }
 // IPCA
 try { const [mm, aa] = await Promise.all([sgs(433, 1), sgs(13522, 1)]), u = it("ipca"), ref = mm[0].d.slice(3);
@@ -32,7 +32,7 @@ try { const [mm, aa] = await Promise.all([sgs(433, 1), sgs(13522, 1)]), u = it("
   Object.assign(u, { valor: nf(mm[0].v, 2) + "%", var: "12 meses: " + nf(aa[0].v, 2) + "%", ref: ref + " · IBGE/BCB" }); log.push("ipca ok");
 } catch (e) { log.push("ipca erro"); }
 // Ouro B3
-try { const g = await sgs(4, 2); if (g.length) { const a = g[g.length - 1], p = g.length > 1 ? (a.v / g[0].v - 1) * 100 : 0;
+try { const g = await sgs(4, 2); const _d = g.length ? g[g.length - 1].d.split("/") : null; if (g.length && (Date.now() - new Date(+_d[2], _d[1] - 1, +_d[0])) < 7 * 864e5) { const a = g[g.length - 1], p = g.length > 1 ? (a.v / g[0].v - 1) * 100 : 0;
   Object.assign(it("ouro"), { valor: "R$ " + nf(a.v, 2) + "/g", var: (p >= 0 ? "+" : "−") + nf(Math.abs(p), 2) + "% no dia", dir: p >= 0 ? 1 : -1, ref: a.d.slice(0, 5) + " · B3 via Banco Central" });
   if (Math.abs(p) >= 2) alerta("ouro-" + a.d, "info", `Ouro ${p > 0 ? "sobe" : "cai"} ${nf(Math.abs(p), 2)}%`, `Ouro na B3: R$ ${nf(a.v, 2)} por grama em ${a.d} (série oficial do Banco Central).`);
   log.push("ouro ok"); } } catch (e) { log.push("ouro erro"); }
