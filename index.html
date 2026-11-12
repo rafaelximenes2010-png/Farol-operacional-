@@ -408,6 +408,8 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .setc a,.card.pol a,.mkt a,.sheet .card a{color:#7fb0ff;font-weight:700}
 
 .drl{position:relative;cursor:pointer}.drl::after{content:"ⓘ detalhar";position:absolute;top:10px;right:12px;font-size:11px;font-weight:700;color:var(--ink2);background:var(--bg);padding:3px 8px;border-radius:99px}
+
+.ofc{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#22c55e;border:1px solid rgba(34,197,94,.5);border-radius:5px;padding:0 4px;margin-left:4px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -498,17 +500,26 @@ function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</
 /* ===== Mercado: SNIC, celulose, diesel e dólar (dólar ao vivo) ===== */
 let MKT=null;
 async function carregaMercado(){try{const r=await fetch("data/mercado.json?t="+Date.now());if(r.ok)MKT=await r.json();}catch(e){}pintaMercado();dolarVivo();}
-async function dolarVivo(){try{const r=await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL",{cache:"no-store"});if(!r.ok)return;const j=(await r.json()).USDBRL;if(!j||!MKT)return;
- const u=MKT.itens.find(x=>x.id==="usd");const v=+j.bid,p=+j.pctChange;u.valor="R$ "+v.toLocaleString("pt-BR",{minimumFractionDigits:3,maximumFractionDigits:3});u.var=(p>=0?"+":"−")+Math.abs(p).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+"%";u.dir=p>=0?1:-1;
- const dt=new Date(+j.timestamp*1000);u.ref="ao vivo · "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});u.vivo=1;u.fonte="AwesomeAPI (mercado à vista)";pintaMercado();}catch(e){}}
+/* dados oficiais ao vivo: Banco Central (PTAX, Selic, IPCA, ouro B3) */
+async function sgs(n,k=2){const r=await fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${n}/dados/ultimos/${k}?formato=json`,{cache:"no-store"});if(!r.ok)throw 0;return (await r.json()).map(x=>({d:x.data,v:parseFloat(String(x.valor).replace(",","."))}));}
+const nf=(v,c)=>v.toLocaleString("pt-BR",{minimumFractionDigits:c,maximumFractionDigits:c});
+async function dolarVivo(){if(!MKT)return;const it=id=>MKT.itens.find(x=>x.id===id)||(MKT.macro||[]).find(x=>x.id===id);let mud=0;
+ try{const f=d=>`${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}-${d.getFullYear()}`,hj=new Date(),ini=new Date(hj-10*864e5);
+  const r=await fetch(`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@a,dataFinalCotacao=@b)?@a='${f(ini)}'&@b='${f(hj)}'&$format=json&$orderby=dataHoraCotacao%20desc&$top=2`,{cache:"no-store"});
+  const v=(await r.json()).value;if(v&&v.length){const u=it("usd"),a=v[0].cotacaoVenda,p=v[1]?(a/v[1].cotacaoVenda-1)*100:0,dt=new Date(v[0].dataHoraCotacao.replace(" ","T"));
+   u.valor="R$ "+nf(a,4);u.var=(p>=0?"+":"−")+nf(Math.abs(p),2)+"%";u.dir=p>=0?1:-1;u.ref=dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})+" "+dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})+" · Banco Central";u.vivo=1;mud=1;}}catch(e){}
+ try{const s=await sgs(432,1),u=it("selic");u.valor=nf(s[0].v,2)+"% a.a.";u.ref="vigente em "+s[0].d.slice(0,5)+" · Banco Central";u.vivo=1;mud=1;}catch(e){}
+ try{const [m,a]=await Promise.all([sgs(433,1),sgs(13522,1)]),u=it("ipca");if(u){u.valor=nf(m[0].v,2)+"%";u.var="12 meses: "+nf(a[0].v,2)+"%";u.ref=m[0].d.slice(3)+" · IBGE/BCB";u.vivo=1;mud=1;}}catch(e){}
+ try{const g=await sgs(4,2),u=it("ouro");if(g.length){const a=g[g.length-1].v,p=g.length>1?(a/g[0].v-1)*100:0;u.valor="R$ "+nf(a,2)+"/g";u.var=(p>=0?"+":"−")+nf(Math.abs(p),2)+"% no dia";u.dir=p>=0?1:-1;u.ref=g[g.length-1].d.slice(0,5)+" · B3 via Banco Central";u.vivo=1;mud=1;}}catch(e){}
+ if(mud)pintaMercado();}
 setInterval(()=>{if(document.visibilityState==="visible")dolarVivo();},300000);
-function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",ouro:"🥇",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
- const ic2={ipca:"🧾",pib:"🏛️"};const mac=(MKT.macro||[]).map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic2[x.id]||""} ${x.nome}</small><b>${x.valor}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("");
- return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+(mac?`<div class="sub">Economia · oficial IBGE</div>${mac}<div class="sub">Setor e insumos</div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
- (MKT.setores?`<button type="button" class="mktmais" id="mktMais">🌐 Mais mercados <small>agro · aço · minério · biodiesel · portos · veículos · ouro</small></button>`:"")+`<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Toque em cada item para ver a fonte.</div>`;}
+function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",selic:"🏦",ouro:"🥇",diesel:"⛽",cimento:"🏗️",celulose:"🌲"};
+ const ic2={ipca:"🧾",pib:"🏛️"};const mac=(MKT.macro||[]).map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic2[x.id]||""} ${x.nome} <span class="ofc">oficial</span></small><b>${x.valor}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("");
+ return (side?`<div class="ttl"><span>Mercado hoje</span><span>${MKT.atualizado}</span></div>`:"")+(mac?`<div class="sub">Economia · oficial IBGE</div>${mac}<div class="sub">Setor e insumos</div>`:"")+MKT.itens.map(x=>`<div class="mr" data-mkt="${x.id}"><small>${ic[x.id]||""} ${x.nome}${x.of?' <span class="ofc">oficial</span>':""}</small><b>${x.valor}${x.vivo?'<span class="lv" title="ao vivo"></span>':""}</b><em><span>${x.ref}</span><i class="${x.dir>0?"up":x.dir<0?"dn":""}">${x.var}</i></em></div>`).join("")+
+ (MKT.setores?`<button type="button" class="mktmais" id="mktMais">🌐 Mais mercados <small>agro · aço · minério · biodiesel · portos · veículos · ouro</small></button>`:"")+`<div class="hl"><b>Highlights SNIC · cimento</b><ul style="margin:0;padding:0">${MKT.snic.map(t=>`<li>${t}</li>`).join("")}</ul></div><div class="ft">Prioridade a fontes oficiais (Banco Central, IBGE, ANP, Conab, ANTAQ). Toque em cada item para ver a fonte.</div>`;}
 
 function setoresSheet(){if(!MKT||!MKT.setores)return;openSheet(`<div class="sh"><b>Mais mercados</b><button id="xS">×</button></div><p class="note" style="margin:0 4px 10px">Indicadores dos setores que movem a carga do Grupo LOS · atualizados em ${MKT.atualizado}</p>
- ${MKT.setores.map(x=>`<div class="card setc"><div class="sth"><span class="si">${x.ic}</span><div style="flex:1;min-width:0"><b>${x.nome}</b><small>${x.ref}</small></div><div style="text-align:right"><div class="sv">${x.valor}</div><small class="${x.dir>0?"up":x.dir<0?"dn":""}" style="font-weight:700;color:${x.dir>0?"#22c55e":x.dir<0?"#ff5a5a":"var(--ink2)"}">${x.var}</small></div></div>
+ ${MKT.setores.map(x=>`<div class="card setc"><div class="sth"><span class="si">${x.ic}</span><div style="flex:1;min-width:0"><b>${x.nome}${x.of?' <span class="ofc">oficial</span>':""}</b><small>${x.ref}</small></div><div style="text-align:right"><div class="sv">${x.valor}</div><small class="${x.dir>0?"up":x.dir<0?"dn":""}" style="font-weight:700;color:${x.dir>0?"#22c55e":x.dir<0?"#ff5a5a":"var(--ink2)"}">${x.var}</small></div></div>
  <ul>${x.itens.map(i=>`<li>${i}</li>`).join("")}</ul><p class="note" style="margin:6px 0 0">Fonte: <b>${x.fonte}</b>${x.link?` · <a href="${x.link}" target="_blank" rel="noopener">abrir</a>`:""}</p></div>`).join("")}`);}
 document.addEventListener("click",e=>{if(e.target.closest("#mktMais")){e.stopPropagation();setoresSheet();}},true);
 

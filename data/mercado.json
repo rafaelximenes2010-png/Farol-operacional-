@@ -3,25 +3,39 @@
  "itens": [
   {
    "id": "usd",
-   "nome": "Dólar comercial",
-   "valor": "R$ 5,51",
-   "var": "+0,08%",
+   "nome": "Dólar · PTAX venda",
+   "valor": "R$ 5,5146",
+   "var": "+0,24%",
    "dir": 1,
-   "ref": "fech. 09/11",
-   "fonte": "Investing.com / Brasil 61",
-   "nota": "Fechamento de 09/11/2026 (PTAX R$ 5,5146). No app, o valor é atualizado ao vivo quando há internet.",
-   "link": "https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes"
+   "ref": "09/11 · Banco Central",
+   "fonte": "Banco Central do Brasil (PTAX)",
+   "nota": "Taxa oficial de câmbio calculada pelo Banco Central a partir das cotações do mercado à vista. O app busca a PTAX mais recente direto do Banco Central sempre que abre.",
+   "link": "https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes",
+   "of": 1
+  },
+  {
+   "id": "selic",
+   "nome": "Selic · meta",
+   "valor": "13,75% a.a.",
+   "var": "mantida (Copom 04/11)",
+   "dir": 0,
+   "ref": "Copom nº 282 · Banco Central",
+   "fonte": "Banco Central do Brasil (SGS 432)",
+   "of": 1,
+   "nota": "Taxa básica de juros definida pelo Copom. Na reunião de 04/11/2026 foi mantida em 13,75% a.a., por unanimidade, interrompendo uma sequência de cortes. O app busca o valor vigente direto do Banco Central.",
+   "link": "https://www.bcb.gov.br/controleinflacao/taxaselic"
   },
   {
    "id": "ouro",
-   "nome": "Ouro · onça troy",
+   "nome": "Ouro · B3 (R$/g)",
    "valor": "US$ 3.880",
    "var": "−2,68% no dia",
    "dir": -1,
    "ref": "12/11 · 14h01 (NY)",
-   "fonte": "Kitco (mercado à vista)",
-   "nota": "Ouro à vista caiu para US$ 3.880/oz em 12/11 (−US$ 107), com mínima do dia de US$ 3.852 — inflação nos EUA acima do esperado e aposta de alta de juros pelo Fed fortaleceram o dólar. Recorde histórico: US$ 5.589 (28/01/2026).",
-   "link": "https://www.kitco.com/charts/gold"
+   "fonte": "Banco Central (SGS 4 · Ouro B3) — referência internacional: Kitco",
+   "nota": "O app busca no Banco Central a cotação oficial do ouro na B3 (R$ por grama, série SGS 4). Enquanto ela não carrega, mostra a referência internacional da onça troy (US$ 3.880 em 12/11, −2,68%).",
+   "link": "https://www3.bcb.gov.br/sgspub/",
+   "of": 1
   },
   {
    "id": "diesel",
@@ -30,9 +44,10 @@
    "var": "−0,14% na semana",
    "dir": -1,
    "ref": "semana 01–07/11",
-   "fonte": "ANP · Levantamento de Preços",
+   "fonte": "ANP · Levantamento de Preços (oficial)",
    "nota": "Média de 3.174 postos. Mínimo R$ 5,89 e máximo R$ 9,19. Terceira semana seguida de queda após o pico de R$ 7,38 em outubro.",
-   "link": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos"
+   "link": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos",
+   "of": 1
   },
   {
    "id": "cimento",
@@ -41,7 +56,7 @@
    "var": "−6,1% a/a",
    "dir": -1,
    "ref": "outubro/26 · SNIC",
-   "fonte": "SNIC",
+   "fonte": "SNIC (entidade do setor)",
    "nota": "Jan–out: 56,7 Mt (+0,1%). Por dia útil: 251,1 mil t (−0,1% a/a; +0,5% vs set). 12 meses: 67 Mt (+0,7%). Chuvas e menos dias úteis pesaram.",
    "link": "https://snic.org.br/numeros-do-setor.php"
   },
@@ -52,7 +67,7 @@
    "var": "futuro dez/26 US$ 605",
    "dir": 1,
    "ref": "BHKP líquido · semana",
-   "fonte": "XP Investimentos (Papel e Celulose)",
+   "fonte": "Mercado (XP Investimentos) — não há fonte oficial diária",
    "nota": "Fibra longa (NBSK) na China: US$ 604/t. Suzano subiu a lista da fibra curta na Europa para US$ 1.410/t em nov/26 (+US$ 50); sem anúncio para a Ásia.",
    "link": "https://conteudos.xpi.com.br/acoes/relatorios/"
   }
@@ -71,9 +86,10 @@
    "var": "12 meses: 4,63%",
    "dir": -1,
    "ref": "outubro/26 · IBGE (12/11)",
-   "fonte": "IBGE",
+   "fonte": "IBGE (IPCA) · Banco Central (SGS 433 e 13522)",
    "nota": "Outubro: 0,14% (setembro 0,82%). No ano: 4,10%. Em 12 meses: 4,63%, acima do teto de 4,5% da meta. Alimentação e bebidas +1,04%; energia elétrica −1,92% (bandeira verde); transportes −0,59%.",
-   "link": "https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/48568-ipca-fica-em-0-14-em-outubro"
+   "link": "https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/48568-ipca-fica-em-0-14-em-outubro",
+   "of": 1
   },
   {
    "id": "pib",
@@ -82,9 +98,10 @@
    "var": "+2,0% a/a",
    "dir": 1,
    "ref": "2º tri/26 · IBGE",
-   "fonte": "IBGE (Contas Nacionais Trimestrais)",
+   "fonte": "IBGE · Contas Nacionais Trimestrais",
    "nota": "2º trimestre de 2026: +0,5% sobre o 1º (com ajuste sazonal), +2,0% sobre o 2º tri de 2025; 1,9% em 4 trimestres; R$ 3,4 trilhões. Agropecuária +2,8%; transporte, armazenagem e correio +1,1%. Próxima divulgação (3º tri): início de dezembro.",
-   "link": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/pib-do-brasil-cresce-05-no-segundo-trimestre-mostra-ibge"
+   "link": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/pib-do-brasil-cresce-05-no-segundo-trimestre-mostra-ibge",
+   "of": 1
   }
  ],
  "setores": [
@@ -102,8 +119,9 @@
     "Área plantada: 85,4 milhões de hectares (+2,3%)",
     "Trigo 2026: 5,7 milhões de t (−27,2%)"
    ],
-   "fonte": "Conab",
-   "link": "https://www.gov.br/conab/pt-br/assuntos/noticias/primeiro-levantamento-da-safra-de-graos-2026-27-estima-producao-acima-de-367-milhoes-de-toneladas"
+   "fonte": "Conab (oficial)",
+   "link": "https://www.gov.br/conab/pt-br/assuntos/noticias/primeiro-levantamento-da-safra-de-graos-2026-27-estima-producao-acima-de-367-milhoes-de-toneladas",
+   "of": true
   },
   {
    "id": "aco",
@@ -120,7 +138,8 @@
     "Importações de aço: +51,7% em setembro vs agosto (~600 mil t)"
    ],
    "fonte": "Instituto Aço Brasil",
-   "link": "https://www.acobrasil.org.br/site/estatistica-mensal/"
+   "link": "https://www.acobrasil.org.br/site/estatistica-mensal/",
+   "of": false
   },
   {
    "id": "minerio",
@@ -136,8 +155,9 @@
     "Pressão: restrições ambientais e menor produção de aço na China",
     "Mínima de 2 anos em outubro (US$ 89,85/t)"
    ],
-   "fonte": "Bolsas de Cingapura e Dalian (via Reuters)",
-   "link": "https://www.infomoney.com.br/mercados/minerio-de-ferro-oscila-diante-da-queda-de-embarques-e-chegadas-aos-portos/"
+   "fonte": "Bolsas de Cingapura e Dalian (mercado) · exportações oficiais: Secex/MDIC",
+   "link": "https://www.infomoney.com.br/mercados/minerio-de-ferro-oscila-diante-da-queda-de-embarques-e-chegadas-aos-portos/",
+   "of": false
   },
   {
    "id": "biodiesel",
@@ -153,8 +173,9 @@
     "Meta de contratação nov–dez (6º bimestre): 1,29 milhão de m³ (+4,2% a/a)",
     "Consumo de matérias-primas jan–set/26: 7,92 milhões de m³ (+8,8%)"
    ],
-   "fonte": "ANP · BiodieselBR",
-   "link": "https://www.biodieselbr.com/"
+   "fonte": "ANP · CNPE (oficial)",
+   "link": "https://www.biodieselbr.com/",
+   "of": true
   },
   {
    "id": "portos",
@@ -170,8 +191,9 @@
     "Paranaguá/Antonina: granéis sólidos de importação (trigo, clínquer, coque) +39% no 1º semestre/26",
     "TMIB (BA): 273 mil t de cimento movimentadas em 2025"
    ],
-   "fonte": "ANTAQ · Portos do Paraná",
-   "link": "https://www.gov.br/antaq/pt-br"
+   "fonte": "ANTAQ (oficial) · Portos do Paraná",
+   "link": "https://www.gov.br/antaq/pt-br",
+   "of": true
   },
   {
    "id": "auto",
@@ -188,7 +210,8 @@
     "Exportações em outubro: 29,1 mil (−28,3%); importações jan–out +29,5%"
    ],
    "fonte": "Anfavea",
-   "link": "https://anfavea.com.br/site/edicoes-em-excel/"
+   "link": "https://anfavea.com.br/site/edicoes-em-excel/",
+   "of": false
   },
   {
    "id": "ouro_min",
@@ -205,7 +228,8 @@
     "Preço médio da onça no semestre: US$ 4.696 (+52,9%)"
    ],
    "fonte": "IBRAM",
-   "link": "https://ibram.org.br/"
+   "link": "https://ibram.org.br/",
+   "of": false
   }
  ]
 }
