@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f2350">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>Baixar o Farol Operacional · CT LOS</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f3f5f9;color:#14213d}
+.top{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff;text-align:center;padding:36px 20px 70px}
+.top img{width:88px;height:88px;border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.top h1{margin:14px 0 4px;font-size:24px}.top p{margin:0;opacity:.85}
+.wrap{max-width:560px;margin:-46px auto 30px;padding:0 14px}
+.card{background:#fff;border:1px solid #e3e7ef;border-radius:18px;padding:18px;margin-bottom:12px;box-shadow:0 2px 6px rgba(15,35,80,.06)}
+.tabs{display:flex;gap:6px;background:#fff;border:1px solid #e3e7ef;border-radius:14px;padding:4px;margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;padding:10px;border-radius:10px;font:inherit;font-weight:700;color:#5b6478;cursor:pointer}
+.tabs button.on{background:#0f2350;color:#fff}
+ol{margin:0;padding-left:0;list-style:none;counter-reset:s}
+ol li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eef1f6;font-size:15px;line-height:1.45}
+ol li:last-child{border:0}
+ol li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:#0f2350;color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.k{display:inline-flex;align-items:center;gap:4px;background:#eef1f6;border-radius:8px;padding:1px 7px;font-weight:700;white-space:nowrap}
+.big{display:block;width:100%;border:0;border-radius:14px;padding:16px;font:inherit;font-size:17px;font-weight:800;background:#1e8e4e;color:#fff;cursor:pointer;margin-top:6px}
+.qr{display:flex;gap:16px;align-items:center}.qr img{width:130px;height:130px;background:#fff;border-radius:12px;padding:6px;border:1px solid #e3e7ef;flex:none}
+.qr p{margin:0;font-size:14px;color:#5b6478;line-height:1.5}
+.note{font-size:12.5px;color:#5b6478;line-height:1.5}
+.ok{background:#e5f4ea;color:#1e8e4e;border-radius:12px;padding:12px;font-weight:700;text-align:center}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><div style="background:#fff;border-radius:20px;display:inline-block;padding:14px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:200px;height:auto;display:block;box-shadow:none;border-radius:0"></div><h1>Farol Operacional</h1><p>CT LOS · Grupo LOS · indicadores do dia no seu celular</p></div>
+<div class="wrap">
+  <div class="card ok" id="jaInst" hidden>✓ O app já está instalado neste aparelho. <a href="./">Abrir o Farol</a></div>
+  <div class="tabs"><button data-p="ios">iPhone</button><button data-p="android">Android</button><button data-p="pc">Computador</button></div>
+
+  <div class="card" data-sec="ios">
+    <ol>
+      <li><span>Abra este endereço no <b>Safari</b> (no Chrome do iPhone também funciona pelo menu Compartilhar).</span></li>
+      <li><span>Toque em <span class="k">Compartilhar ⬆︎</span> na barra de baixo.</span></li>
+      <li><span>Role e toque em <span class="k">Adicionar à Tela de Início ⊞</span>.</span></li>
+      <li><span>Toque em <span class="k">Adicionar</span>. O ícone do Farol aparece na tela do iPhone.</span></li>
+    </ol>
+  </div>
+  <div class="card" data-sec="android">
+    <button class="big" id="bInst" hidden>⬇ Instalar o Farol</button>
+    <ol id="andSteps">
+      <li><span>Abra este endereço no <b>Chrome</b>.</span></li>
+      <li><span>Toque no menu <span class="k">⋮</span> no canto de cima.</span></li>
+      <li><span>Toque em <span class="k">Instalar app</span> (ou "Adicionar à tela inicial").</span></li>
+      <li><span>Confirme em <span class="k">Instalar</span>. O ícone aparece junto dos seus apps.</span></li>
+    </ol>
+  </div>
+  <div class="card" data-sec="pc">
+    <button class="big" id="bInst2" hidden>⬇ Instalar no computador</button>
+    <ol>
+      <li><span>Abra este endereço no <b>Chrome</b> ou no <b>Edge</b>.</span></li>
+      <li><span>Clique no ícone <span class="k">⊕ Instalar</span> no fim da barra de endereço.</span></li>
+      <li><span>Clique em <span class="k">Instalar</span>. O Farol abre em janela própria e fica no menu Iniciar / Dock.</span></li>
+    </ol>
+  </div>
+
+  <div class="card qr"><img src="icons/qr-instalar.svg" alt="QR code para baixar o app"><p><b>Aponte a câmera do celular</b> para o código para abrir esta página e instalar.<br><span class="note">rafaelximenes2010-png.github.io/Farol-operacional-</span></p></div>
+  <a class="big" id="bWa" style="background:#25d366;text-align:center;text-decoration:none;margin-bottom:12px">Enviar convite pelo WhatsApp</a>
+  <p class="note" style="text-align:center">Na primeira vez, o app pede a senha da equipe CT LOS. Os números ficam protegidos e não são públicos.</p>
+  <p style="text-align:center"><a href="./" style="font-weight:700;color:#1b3a7a">Abrir o Farol no navegador →</a></p>
+</div>
+<script>
+const ua=navigator.userAgent, plat=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?"ios":/Android/.test(ua)?"android":"pc";
+function sel(p){document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));document.querySelectorAll("[data-sec]").forEach(s=>s.hidden=s.dataset.sec!==p);}
+document.querySelector(".tabs").onclick=e=>{const b=e.target.closest("button");if(b)sel(b.dataset.p);};sel(plat);
+if(matchMedia("(display-mode: standalone)").matches||navigator.standalone) document.getElementById("jaInst").hidden=false;
+let dp=null;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;["bInst","bInst2"].forEach(id=>document.getElementById(id).hidden=false);});
+["bInst","bInst2"].forEach(id=>document.getElementById(id).onclick=async()=>{if(!dp)return;dp.prompt();const r=await dp.userChoice;if(r.outcome==="accepted")document.getElementById("jaInst").hidden=false;dp=null;});
+window.addEventListener("appinstalled",()=>document.getElementById("jaInst").hidden=false);
+const LINK=new URL("instalar.html",location.href).href;
+document.getElementById("bWa").href="https://wa.me/?text="+encodeURIComponent("*Farol Operacional · CT LOS* 🚦\nOs indicadores do dia no seu celular: faturamento, farol das regionais, mês e projeção.\n\nBaixe aqui (iPhone, Android ou computador):\n"+LINK+"\n\nNa primeira vez, use a senha da equipe que eu te passo em separado.\n\nCarro parado é prejuízo. Vamos pra cima!");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>

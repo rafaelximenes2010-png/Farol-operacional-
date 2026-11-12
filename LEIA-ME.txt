@@ -1,0 +1,57 @@
+FAROL OPERACIONAL · CT LOS — pacote do aplicativo
+==================================================
+
+O QUE TEM NESTA PASTA
+- index.html ............ o aplicativo (Hoje, Mês, Regionais, Projeção, Orçamento)
+- manifest.webmanifest .. permite instalar no celular e no computador
+- sw.js ................. abre o app sem internet com os últimos dados
+- icons/ ................ ícones do app
+- parser.js ............. lê o PDF da revista Morning Operational News
+- vendor/ ............... leitor de PDF (pdf.js)
+- data/ (criada ao publicar) edições CRIPTOGRAFADAS com a senha da equipe
+- api/worker.js ......... servidor (API) que busca no Power BI e no orçamento
+
+O QUE O APP FAZ
+- Toda informação tem drill-down: toque em qualquer número (cartões, resumo do dia,
+  linhas das tabelas, farol) e abre a tela "Entenda este número" com:
+  o que é · de onde vem (Power BI, Orçamento, calculado ou estimativa) ·
+  régua Power BI × régua orçada · fórmula com os valores · detalhamento.
+- Mensagem de segurança (DDS) e resumo do dia por escrito, sempre no topo da tela Hoje,
+  com os números clicáveis.
+- Configurações (⚙︎): endereço da API e instruções de instalação.
+
+ROTINA DIÁRIA ENQUANTO A API NÃO É LIBERADA
+1. Administrador abre o app › Carregar PDF › escolhe a revista do dia.
+2. Confere os números e toca em "Publicar agora".
+3. A equipe abre o app e vê a edição (pede a senha da equipe só na primeira vez).
+
+HOSPEDAGEM NO GITHUB PAGES
+- Repositório público "Farol-operacional-" com estes arquivos; Settings › Pages ›
+  Deploy from a branch › main › / (root). Endereço:
+  https://rafaelximenes2010-png.github.io/Farol-operacional-/
+- O código fica público, mas os números NÃO: cada edição é gravada criptografada
+  (AES-256) e só abre com a senha da equipe.
+- Token para publicar: GitHub › Settings › Developer settings › Fine-grained tokens ›
+  só o repositório Farol-operacional- › permissão "Contents: Read and write".
+  O token fica salvo só no aparelho do administrador.
+
+COMO LIGAR A API (com a TI, depois)
+1. Hospedar a pasta (sem a pasta api/) num endereço https, ex.: https://farol.grupolos.com.br
+   (Cloudflare Pages, Azure Static Web Apps ou servidor da empresa).
+2. Proteger o endereço com login corporativo (Cloudflare Access com Microsoft Entra ID).
+3. Criar o Worker com api/worker.js e preencher as variáveis listadas no topo do arquivo.
+4. Confirmar com o time de BI os nomes reais das tabelas e medidas DAX (estão como exemplo).
+5. No app, ⚙︎ Configurações › Endereço da API › Salvar e testar.
+
+O QUE A TI PRECISA LIBERAR
+- Registrar um aplicativo no Microsoft Entra ID (client id + segredo).
+- Power BI (portal de administração): "Entidades de serviço podem usar APIs do Power BI"
+  e "API de execução de consultas em conjuntos de dados"; adicionar o aplicativo como
+  Leitor/Membro do workspace do indicadores_flash.
+- Microsoft Graph: permissão de leitura (Sites.Selected ou Files.Read.All) para a
+  planilha orcamento_ano.xlsx.
+
+COMO INSTALAR
+- iPhone: abrir o endereço no Safari › Compartilhar › "Adicionar à Tela de Início".
+- Android: Chrome › menu ⋮ › "Instalar app".
+- Computador: Chrome ou Edge › ícone de instalar na barra de endereço.
