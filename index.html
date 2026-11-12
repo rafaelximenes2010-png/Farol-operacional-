@@ -37,6 +37,7 @@ h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;f
 .kpi .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:700}
 .kpi .v{font-size:24px;font-weight:800;margin:6px 0 2px;letter-spacing:-.5px}
 .kpi .s{font-size:12px;color:var(--ink2)}
+.kpi.lit{background:linear-gradient(135deg,#0b3d26,#15803d);color:#fff;border:0;box-shadow:0 6px 18px rgba(21,128,61,.28)}.kpi.lit .l,.kpi.lit .s{color:rgba(255,255,255,.85)}.kpi.lit .v,.kpi.lit .v.up,.kpi.lit .v.dn{color:#fff}.kpi.lit.bad{background:linear-gradient(135deg,#5a1414,#b91c1c);box-shadow:0 6px 18px rgba(185,28,28,.28)}
 .kpi.hero{background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border:0}.kpi.hero .l,.kpi.hero .s{color:rgba(255,255,255,.8)}
 .est{display:inline-block;font-size:10px;font-weight:700;background:#ede9fe;color:#5b21b6;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}
 .up{color:var(--g)}.dn{color:var(--r)}.hero .up{color:#7ef0a8}
@@ -259,7 +260,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
     <span class="datebar"><select id="dSel" aria-label="Escolher dia"></select></span></div>
 </header>
 <main id="main"></main>
-<button class="share" id="bSh" aria-label="Compartilhar no WhatsApp">↗</button>
+<button class="share" id="bSh" aria-label="Enviar revista do dia + resumo no WhatsApp">↗</button>
 <nav class="tabs">
   <div class="side-brand"><img src="icons/icone-96.png" alt=""><div><b>Farol Operacional</b><small>CT LOS · Grupo LOS</small></div></div>
   <button data-t="hoje" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Hoje</button>
@@ -370,7 +371,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
  return `
  <div class="kpis">
   <div class="card kpi hero" data-m="fatD1"><div class="l">Faturamento D-1</div><div class="v">${mi(d1.fat)}</div><div class="s">meta do dia ${mi(d1.meta)} · <span class="up">${d1.vsD2>0?"▲":"▼"} ${pct(d1.vsD2,1)} vs D-2</span></div></div>
-  <div class="card kpi" data-m="atD1"><div class="l">Atingimento D-1</div><div class="v ${atD1>=100?"up":"dn"}">${pct(atD1)}</div><div class="s">${sg(d1.fat-d1.meta)} no dia</div></div>
+  <div class="card kpi lit ${atD1>=100?"":"bad"}" data-m="atD1"><div class="l">Atingimento D-1</div><div class="v ${atD1>=100?"up":"dn"}">${pct(atD1)}</div><div class="s">${sg(d1.fat-d1.meta)} no dia</div></div>
   <div class="card kpi" data-m="acum"><div class="l">Acumulado do mês</div><div class="v">${mi(M.acum)}</div><div class="s">${pct(atAcO)} da orçada · ${pct(atAcB)} BI</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Projeção do mês <span class="est">projeção</span></div><div class="v">${mi(M.proj)}</div><div class="s">${pct(M.proj/M.metaOrc*100)} da orçada · ${pct(M.proj/M.metaBI*100)} BI</div></div>
  </div>
@@ -411,7 +412,7 @@ function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3]
  let acc=0,accm=0;
  return `<div class="kpis">
   <div class="card kpi hero" data-m="atAc"><div class="l">Acumulado 01–10/11</div><div class="v">${mi(M.acum)}</div><div class="s">${pct(atAcO)} da meta orçada proporcional</div></div>
-  <div class="card kpi" data-m="desvio"><div class="l">Desvio acumulado</div><div class="v up">+${mi(M.acum-M.metaAcOrc)}</div><div class="s">vs meta orçada ${mi(M.metaAcOrc)}</div></div>
+  <div class="card kpi lit ${M.acum>=M.metaAcOrc?"":"bad"}" data-m="desvio"><div class="l">Desvio acumulado</div><div class="v">${M.acum>=M.metaAcOrc?"+":"−"}${mi(Math.abs(M.acum-M.metaAcOrc))}</div><div class="s">vs meta orçada ${mi(M.metaAcOrc)}</div></div>
   <div class="card kpi" data-m="dias"><div class="l">Dias na meta</div><div class="v">${M.diasMeta} de ${M.diasTot}</div><div class="s">melhor ${best[0]} (${pct(best[2]/best[3]*100)}) · pior ${worst[0]} (${pct(worst[2]/worst[3]*100)})</div></div>
   <div class="card kpi" data-m="mediaDU"><div class="l">Média por dia útil</div><div class="v">${mi(M.mediaDU)}</div><div class="s">margens ${pct(M.mgT,2)} terc. · ${pct(M.mgA,2)} agr.</div></div></div>
  <h2>Acumulado real × meta (Power BI)</h2>
@@ -438,7 +439,7 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  const mxp=Math.max(...D.proj3.map(p=>p[1]),M.metaOrc/1e6);
  return `<div class="kpis">
   <div class="card kpi hero" data-m="falta"><div class="l">Falta p/ meta orçada</div><div class="v">${mi(falta)}</div><div class="s">meta ${mi(M.metaOrc)} · BI ${mi(M.metaBI)}</div></div>
-  <div class="card kpi" data-m="du"><div class="l">Dias úteis restantes</div><div class="v">${M.duRest}</div><div class="s">seg–sex, sem feriados</div></div>
+  <div class="card kpi lit" data-m="du"><div class="l">Dias úteis restantes</div><div class="v">${M.duRest}</div><div class="s">seg–sex, sem feriados</div></div>
   <div class="card kpi" data-m="necDU"><div class="l">Necessário / dia útil</div><div class="v">${mi(necDU)}</div><div class="s">realizado: ${mi(M.mediaDU)}/dia útil</div></div>
   <div class="card kpi" data-m="proj"><div class="l">Fechamento projetado</div>${(()=>{const v=D.proj3.map(x=>x[1]),mn=Math.min(...v),mx=Math.max(...v),f1=x=>x.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});return `<div class="v">R$ ${f1(mx)} mi</div><div class="s">faixa R$ ${f1(mn)} a ${f1(mx)} mi · ${mn*1e6>=M.metaOrc?"todas acima da meta":"atenção à meta"}</div>`;})()}</div></div>
  <h2>Trajetória do mês <small>tracejado = meta e projeção</small></h2>
@@ -456,7 +457,7 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
  return vSuper()+`<div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
  <div class="kpis">
   <div class="card kpi hero" data-m="ano"><div class="l">Realizado no ano</div><div class="v">${mi(sR)}</div><div class="s">10 meses fechados</div></div>
-  <div class="card kpi" data-m="ano"><div class="l">Ating. orçada (ano)</div><div class="v up">${pct(sR/sO*100,1)}</div><div class="s">${sg(sR-sO)}</div></div>
+  <div class="card kpi lit" data-m="ano"><div class="l">Ating. orçada (ano)</div><div class="v up">${pct(sR/sO*100,1)}</div><div class="s">${sg(sR-sO)}</div></div>
   <div class="card kpi" data-m="metas"><div class="l">Novembro até D-1</div><div class="v">${pct(M.acum/M.metaOrc*100,1)}</div><div class="s">da meta orçada do mês</div></div>
   <div class="card kpi" data-m="metas"><div class="l">Meta orçada do ano</div><div class="v">${mi(D.metaAno)}</div><div class="s">compromisso</div></div></div>
  <h2>Meta orçada × realizado <small>cinza = meta · traço = meta Power BI</small></h2>
@@ -926,7 +927,7 @@ document.addEventListener("click",e=>{if(e.target.closest("[data-revista]")){doc
 $("#main").addEventListener("click",e=>{const tx=e.target.closest(".tipx");if(tx){e.stopPropagation();const bx=tx.closest(".tipbox"),sv=bx.previousElementSibling;bx.hidden=true;bx.innerHTML="";if(sv){sv.classList.remove("sel");sv.querySelectorAll(".on").forEach(x=>x.classList.remove("on"));}return;}const tp=e.target.closest(".tipchart [data-tip]");if(tp&&!document.body.classList.contains("selmode")){e.stopPropagation();const sv=tp.closest("svg"),bx=sv.nextElementSibling;sv.classList.add("sel");sv.querySelectorAll(".on").forEach(x=>x.classList.remove("on"));tp.classList.add("on");if(bx){bx.innerHTML=`<button type="button" class="tipx" aria-label="Fechar">×</button>`+tp.getAttribute("data-tip");bx.hidden=false;}return;}if(e.target.closest("[data-selmode]"))return selEntrar();if(document.body.classList.contains("selmode")){const b=e.target.closest(".blk");if(b){b.classList.toggle("sel");selConta();}return;}const bs=e.target.closest("[data-bsh]");if(bs)return enviarBlocos([bs.closest(".blk")]);if(e.target.closest("[data-pdf]"))return;if(e.target.closest("#ddsCard")) return ddsSheet();const m=e.target.closest("[data-m]");if(m) return mSheet(m.dataset.m);const r=e.target.closest("[data-reg]");if(r) regSheet(r.dataset.reg);});
 $("#bAl").onclick=()=>D?alertsSheet():toastMsg("Carregue uma edição primeiro.");$("#bCfg").onclick=menu;$("#bInst").onclick=doInstall;
 $("#dSel").onchange=()=>{const e=edicoes()[$("#dSel").value];if(e){D=e;LS.set("farolAtual",$("#dSel").value);compute();paintHead();show(cur);}};
-$("#bSh").onclick=()=>FarolPacote.abrir();
+$("#bSh").onclick=()=>FarolPacote.gerarRevista();
 function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),st=navigator.standalone||matchMedia("(display-mode: standalone)").matches;
  if(ios&&!st&&!LS.get("farolIosHint",0)){const d=document.createElement("div");d.style.cssText="position:fixed;left:12px;right:12px;bottom:84px;background:#0f2350;color:#fff;border-radius:16px;padding:12px 14px;z-index:15;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.3)";
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';

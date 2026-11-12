@@ -14,19 +14,24 @@
 
   /* ---------- texto do WhatsApp ---------- */
   function texto() {
-    const f = D.farol, g = f.filter(x => x[1] >= 100).length;
-    const ag = D.reg.filter(r => r[3] < 100);
-    let t = `*MORNING OPERATIONAL NEWS · CT LOS* 🚦\n*Grupo LOS* · resultado de ${d1.dia}, ${d1.data}\n\n`;
-    t += `💰 *Faturamento D-1:* ${brl(d1.fat)} (*${pct(atD1)}* da meta)\n`;
-    t += `📈 *Acumulado do mês:* ${mi(M.acum)} · ${pct(atAcO)} da orçada · ${pct(atAcB)} BI\n`;
-    t += `🔭 *Projeção:* ${mi(M.proj)} (projeção)\n`;
-    t += `🎯 *Ritmo:* faltam ${mi(falta)} em ${M.duRest} dias úteis · ${mi(necDU)}/dia útil\n\n`;
-    t += `*Farol do dia* (${g} de ${f.length} no verde)\n` + f.map(([n, p]) => `${bola(p)} ${n} ${pct(p)}`).join("\n") + "\n";
-    if (ag.length) t += `\n⚠️ *Onde agir hoje:* ` + ag.map(r => `${r[0]} (${pct(r[3])} no mês, devendo ${brl(-r[6])})`).join("; ") + "\n";
-    if (D.dds) t += `\n🦺 *DDS · ${D.dds.titulo}*\n${D.dds.texto}\n`;
-    if (D.editorial) t += `\n📝 ${D.editorial.texto}\n— ${D.editorial.autor}\n`;
-    if (D.frase) t += `\n💬 _“${D.frase.texto}”_ — ${D.frase.autor}\n`;
-    t += `\n*Carro parado é prejuízo. Vamos pra cima!*\n📲 App: ${new URL("./", location.href).href}`;
+    const DIAS = { dom: "domingo", seg: "segunda", ter: "terça", qua: "quarta", qui: "quinta", sex: "sexta", sáb: "sábado", sab: "sábado" };
+    const DIASF = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+    const [dd, mm, aa] = d1.data.split("/").map(Number), ed = new Date(aa, mm - 1, dd + 1);
+    const edS = `${DIASF[ed.getDay()]}, ${String(ed.getDate()).padStart(2, "0")}/${String(ed.getMonth() + 1).padStart(2, "0")}/${ed.getFullYear()}`;
+    const tit = n => n.toLowerCase().replace(/(^|[\s\/-])(\S)/g, (m, a, b) => a + b.toUpperCase()).replace(/\bLosx\b/, "LOSX").replace(/Ceara/, "Ceará").replace(/Avancado/, "Avançado");
+    const f = [...D.farol].sort((a, b) => b[1] - a[1]), g = f.filter(x => x[1] >= 100), y = f.filter(x => x[1] >= 90 && x[1] < 100), r = f.filter(x => x[1] < 90);
+    const lin = (e, arr) => arr.length ? `${e} ${arr.map(([n, p]) => `${tit(n)} ${pct(p)}`).join(" | ")}\n` : "";
+    const ag = D.reg.filter(x => x[3] < 100).map(x => `${tit(x[0])} (${pct(x[3])} no parcial)`).concat(r.filter(x => !D.reg.some(q => q[0] === x[0] && q[3] < 100)).map(x => tit(x[0])));
+    const sgn = v => (v >= 0 ? "+" : "−") + brl(Math.abs(v));
+    let t = `☀️ *MORNING OPERATIONAL NEWS*\n_Revista Diária de Operações | CT LOS_\nEdição de ${edS}\n\nBom dia, time! A edição de hoje já está disponível. 📎\n\n`;
+    t += `📊 *D-1 (${DIAS[d1.dia] || d1.dia}, ${d1.data.slice(0, 5)})*\nFaturamento: ${brl(d1.fat)}\nAtingimento: *${pct(atD1)}* da meta do dia (${sgn(d1.fat - d1.meta)})\n\n`;
+    t += `🚦 *Farol do dia:* ${g.length} de ${f.length} regionais no verde\n` + lin("🟢", g) + lin("🟡", y) + lin("🔴", r) + "\n";
+    t += `📈 *Acumulado do mês*\n*${brl(M.acum)}*, ${pct(atAcO)} da meta orçada proporcional (${sgn(M.acum - M.metaAcOrc)})\n\n`;
+    t += `🎯 *Ritmo para a meta*\nFaltam ${brl(falta)} em ${M.duRest} dias úteis: ${brl(necDU)} por dia útil.\nNossa média realizada é de ${brl(M.mediaDU)} por dia útil.\nProjeção de fechamento: R$ ${(M.proj / 1e6).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} mi, contra meta orçada de R$ ${(M.metaOrc / 1e6).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} mi.\n\n`;
+    if (ag.length) t += `⚠️ *Onde agir hoje:* ${ag.length > 1 ? ag.slice(0, -1).join(", ") + " e " + ag[ag.length - 1] : ag[0]}.\n\n`;
+    if (D.dds) { const ult = (D.dds.texto.match(/[^.!?]+[.!?]/g) || [D.dds.texto]).map(x => x.trim()); const ult0 = ult.find(x => /nenhuma/i.test(x)) || ult.find(x => /cuid|segur/i.test(x)) || ""; t += `🦺 *DDS do dia:* ${D.dds.titulo.replace(/[!.]$/, "")}.${ult0 ? " " + ult0 : ""}\n\n`; }
+    const ab = D.editorial ? (D.editorial.texto.match(/[^.!?]+[.!?]/g) || [""]).slice(0, 2).map(x => x.trim()).join(" ") : "";
+    t += `${ab ? ab + " " : ""}*Carro parado é prejuízo. Pra cima!* 🚀`;
     return t;
   }
 
