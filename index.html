@@ -1334,7 +1334,7 @@ function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
- $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:D.meta.modo==="equipe"?"Edição da equipe":"PDF do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
+ $("#updT").textContent=(D.meta.modo==="api"?"Power BI ao vivo · "+D.meta.atualizado:"Edição da equipe do dia")+" · D-1: "+d1.dia.slice(0,3)+", "+d1.data;
  const ks=Object.keys(edicoes()).sort().reverse();$("#dSel").innerHTML=ks.map(k=>`<option value="${k}" ${k===isoOf(d1.data)?"selected":""}>${k.slice(8)}/${k.slice(5,7)}</option>`).join("");}
 function vazio(){return `<div class="card empty"><img src="icons/logo-los.png" alt="Grupo LOS" style="width:220px;max-width:70%;margin-bottom:6px"><div class="ic">📄</div><b>Carregue os números do dia</b><p class="note">Selecione os 2 PDFs padrão do Power BI: indicadores_flash e D-1 Regionais.</p>${ehAdmin()?`<button class="btn" data-pdf style="margin-top:8px">Carregar PDF</button>`:`<p class="note">Aguarde a publicação da edição pelo administrador.</p>`}</div>`;}
 document.querySelector("nav.tabs").onclick=e=>{const b=e.target.closest("button");if(b) irPara(b.dataset.t);};

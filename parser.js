@@ -54,10 +54,10 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
     const quad = (all.split("FECHAMENTO PROJETADO POR REGIONAL")[1] || "").split("LEITURAS")[0];
     quad.split("\n").forEach(l => { const t = l.trim().split(/\s{2,}/); const r = reg.find(x => x[0] === t[0]); if (r && t.length >= 8) r[7] = t[7]; });
     // ---- textos: DDS, editorial, frase do dia
-    const ddsM = all.match(/D D S D O D I A\s*\n\s*(.+?)\s*🦺?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
+    const ddsM = all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const edM = all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”\n]+)”/);
-    const limpa = s => s.replace(/-\n/g, "").replace(/\s*\n\s*/g, " ").replace(/^E\s+stamos/, "Estamos").replace(/^(\w)\s+(\w)/, "$1$2").trim();
+    const limpa = s => s.replace(/\*\*/g, "").replace(/-\n/g, "").replace(/\s*\n\s*/g, " ").replace(/^E\s+stamos/, "Estamos").replace(/^(\w)\s+(\w)/, "$1$2").trim();
     const D = {
       meta: { modo: "pdf", fonte: "PDF da revista (Power BI importado)", atualizado: dataD1 },
       d1: { data: dataD1, dia: SEM[wd], fat: last[2], meta: last[3], vsD2 },

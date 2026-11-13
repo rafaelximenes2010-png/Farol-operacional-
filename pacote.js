@@ -1,5 +1,5 @@
 /* Farol Operacional · PACOTE DO DIA
-   A partir da edição carregada (PDF do dia), gera:
+   A partir da edição carregada (edição da equipe do dia), gera:
    1) a revista impressa em PDF (A4, 2 páginas, com o logo do Grupo LOS);
    2) o cartão do dia em imagem (para o WhatsApp);
    3) o texto do WhatsApp.
@@ -119,7 +119,7 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
   /* ---------- tela do pacote ---------- */
   const nomeBase = () => "Revista_Diaria_CT_LOS_" + isoOf(d1.data);
   async function abrir() {
-    if (!D) { toastMsg("Carregue o PDF do dia primeiro."); return; }
+    if (!D) { toastMsg("Carregue a edição da equipe do dia primeiro."); return; }
     openSheet(`<div class="sh"><b>Pacote do dia · WhatsApp</b><button id="xS">×</button></div>
 <div class="card" style="text-align:center"><div id="pkPrev" class="note">Gerando o cartão e a revista…</div></div>
 <div class="sec">Texto da mensagem</div><div class="card"><div class="fx" id="pkTxt" style="max-height:220px;overflow:auto"></div></div>
@@ -145,10 +145,11 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
     };
   }
   async function gerarRevista() {
-    if (!D) { toastMsg("Carregue o PDF do dia primeiro."); return; }
+    if (!D) { toastMsg("Carregue a edição da equipe do dia primeiro."); return; }
     toastMsg("Preparando a revista…");
-    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null; const pdf = orig || await revistaPDF();
-      prontoParaEnviar(orig ? "Revista completa do dia" : "Revista (resumo gerado pelo app)", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), texto(), false);
+    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null; if (!orig) { toastMsg("A revista do dia ainda não foi publicada. Assim que o admin enviar a revista, ela segue exatamente no formato original."); return; }
+      const pdf = orig;
+      prontoParaEnviar("Revista do dia", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), texto(), false);
     } catch (e) { toastMsg("Não consegui preparar a revista: " + e.message); } }
   window.FarolPacote = { abrir, texto, cartao, revistaPDF, gerarRevista };
 })();
