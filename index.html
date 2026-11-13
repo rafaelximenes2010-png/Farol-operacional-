@@ -798,7 +798,10 @@ function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true,luz=null,onTap=nul
  const fora=()=>{b.classList.remove("in");b.classList.add("out");setTimeout(()=>b.remove(),380);};let y0=null;
  b.addEventListener("pointerdown",e=>{y0=e.clientY;});b.addEventListener("pointerup",e=>{if(y0!=null&&y0-e.clientY>25){fora();}else{fora();(onTap||alertsSheet)();}y0=null;});
  setTimeout(fora,dur);}
-async function testeNotif(){notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
+async function testeDds(){if(!window.FarolSeg)return;const d=new Date();let s=FarolSeg.slotAtual(d);if(s<0)s=0;const a=FarolSeg.aviso(d,s,await segApi());
+ notifBanner(a.titulo,a.texto,{sub:a.fonte?`<b>${a.fonte}</b><span>${a.contexto||""}</span>`:"",tag:"SEGURANÇA · TESTE",farol:false,luz:1,dur:15000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});
+ if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto+(a.fonte?"\n"+a.fonte+": "+(a.contexto||""):""),icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"dds-teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("🦺 "+a.titulo,o):new Notification("🦺 "+a.titulo,o),2500);}catch(e){}}}
+async function testeNotif(){setTimeout(testeDds,4500);notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const fz=(D&&D.farol||[]).filter(f=>typeof f[1]==="number").map(f=>(f[1]>=100?"🟢":f[1]>=90?"🟡":"🔴")+" "+nbAbrev(f[0])+" "+Math.round(f[1])+"%").join("  ");const o={body:fz||"Assim chegam os avisos do Farol na tela do celular.",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("Farol · Teste de notificação",o):new Notification("Farol · Teste de notificação",o),1500);}catch(e){}}}
 
 /* ===== Alertas de mercado (busca diária automática) ===== */
@@ -1408,7 +1411,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 </script>
 <script src="pacote.js"></script>
 </body>
