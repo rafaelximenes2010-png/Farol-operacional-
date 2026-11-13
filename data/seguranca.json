@@ -5,23 +5,48 @@
   11,
   15
  ],
- "dicas": [],
+ "dicas": [
+  {
+   "titulo": "Estrela adere ao DDS 6.0 e fortalece a formação contínua de motoristas",
+   "texto": "A Estrela Transportes, empresa do setor de transporte rodoviário de cargas, passa a integrar o DDS 6.0, programa do Observatório Nacional de Segurança Viária voltado à formação…",
+   "fonte": "ONSV",
+   "url": "https://www.onsv.org.br/comunicacao/materias/estrela-adere-ao-dds-6-0-e-fortalece-a-formacao-continua-de-motoristas"
+  },
+  {
+   "titulo": "Caminhões estão envolvidos em 3 de cada 10 acidentes nas rodovias federais do Paraná",
+   "texto": "Caminhões estão envolvidos em 3 de cada 10 acidentes nas rodovias federais do Paraná",
+   "fonte": "Portal do Trânsito",
+   "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQU2dFS1YyQTRhRUdJZ2hWRG5GR25JUkh1SzVwa1pleUZocU1Pc09hLXB6Y1l0QWZfLU5RS2E4MHJjRTlFRzgzaFY4LVo4dVpXUDJWc05INjYtZVltUkRsZk9ibndaMDZYQW1aZFdNUkNZR0FCa21CcElidnRLQU5zdURlTGNISU02V0NpNW9US2Q3Znl3SUhLeWVFNEdJQlVIeHd2THNUSkFhUnpiaC1RZ1M2YW9ZcGlsTGRoUEJYZ0x0dnhtOE5HbUcxMVZoVS1SbjVaSVFGSGh2YV9vWkJj0gHkAUFVX3lxTFBBSEd4U1B6SVFULWViRk52QXNnSkJFZHlkUHRuUUl5UGNpQUl6cXZUQVNLekNDcmhLbEJ5a1hiWDM3bWZqVkxndDVuMUpvd251OU9qLUhkZk9HNm8ySkFRTUxBblNQRU5keFltTmNfcXV2TldRTDFBbUZrYXowQ0VNdjJWOHRiM1FpRGM1eW9qT0lacHlablB2RlEzOFlMdFp5WG1mTVYyd09UM2ZWOTNpS0NuTEVJWnBsck9KSXdKSUVfTF9LVXhpZ0QtMVNiclRXclJrYUZINzFmWlFUNmJTeWc5QQ?oc=5"
+  },
+  {
+   "titulo": "PRF prende motorista embriagado e sem CNH após envolvimento em acidente na BR-153, em…",
+   "texto": "PRF prende motorista embriagado e sem CNH após envolvimento em acidente na BR-153, em Araguaína (TO)",
+   "fonte": "PRF",
+   "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOVkhhMFlaZnY2a2VPaUtpeFBSLTMxTUM1Z2V4U0dvbk1yV0ViRVY2SXM1ZWtiRklBdm1LR1J1M25ObGs5S2N4Q3NEdUlnT0sxT3h6d3pZaXR4SzBfOTFaX1JaYWFFVzN0dUpVWk54d1RLVVBPZS11b05xOGF6M3lRa1RTa1ZlX2VGa3Yxa0tyT1FTZnhKc3NSMHVlRDNYVGZIdDBvYVBVbUlWZGtVZzBtdktyNGtUcjc1alc3MXRwUWlDMjZnanZHRFE1V1dfRHJlQW9yYlZVd1pzTVNOQ2dyS2pSMTJVYVg5VUk0ODk4YWtyZGtvNUxqYUpvSkM?oc=5"
+  }
+ ],
  "fontes": [
+  "ONSV",
+  "Revista Proteção",
+  "ANAMT",
   "PRF",
   "Fundacentro",
   "Ministério do Trabalho",
-  "Ministério dos Transportes",
-  "ONSV",
-  "SEST SENAT"
+  "Notícias"
  ],
- "usados": [],
+ "usados": [
+  "https://www.onsv.org.br/comunicacao/materias/estrela-adere-ao-dds-6-0-e-fortalece-a-formacao-continua-de-motoristas",
+  "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQU2dFS1YyQTRhRUdJZ2hWRG5GR25JUkh1SzVwa1pleUZocU1Pc09hLXB6Y1l0QWZfLU5RS2E4MHJjRTlFRzgzaFY4LVo4dVpXUDJWc05INjYtZVltUkRsZk9ibndaMDZYQW1aZFdNUkNZR0FCa21CcElidnRLQU5zdURlTGNISU02V0NpNW9US2Q3Znl3SUhLeWVFNEdJQlVIeHd2THNUSkFhUnpiaC1RZ1M2YW9ZcGlsTGRoUEJYZ0x0dnhtOE5HbUcxMVZoVS1SbjVaSVFGSGh2YV9vWkJj0gHkAUFVX3lxTFBBSEd4U1B6SVFULWViRk52QXNnSkJFZHlkUHRuUUl5UGNpQUl6cXZUQVNLekNDcmhLbEJ5a1hiWDM3bWZqVkxndDVuMUpvd251OU9qLUhkZk9HNm8ySkFRTUxBblNQRU5keFltTmNfcXV2TldRTDFBbUZrYXowQ0VNdjJWOHRiM1FpRGM1eW9qT0lacHlablB2RlEzOFlMdFp5WG1mTVYyd09UM2ZWOTNpS0NuTEVJWnBsck9KSXdKSUVfTF9LVXhpZ0QtMVNiclRXclJrYUZINzFmWlFUNmJTeWc5QQ?oc=5",
+  "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOVkhhMFlaZnY2a2VPaUtpeFBSLTMxTUM1Z2V4U0dvbk1yV0ViRVY2SXM1ZWtiRklBdm1LR1J1M25ObGs5S2N4Q3NEdUlnT0sxT3h6d3pZaXR4SzBfOTFaX1JaYWFFVzN0dUpVWk54d1RLVVBPZS11b05xOGF6M3lRa1RTa1ZlX2VGa3Yxa0tyT1FTZnhKc3NSMHVlRDNYVGZIdDBvYVBVbUlWZGtVZzBtdktyNGtUcjc1alc3MXRwUWlDMjZnanZHRFE1V1dfRHJlQW9yYlZVd1pzTVNOQ2dyS2pSMTJVYVg5VUk0ODk4YWtyZGtvNUxqYUpvSkM?oc=5"
+ ],
  "log": [
-  "PRF: erro 404",
-  "Fundacentro: erro 404",
-  "Ministério do Trabalho: erro 404",
-  "Ministério dos Transportes: erro 404",
-  "ONSV: erro 404",
-  "SEST SENAT: 0"
+  "ONSV: 25",
+  "Revista Proteção: 10",
+  "ANAMT: 10",
+  "PRF: 25",
+  "Fundacentro: 17",
+  "Ministério do Trabalho: 25",
+  "Notícias: 6"
  ],
- "atualizado": "2026-11-13T09:07:26.931Z"
+ "atualizado": "2026-11-13T09:10:28.986Z"
 }
