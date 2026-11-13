@@ -5,7 +5,7 @@ import fs from "fs";
 const OUT = "data/seguranca.json";
 const GN = q => "https://news.google.com/rss/search?q=" + encodeURIComponent(q) + "&hl=pt-BR&gl=BR&ceid=BR:pt-419";
 const FONTES = [
-  { nome: "ONSV", url: "https://www.onsv.org.br/rss" },
+  { nome: "Observatório Nacional de Segurança Viária", url: "https://www.onsv.org.br/rss" },
   { nome: "Revista Proteção", url: "https://protecao.com.br/feed/" },
   { nome: "ANAMT", url: "https://anamt.org.br/portal/feed/" },
   { nome: "PRF", url: GN("site:gov.br/prf caminhão OR motorista OR carga when:30d"), gn: true },
