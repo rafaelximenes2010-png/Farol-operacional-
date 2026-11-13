@@ -1,0 +1,27 @@
+{
+ "data": "2026-11-13",
+ "horas": [
+  7,
+  11,
+  15
+ ],
+ "dicas": [],
+ "fontes": [
+  "PRF",
+  "Fundacentro",
+  "Ministério do Trabalho",
+  "Ministério dos Transportes",
+  "ONSV",
+  "SEST SENAT"
+ ],
+ "usados": [],
+ "log": [
+  "PRF: erro 404",
+  "Fundacentro: erro 404",
+  "Ministério do Trabalho: erro 404",
+  "Ministério dos Transportes: erro 404",
+  "ONSV: erro 404",
+  "SEST SENAT: 0"
+ ],
+ "atualizado": "2026-11-13T09:07:26.931Z"
+}
