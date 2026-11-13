@@ -56,7 +56,7 @@
   function slotAtual(d) { const h = d.getHours() + d.getMinutes() / 60; let s = -1; HORAS.forEach((x, i) => { if (h >= x) s = i; }); return s; }
   function mensagem(d, slot) { const n = diaDoAno(d) * 3 + slot; return MSG[(n * 7) % MSG.length]; }
   function aviso(d, slot, api) { const dia = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); const x = api && api.data === dia && api.dicas && api.dicas[slot];
-    if (x) return { titulo: "DDS do dia · " + String(HORAS[slot]).padStart(2, "0") + "h", rotulo: ROTULO[slot], texto: (x.dica || x.titulo) + (x.dica ? " Contexto: " + x.titulo : ""), fonte: x.fonte, url: x.url, chave: chave(d, slot) };
+    if (x) return { titulo: "DDS do dia · " + String(HORAS[slot]).padStart(2, "0") + "h", rotulo: ROTULO[slot], texto: x.dica || x.titulo, contexto: x.dica ? x.titulo : "", fonte: x.fonte, url: x.url, chave: chave(d, slot) };
     return { titulo: "DDS do dia · " + String(HORAS[slot]).padStart(2, "0") + "h", rotulo: ROTULO[slot], texto: mensagem(d, slot), chave: chave(d, slot) }; }
   g.FarolSeg = { HORAS, slotAtual, aviso };
 })(typeof self !== "undefined" ? self : this);
