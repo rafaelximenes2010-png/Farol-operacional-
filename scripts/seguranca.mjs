@@ -43,7 +43,29 @@ const escolhidos = [], fontes = new Set();
 for (const a of pool) { if (escolhidos.length >= 3) break; if (!fontes.has(a.fonte) || pool.filter(x => !fontes.has(x.fonte)).length === 0) { escolhidos.push(a); fontes.add(a.fonte); } }
 for (const a of pool) { if (escolhidos.length >= 3) break; if (!escolhidos.includes(a)) escolhidos.push(a); }
 const hoje = new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
-const dicas = escolhidos.map(a => ({ titulo: corta(a.titulo, 90), texto: corta(a.texto || a.titulo, 180), fonte: a.fonte, url: a.url }));
+// cada notícia vira uma dica prática para o nosso negócio, com a notícia como contexto
+const TEMAS = [
+  [/embriag|álcool|alcool|bebida|lei seca/i, "Álcool e direção: tolerância zero. Nem um gole antes de dirigir."],
+  [/sono|fadiga|cansa|jornada|descanso/i, "Sentiu sono, pare. Pausa respeitada é vida preservada."],
+  [/celular|distra/i, "Celular só com o veículo parado em local seguro."],
+  [/velocidade|radar|excesso/i, "Respeite a velocidade da via. Com carga a granel, curva sempre devagar."],
+  [/tomba|capota|curva/i, "Carreta graneleira tem centro de gravidade alto: reduza antes da curva."],
+  [/freio|pneu|manuten|mecânic|mecanic/i, "Checklist pré-viagem: freios, pneus e luzes antes de sair do pátio."],
+  [/ultrapass|contramão|contramao|colis/i, "Ultrapassagem só com visibilidade total. Na dúvida, não ultrapasse."],
+  [/chuva|neblina|pista molhada/i, "Chuva ou neblina: farol baixo, menos velocidade e mais distância."],
+  [/cinto/i, "Cinto afivelado antes da partida, em todo trajeto."],
+  [/altura|queda/i, "Em cima do tanque, só com cinto e ponto de ancoragem."],
+  [/espaço confinado|espaco confinado|silo/i, "Silo e tanque: nunca entre sem liberação e sem vigia."],
+  [/epi|proteção individual|protecao individual/i, "EPI completo na operação: capacete, óculos, luva e bota."],
+  [/calor|hidrat/i, "Hidrate-se ao longo do dia. Calor tira a atenção."],
+  [/carga|amarra|lona|peso|excesso de peso/i, "Carga dentro do limite e lona conferida antes de sair."],
+  [/caminh|motorista|rodovi|acidente|trânsito|transito/i, "Distância segura do veículo da frente: no mínimo 3 segundos."],
+  [/dds|treinamento|capacita|forma/i, "Participe do DDS: 5 minutos de conversa evitam o acidente do dia."],
+  [/.*/, "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver."],
+];
+const usadasDicas = new Set();
+const dicaDe = a => { const t = a.titulo + " " + a.texto; for (const [r, d] of TEMAS) if (r.test(t) && !usadasDicas.has(d)) { usadasDicas.add(d); return d; } return TEMAS[TEMAS.length - 1][1]; };
+const dicas = escolhidos.map(a => ({ dica: dicaDe(a), titulo: corta(a.titulo, 110), fonte: a.fonte, url: a.url }));
 const out = { data: hoje, horas: [7, 11, 15], dicas, fontes: FONTES.map(f => f.nome), usados: [...(ant.usados || []), ...escolhidos.map(a => a.url || a.titulo)].slice(-90), log, atualizado: new Date().toISOString() };
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1));
-console.log(log.join("\n")); console.log(`candidatos ${bons.length} · escolhidos ${dicas.length}`); dicas.forEach(d => console.log("-", d.fonte, "|", d.titulo));
+console.log(log.join("\n")); console.log(`candidatos ${bons.length} · escolhidos ${dicas.length}`); dicas.forEach(d => console.log("-", d.dica, "||", d.fonte, "|", d.titulo));
