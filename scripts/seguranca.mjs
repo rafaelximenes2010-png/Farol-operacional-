@@ -3,16 +3,18 @@
 // Roda no GitHub Actions e grava data/seguranca.json com as 3 dicas do dia (7h, 11h e 15h).
 import fs from "fs";
 const OUT = "data/seguranca.json";
+const GN = q => "https://news.google.com/rss/search?q=" + encodeURIComponent(q) + "&hl=pt-BR&gl=BR&ceid=BR:pt-419";
 const FONTES = [
-  { nome: "PRF", url: "https://www.gov.br/prf/pt-br/noticias/RSS" },
-  { nome: "Fundacentro", url: "https://www.gov.br/fundacentro/pt-br/comunicacao/noticias/RSS" },
-  { nome: "Ministério do Trabalho", url: "https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/RSS" },
-  { nome: "Ministério dos Transportes", url: "https://www.gov.br/transportes/pt-br/assuntos/noticias/RSS" },
-  { nome: "ONSV", url: "https://www.onsv.org.br/feed/" },
-  { nome: "SEST SENAT", url: "https://www.sestsenat.org.br/feed" },
+  { nome: "ONSV", url: "https://www.onsv.org.br/rss" },
+  { nome: "Revista Proteção", url: "https://protecao.com.br/feed/" },
+  { nome: "ANAMT", url: "https://anamt.org.br/portal/feed/" },
+  { nome: "PRF", url: GN("site:gov.br/prf caminhão OR motorista OR carga when:30d"), gn: true },
+  { nome: "Fundacentro", url: GN("site:gov.br/fundacentro segurança when:60d"), gn: true },
+  { nome: "Ministério do Trabalho", url: GN("site:gov.br/trabalho-e-emprego segurança do trabalho when:60d"), gn: true },
+  { nome: "Notícias", url: GN("segurança caminhoneiro dicas OR prevenção acidentes transporte de carga when:14d"), gn: true },
 ];
 const BOM = /(dica|cuidado|orienta|alerta|evite|previn|segur|acidente|motorista|caminh|rodovi|epi|trabalhador|fadiga|chuva|velocidade|cinto|ultrapass|carga|sono|álcool|alcool)/i;
-const RUIM = /(licita|edital|nomea|portaria|concurso|resultado final|posse|agenda do ministro|reunião|reuniao|convênio|convenio|leil)/i;
+const RUIM = /(morre|morte|morreu|mort|preso|prisão|prisao|apreen|tráfico|trafico|droga|crime|assalt|roubo|furto|operação policial|licita|edital|nomea|portaria|concurso|resultado final|posse|agenda do ministro|reunião|reuniao|convênio|convenio|leil)/i;
 const tira = s => String(s || "").replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#8211;|&#8212;/g, "—").replace(/&#8217;|&#8216;/g, "'").replace(/&#8220;|&#8221;/g, '"').replace(/&#\d+;/g, "").replace(/\s+/g, " ").trim();
 const corta = (s, n) => s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n)) + "…";
 async function rss(f) {
@@ -21,7 +23,8 @@ async function rss(f) {
   const x = await r.text();
   return [...x.matchAll(/<item[\s>][\s\S]*?<\/item>/g)].slice(0, 25).map(m => {
     const g = t => (m[0].match(new RegExp(`<${t}[^>]*>([\\s\\S]*?)</${t}>`)) || [])[1];
-    return { fonte: f.nome, titulo: tira(g("title")), texto: tira(g("description")), url: tira(g("link")), data: tira(g("pubDate") || g("dc:date")) };
+    let ti = tira(g("title")), fo = f.nome; if (f.gn) { const k = ti.lastIndexOf(" - "); if (k > 20) { if (f.nome === "Notícias") fo = ti.slice(k + 3); ti = ti.slice(0, k); } }
+    return { fonte: fo, titulo: ti, texto: f.gn ? "" : tira(g("description")), url: tira(g("link")), data: tira(g("pubDate") || g("dc:date")) };
   });
 }
 const log = [], achados = [];
