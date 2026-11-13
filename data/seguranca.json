@@ -7,26 +7,26 @@
  ],
  "dicas": [
   {
-   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "Relatório do Observatório reúne dados e evidências sobre segurança de motociclistas no Brasil",
+   "dica": "Respeite a velocidade da via. Com carga a granel, curva sempre devagar.",
+   "titulo": "Além da Velocidade e do Capacete: Os Fatores Cruciais na Severidade dos Sinistros Viários Envolvendo…",
    "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/materias/relatorio-do-observatorio-reune-dados-e-evidencias-sobre-seguranca-de-motociclistas-no-brasil"
+   "url": "https://www.onsv.org.br/comunicacao/artigos/alem-da-velocidade-e-do-capacete-os-fatores-cruciais-na-severidade-dos-sinistros-viarios-envolvendo-motocicletas"
   },
   {
    "dica": "Álcool e direção: tolerância zero. Nem um gole antes de dirigir.",
-   "titulo": "PRF prende motorista por embriaguez ao volante após sinistro de trânsito na BR-242, em Ibotirama (BA)",
+   "titulo": "Motorista alcoolizado suspeito de provocar colisão e fugir a pé é detido pela PRF em Serra Talhada",
    "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOZ19Fbnk3Wk9LaTBId19wOVFhXzFxVGlFd0lWTHRtUy05ZldSeDlScFNfMTMxc2k4M2ZQeUNzSEtNUm9OTzg1NDB4WjhIY2JWV2dlcjRpWUpYZWJLNkt5X3VkOVVCZVhtT1RFYnZQZklZS2k5Y2JtSThvRmFhaFlyTlJoRkFYSERLbWNRSk85NzVyVnA0TjhSTEV3WXBtVmJ2VGFpdzJxZC1pTVZwYk5ZZTB2QWdOektFdk1YZmFwTzVnNmdSS05oanU2VXRQU2RReDlSVENQeXM2ejIyZkd6dWJ5Ti1fUmg1X0ZqWHN1TUFUSWVvZ3pDd0d3?oc=5"
+   "url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxPQmdvekNKSVB6dm5EblA4cDdBeHpmMXZBbWJISWxDN1hzZW9WcERPa1BKbW5SRjduZ2k5YVVZN3M2cHRKU1pkSHZpc3UxU1VjUmtwS3VvS0RNaXFLNUVSOHlBZGxzWk43bXB0SDhFV0pxZ3BZRUxuYzY1elZqX2VNdnNOVnF6ZjNaRHY0M3dQSjB1cVhuVmpySm5BdTVvdlRfc1hrMzNWM25XdkdXWG1sZ3JtbXZpa05lTUZGai1uT3llZmk0VHVyMGdsWjd1ZG1KZGhLM0ZVbmo3TG1DU1EtWGlJd3pyNzQ2ZFl3aEhYeHVQYzkzRU8wUUN0Z2phME5t?oc=5"
   },
   {
-   "dica": "Chuva ou neblina: farol baixo, menos velocidade e mais distância.",
-   "titulo": "Experiência de 'videogame' simula transporte de cargas sob chuva e vento forte para agilizar preparo de…",
-   "fonte": "G1",
-   "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQY3JpSVR2N1JidlhTLVk2QkxscjRHTWRuZUlRUFEzeEJRNDQ3NnRrQ00wcFo2VWZKQXZJMW1VdmdIcUVQOWNTdDc4YzgwajJVX255b3h1WlFYMDBPS3l0bTZwS29TYTFEWUFDMFZ4UnhyZkF2dlRwdEgxSmFEUGJZOTJoSWsybzNYRkkzM2RUZ3RISHRvdWtPNWM3cE81Y0h3RXVoV2NCdFZWRmFYZ3pGM01ReWZvOU45TUp0V3JTVWt0NEtOWXfSAdQBQVVfeXFMUFRkZ2tGWGtCUHJlVEdCaXM2Z0pxRVRtaS1mSnN3WVdoWDZhOVpOelBCenFYdkQ2NkRHc29md2RTN19idnVLRGc2Ti14SXJrUHpqMFBkeUVjckVEVVJmai00QlE3NVY4LW5DUXZYZWJxNG41S0dMSWNaQi1SdEJJSHUySkNTbVVrSmdPYUJXQkRzdVFIdHNXMFNDRXlRUkZoV1Q4UE1zQWd3MVRYS29hQlF5ZU1PYldyVGUwZnFUc1JubEFFODdTQWJ1SHFjYmRTTk5MTFc?oc=5"
+   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
+   "titulo": "Sinalização de caminhões com produtos perigosos exige atenção para evitar acidentes",
+   "fonte": "Portal O Carreteiro",
+   "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5"
   }
  ],
  "fontes": [
-  "ONSV",
+  "Observatório Nacional de Segurança Viária",
   "Revista Proteção",
   "ANAMT",
   "PRF",
@@ -40,16 +40,19 @@
   "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOVkhhMFlaZnY2a2VPaUtpeFBSLTMxTUM1Z2V4U0dvbk1yV0ViRVY2SXM1ZWtiRklBdm1LR1J1M25ObGs5S2N4Q3NEdUlnT0sxT3h6d3pZaXR4SzBfOTFaX1JaYWFFVzN0dUpVWk54d1RLVVBPZS11b05xOGF6M3lRa1RTa1ZlX2VGa3Yxa0tyT1FTZnhKc3NSMHVlRDNYVGZIdDBvYVBVbUlWZGtVZzBtdktyNGtUcjc1alc3MXRwUWlDMjZnanZHRFE1V1dfRHJlQW9yYlZVd1pzTVNOQ2dyS2pSMTJVYVg5VUk0ODk4YWtyZGtvNUxqYUpvSkM?oc=5",
   "https://www.onsv.org.br/comunicacao/materias/relatorio-do-observatorio-reune-dados-e-evidencias-sobre-seguranca-de-motociclistas-no-brasil",
   "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOZ19Fbnk3Wk9LaTBId19wOVFhXzFxVGlFd0lWTHRtUy05ZldSeDlScFNfMTMxc2k4M2ZQeUNzSEtNUm9OTzg1NDB4WjhIY2JWV2dlcjRpWUpYZWJLNkt5X3VkOVVCZVhtT1RFYnZQZklZS2k5Y2JtSThvRmFhaFlyTlJoRkFYSERLbWNRSk85NzVyVnA0TjhSTEV3WXBtVmJ2VGFpdzJxZC1pTVZwYk5ZZTB2QWdOektFdk1YZmFwTzVnNmdSS05oanU2VXRQU2RReDlSVENQeXM2ejIyZkd6dWJ5Ti1fUmg1X0ZqWHN1TUFUSWVvZ3pDd0d3?oc=5",
-  "https://news.google.com/rss/articles/CBMixgFBVV95cUxQY3JpSVR2N1JidlhTLVk2QkxscjRHTWRuZUlRUFEzeEJRNDQ3NnRrQ00wcFo2VWZKQXZJMW1VdmdIcUVQOWNTdDc4YzgwajJVX255b3h1WlFYMDBPS3l0bTZwS29TYTFEWUFDMFZ4UnhyZkF2dlRwdEgxSmFEUGJZOTJoSWsybzNYRkkzM2RUZ3RISHRvdWtPNWM3cE81Y0h3RXVoV2NCdFZWRmFYZ3pGM01ReWZvOU45TUp0V3JTVWt0NEtOWXfSAdQBQVVfeXFMUFRkZ2tGWGtCUHJlVEdCaXM2Z0pxRVRtaS1mSnN3WVdoWDZhOVpOelBCenFYdkQ2NkRHc29md2RTN19idnVLRGc2Ti14SXJrUHpqMFBkeUVjckVEVVJmai00QlE3NVY4LW5DUXZYZWJxNG41S0dMSWNaQi1SdEJJSHUySkNTbVVrSmdPYUJXQkRzdVFIdHNXMFNDRXlRUkZoV1Q4UE1zQWd3MVRYS29hQlF5ZU1PYldyVGUwZnFUc1JubEFFODdTQWJ1SHFjYmRTTk5MTFc?oc=5"
+  "https://news.google.com/rss/articles/CBMixgFBVV95cUxQY3JpSVR2N1JidlhTLVk2QkxscjRHTWRuZUlRUFEzeEJRNDQ3NnRrQ00wcFo2VWZKQXZJMW1VdmdIcUVQOWNTdDc4YzgwajJVX255b3h1WlFYMDBPS3l0bTZwS29TYTFEWUFDMFZ4UnhyZkF2dlRwdEgxSmFEUGJZOTJoSWsybzNYRkkzM2RUZ3RISHRvdWtPNWM3cE81Y0h3RXVoV2NCdFZWRmFYZ3pGM01ReWZvOU45TUp0V3JTVWt0NEtOWXfSAdQBQVVfeXFMUFRkZ2tGWGtCUHJlVEdCaXM2Z0pxRVRtaS1mSnN3WVdoWDZhOVpOelBCenFYdkQ2NkRHc29md2RTN19idnVLRGc2Ti14SXJrUHpqMFBkeUVjckVEVVJmai00QlE3NVY4LW5DUXZYZWJxNG41S0dMSWNaQi1SdEJJSHUySkNTbVVrSmdPYUJXQkRzdVFIdHNXMFNDRXlRUkZoV1Q4UE1zQWd3MVRYS29hQlF5ZU1PYldyVGUwZnFUc1JubEFFODdTQWJ1SHFjYmRTTk5MTFc?oc=5",
+  "https://www.onsv.org.br/comunicacao/artigos/alem-da-velocidade-e-do-capacete-os-fatores-cruciais-na-severidade-dos-sinistros-viarios-envolvendo-motocicletas",
+  "https://news.google.com/rss/articles/CBMigAJBVV95cUxPQmdvekNKSVB6dm5EblA4cDdBeHpmMXZBbWJISWxDN1hzZW9WcERPa1BKbW5SRjduZ2k5YVVZN3M2cHRKU1pkSHZpc3UxU1VjUmtwS3VvS0RNaXFLNUVSOHlBZGxzWk43bXB0SDhFV0pxZ3BZRUxuYzY1elZqX2VNdnNOVnF6ZjNaRHY0M3dQSjB1cVhuVmpySm5BdTVvdlRfc1hrMzNWM25XdkdXWG1sZ3JtbXZpa05lTUZGai1uT3llZmk0VHVyMGdsWjd1ZG1KZGhLM0ZVbmo3TG1DU1EtWGlJd3pyNzQ2ZFl3aEhYeHVQYzkzRU8wUUN0Z2phME5t?oc=5",
+  "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5"
  ],
  "log": [
-  "ONSV: 25",
+  "Observatório Nacional de Segurança Viária: 25",
   "Revista Proteção: 10",
-  "ANAMT: 10",
+  "ANAMT: erro fetch failed",
   "PRF: 25",
   "Fundacentro: 17",
   "Ministério do Trabalho: 25",
   "Notícias: 6"
  ],
- "atualizado": "2026-11-13T09:12:07.774Z"
+ "atualizado": "2026-11-13T10:38:32.627Z"
 }
