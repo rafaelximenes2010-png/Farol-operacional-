@@ -1,0 +1,21 @@
+name: Segurança do dia
+on:
+  schedule:
+    - cron: "41 9 * * *"   # 06h41 (Fortaleza), antes do aviso das 7h
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  busca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/seguranca.mjs
+      - run: |
+          git config user.name "Farol Operacional (automático)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull -q --rebase origin main || true
+          git add data/seguranca.json
+          git diff --cached --quiet || (git commit -m "Segurança: dicas do dia $(date -u +%F)" && git push)

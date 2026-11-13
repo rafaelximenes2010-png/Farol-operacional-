@@ -474,6 +474,7 @@ header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-h
   <div class="side-foot"><img src="icons/logo-los.png" alt="Grupo LOS">Indicadores operacionais diários.<br>Carro parado é prejuízo.</div>
 </nav>
 <script src="parser.js"></script>
+<script src="seguranca.js"></script>
 <script>
 /* ===== DADOS (protótipo: edição de 10/11/2026; no app real vêm da API /api/hoje) ===== */
 let D=null;
@@ -783,7 +784,7 @@ function regSheet(n){const r=regByName(n),f=D.farol.find(x=>x[0]===n);let h=`<di
 /* ===== Banner de notificação (estilo celular) ===== */
 function nbAbrev(n){const u=String(n).toUpperCase();return u.includes("CENTRO")?"C-Oeste":u.startsWith("CE")?"CE/Norte":u.startsWith("POSTO")?"Posto Av.":u==="NORDESTE 1"||u==="NORDESTE"?"NE 1":u==="NORDESTE 2"?"NE 2":u.startsWith("SUL")?"Sul/SE":u==="LOSX"?"LOSX":u==="PA"?"PA":n;}
 function nbCor(p){return p>=100?"#2ee66b":p>=90?"#ffc21a":"#ff4d4d";}
-function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true}={}){let st=document.getElementById("nbStack");if(!st){st=document.createElement("div");st.id="nbStack";document.body.appendChild(st);}
+function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true,luz=null,onTap=null}={}){let st=document.getElementById("nbStack");if(!st){st=document.createElement("div");st.id="nbStack";document.body.appendChild(st);}
  const F=(farol&&typeof D!=="undefined"&&D&&Array.isArray(D.farol))?D.farol.filter(f=>typeof f[1]==="number"):[];
  const g=F.filter(f=>f[1]>=100).length,y=F.filter(f=>f[1]>=90&&f[1]<100).length,r=F.length-g-y;
  const chips=F.slice().sort((a,b)=>b[1]-a[1]).map(f=>`<span><i style="background:${nbCor(f[1])};box-shadow:0 0 5px ${nbCor(f[1])},0 0 12px ${nbCor(f[1])}"></i>${nbAbrev(f[0])} <em style="color:${nbCor(f[1])}">${Math.round(f[1])}%</em></span>`).join("");
@@ -791,10 +792,10 @@ function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true}={}){let st=docume
  b.innerHTML=`<div class="nbTop"><div class="nbL"><i class="r"></i><i class="y"></i><i class="g"></i></div><div class="nbt"><div class="nbh"><b>FAROL · ${tag}</b><span>agora</span></div><div class="nbb"><b>${t}</b><p>${txt}</p></div></div></div>${F.length?`<div class="nbF">${chips}</div>`:""}`;
  st.prepend(b);requestAnimationFrame(()=>b.classList.add("in"));if(navigator.vibrate)try{navigator.vibrate([18,40,18]);}catch(e){}
  const L=[...b.querySelectorAll(".nbL i")];[0,1,2].forEach(k=>setTimeout(()=>{L.forEach(x=>x.classList.remove("on"));L[k].classList.add("on");},250+k*380));
- setTimeout(()=>{L.forEach(x=>x.classList.remove("on"));const dom=F.length?(r>g&&r>=y?0:y>g?1:2):2;L[dom].classList.add("on");},250+3*380);
+ setTimeout(()=>{L.forEach(x=>x.classList.remove("on"));const dom=luz!=null?luz:F.length?(r>g&&r>=y?0:y>g?1:2):2;L[dom].classList.add("on");},250+3*380);
  [...b.querySelectorAll(".nbF span")].forEach((c,k)=>setTimeout(()=>c.classList.add("in"),500+k*90));
  const fora=()=>{b.classList.remove("in");b.classList.add("out");setTimeout(()=>b.remove(),380);};let y0=null;
- b.addEventListener("pointerdown",e=>{y0=e.clientY;});b.addEventListener("pointerup",e=>{if(y0!=null&&y0-e.clientY>25){fora();}else{fora();alertsSheet();}y0=null;});
+ b.addEventListener("pointerdown",e=>{y0=e.clientY;});b.addEventListener("pointerup",e=>{if(y0!=null&&y0-e.clientY>25){fora();}else{fora();(onTap||alertsSheet)();}y0=null;});
  setTimeout(fora,dur);}
 async function testeNotif(){notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const fz=(D&&D.farol||[]).filter(f=>typeof f[1]==="number").map(f=>(f[1]>=100?"🟢":f[1]>=90?"🟡":"🔴")+" "+nbAbrev(f[0])+" "+Math.round(f[1])+"%").join("  ");const o={body:fz||"Assim chegam os avisos do Farol na tela do celular.",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("Farol · Teste de notificação",o):new Notification("Farol · Teste de notificação",o),1500);}catch(e){}}}
@@ -809,9 +810,17 @@ async function alertasMercado(avisar=true){try{const r=await fetch("data/alertas
   if(LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();novos.slice(0,3).forEach(x=>reg?reg.showNotification("Farol · Mercado",{body:x.titulo+" — "+x.texto,icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:x.id}):new Notification("Farol · Mercado",{body:x.titulo}));}catch(e){}}}
  else LS.set("farolAlmInit",1);}
 function almVistos(){LS.set("farolAlmVistos",ALM.map(a=>a.id).slice(0,80));document.getElementById("bAl")?.classList.remove("dotm");}
+/* ===== DDS do dia: avisos de segurança às 7h, 11h e 15h ===== */
+async function segApi(){try{const r=await fetch("data/seguranca.json?t="+Date.now(),{cache:"no-store"});return r.ok?await r.json():null;}catch(e){return null;}}
+async function ddsVisto(k,marcar){try{const c=await caches.open("farol-dds");if(marcar){await c.put("visto",new Response(k));return true;}const r=await c.match("visto");return r?(await r.text())===k:false;}catch(e){const v=LS.get("farolDdsVisto","");if(marcar){LS.set("farolDdsVisto",k);return true;}return v===k;}}
+async function ddsTick(){if(!window.FarolSeg||!perfilValido())return;if(LS.get("farolDdsOff",false))return;const d=new Date(),s=FarolSeg.slotAtual(d);if(s<0)return;
+ if(await ddsVisto(FarolSeg.aviso(d,s).chave))return;const a=FarolSeg.aviso(d,s,await segApi());await ddsVisto(a.chave,true);
+ if(document.visibilityState==="visible"){notifBanner(a.titulo,a.texto+(a.fonte?` <span style="opacity:.7">· Fonte: ${a.fonte}</span>`:""),{tag:"SEGURANÇA",farol:false,luz:1,dur:12000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});}
+ else if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto+(a.fonte?" · Fonte: "+a.fonte:""),icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"dds-"+a.chave};reg?reg.showNotification("🦺 "+a.titulo,o):new Notification("🦺 "+a.titulo,o);}catch(e){}}}
+setInterval(ddsTick,60000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")setTimeout(ddsTick,1500);});
 async function ativarNotif(){if(!("Notification" in window)){toastMsg("Este aparelho não suporta notificações. No iPhone, instale o app na tela de início.");return;}
  const p=await Notification.requestPermission();if(p!=="granted"){toastMsg("Notificações não autorizadas.");return;}LS.set("farolNotif",1);
- try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync){const st=await navigator.permissions.query({name:"periodic-background-sync"});if(st.state==="granted")await reg.periodicSync.register("farol-mercado",{minInterval:6*3600e3});}}catch(e){}
+ try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync){const st=await navigator.permissions.query({name:"periodic-background-sync"});if(st.state==="granted")await reg.periodicSync.register("farol-mercado",{minInterval:6*3600e3});await reg.periodicSync.register("farol-dds",{minInterval:3600e3});}}catch(e){}
  document.querySelector(".sheet")?.remove();setTimeout(testeNotif,400);}
 setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
@@ -1398,7 +1407,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);setTimeout(convite,6000);})();
 </script>
 <script src="pacote.js"></script>
 </body>
