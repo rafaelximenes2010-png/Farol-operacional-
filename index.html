@@ -432,6 +432,8 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 @media (min-width:1024px){#nbStack{align-items:flex-end;padding-right:24px;top:20px}}
 
 .ipb li{display:block!important;position:relative;padding-left:34px;line-height:1.9}.ipb li i{position:absolute;left:0;top:2px}.ipb li span.k{display:inline!important;padding:2px 7px;white-space:nowrap}
+
+header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-highlight-color:transparent}header .logo:active,header .ht:active{opacity:.7}
 </style>
 </head>
 <body>
@@ -1189,6 +1191,11 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
 
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
 const pilha=[];
+
+/* tocar no farol (logo/nome) volta ao início */
+function inicio(){document.querySelectorAll(".sheet,.inf-pop").forEach(x=>x.remove());if(document.body.classList.contains("selmode"))selSair();pilha.length=0;if(cur!=="hoje"&&D)show("hoje");else if(!D)show(cur);document.querySelectorAll("nav.tabs [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t==="hoje"));const m=document.getElementById("main");try{m&&m.scrollTo({top:0,behavior:"smooth"});}catch(e){}scrollTo({top:0,behavior:"smooth"});}
+document.addEventListener("click",e=>{if(e.target.closest("header .logo, header .ht, .side-brand, nav.tabs .brand")){e.preventDefault();inicio();}});
+
 function irPara(t){if(t===cur)return;pilha.push(cur);try{history.pushState({t},"")}catch(e){}show(t);}
 function voltar(){const sh=document.querySelector(".sheet");if(sh){sh.remove();return;}if(document.body.classList.contains("selmode")){selSair();return;}
  const t=pilha.pop();if(t)show(t);else if(cur!=="hoje")show("hoje");}
