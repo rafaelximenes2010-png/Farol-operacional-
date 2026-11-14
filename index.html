@@ -490,7 +490,39 @@ let M,d1,atD1,atAcO,atAcB,falta,necDU;
 function normRegs(X){if(!X)return;const n=x=>{x=String(x||"").trim().toUpperCase().replace(/\s+/g," ");return x==="NORDESTE"?"NORDESTE 1":x;};(X.reg||[]).forEach(r=>r[0]=n(r[0]));(X.farol||[]).forEach(f=>f[0]=n(f[0]));}
 function mergeFarol(Dx,R){if(!R||!R.farol||!R.farol.length)return;normRegs(Dx);normRegs(R);R.farol.forEach(([n,p])=>{const f=Dx.farol.find(x=>x[0]===n);if(f){f[1]=p;f.length=2;}else Dx.farol.push([n,p]);});}
 /* editorial herdado de outra edição (dia carregado só com os PDFs do BI): refaz com os números do dia */
-function editorialAtual(){const e=D.editorial;if(!e||!e.texto||!d1)return;const p=Math.round(atD1),m=e.texto.match(/Fechamos o D-1 com (\d+)%/);
+/* banco de DDS e frases: usado quando a edição do dia não traz textos novos (só PDFs do BI) */
+const DDS_BANCO=[
+["Cinto de segurança, sempre!","O cinto salva vidas em qualquer trajeto, curto ou longo. Antes de dar a partida, confira se você e todos no veículo estão com o cinto bem ajustado. Não existe viagem rápida demais para usar o cinto."],
+["Cansaço também é risco","Dirigir com sono é tão perigoso quanto dirigir alcoolizado. Respeite as pausas e o descanso obrigatório. Sentiu os olhos pesando? Pare em local seguro. Chegar mais tarde é melhor do que não chegar."],
+["Checklist antes de sair","Pneus, freios, luzes, retrovisores, nível de óleo e documentação: confira tudo antes de iniciar a viagem. Encontrou algo errado? Não saia, avise o líder. O checklist bem feito evita acidentes e paradas na estrada."],
+["Velocidade sob controle","Respeite os limites da via e da empresa. Em descidas, use o freio motor; em curvas, reduza antes de entrar. Velocidade a mais não traz ganho de tempo que compense o risco."],
+["Chuva pede mais cuidado","Na pista molhada, a distância de frenagem aumenta muito. Reduza a velocidade, aumente a distância do veículo da frente e acenda os faróis. Com visibilidade ruim, pare em local seguro e espere."],
+["EPI é proteção de verdade","Capacete, óculos, luvas, botina e colete não são enfeite: são a última barreira entre você e o acidente. No pátio, na carga e na descarga, use o EPI completo e em bom estado."],
+["Carga bem amarrada","Carga solta ou mal distribuída tomba, desloca e provoca acidentes graves. Confira cintas, travas e lona antes de sair e durante as paradas. Respeite o limite de peso por eixo."],
+["Atenção aos pontos cegos","Antes de mudar de faixa, manobrar ou dar ré, confira os retrovisores e sinalize. Na dúvida, desça e olhe. Pedestres, motos e ciclistas podem estar onde você não vê."],
+["Manobra de ré com apoio","Sempre que possível, faça a ré com ajuda de um sinaleiro e em velocidade mínima. Combine os sinais antes e pare se perder o contato visual. Uma manobra apressada pode custar uma vida."],
+["Álcool e direção não se misturam","Nenhuma quantidade de álcool é segura para dirigir. Os reflexos diminuem e a percepção de risco também. Bebeu, não dirija. Viu um colega nessa situação? Fale com ele e com o líder."],
+["Hidratação e alimentação","Calor, longas jornadas e pouca água levam à fadiga e à perda de atenção. Beba água ao longo do dia e faça refeições leves nas paradas. Cuidar do corpo também é cuidar da segurança."],
+["Ultrapassagem só com segurança","Ultrapasse apenas em trecho permitido, com visibilidade e espaço de sobra. Veículo pesado precisa de mais distância para concluir a manobra. Na dúvida, não ultrapasse."],
+["Pátio é área de risco","No pátio, circule só pelas faixas de pedestre, respeite a sinalização e nunca passe entre veículos em manobra. Motorista: velocidade máxima de pátio e atenção redobrada."],
+["Pare, pense e aja","Antes de qualquer tarefa fora da rotina, pare um minuto e pense nos riscos. Se não estiver seguro, não faça: chame o líder. Ninguém é cobrado por parar uma atividade insegura."]];
+const FRASES_BANCO=[
+["Somos o que fazemos repetidamente. A excelência, portanto, não é um ato, mas um hábito.","Will Durant"],
+["A qualidade nunca é um acidente; é sempre o resultado de um esforço inteligente.","John Ruskin"],
+["Talento vence jogos, mas trabalho em equipe e inteligência vencem campeonatos.","Michael Jordan"],
+["O sucesso é a soma de pequenos esforços repetidos dia após dia.","Robert Collier"],
+["Nenhum de nós é tão inteligente quanto todos nós.","Ken Blanchard"],
+["O que pode ser medido pode ser melhorado.","Peter Drucker"],
+["A melhor maneira de prever o futuro é criá-lo.","Peter Drucker"],
+["Unir-se é um bom começo, manter a união é um progresso, e trabalhar em conjunto é a vitória.","Henry Ford"],
+["Não é o mais forte que sobrevive, nem o mais inteligente, mas o que melhor se adapta às mudanças.","Leon C. Megginson"],
+["Grandes coisas nos negócios nunca são feitas por uma pessoa. São feitas por uma equipe.","Steve Jobs"]];
+const idxDia=(iso,n)=>Math.floor(Date.parse(iso+"T12:00:00Z")/864e5)%n;
+function textosAtuais(){if(!d1)return;const iso=isoOf(d1.data),e=edicoes(),ka=Object.keys(e).filter(k=>k<iso).sort().pop(),ant=ka?e[ka]:null;
+ const bi=!!(D.meta&&/Power BI/.test(D.meta.fonte||"")),herdado=(o,campo)=>o&&!o.manual&&!o.banco&&((o.de&&o.de!==d1.data)||(bi&&ant&&ant[campo]&&ant[campo].texto===o.texto));
+ if(!D.dds||herdado(D.dds,"dds")){const b=DDS_BANCO[idxDia(iso,DDS_BANCO.length)];D.dds={titulo:b[0],texto:b[1],autor:(D.dds&&D.dds.autor)||"Rafael Ximenes",banco:true};}
+ if(!D.frase||herdado(D.frase,"frase")){const f=FRASES_BANCO[idxDia(iso,FRASES_BANCO.length)];D.frase={texto:f[0],autor:f[1],banco:true};}}
+function editorialAtual(){textosAtuais();const e=D.editorial;if(!e||!e.texto||!d1||e.manual)return;const p=Math.round(atD1),m=e.texto.match(/Fechamos o D-1 com (\d+)%/);
  if(!((e.de&&e.de!==d1.data)||(m&&+m[1]!==p)))return;const n=(D.farol||[]).filter(x=>typeof x[1]==="number"&&x[1]>=100).length,ok=p>=100;
  D.editorial={autor:e.autor||"Rafael Ximenes",auto:true,texto:(ok?"RESULTADO FORTE, FOCO NA SUPERMETA! ":"HORA DE VIRAR O JOGO! ")+`Fechamos o D-1 com ${p}% de atingimento e ${n} ${n===1?"regional":"regionais"} acima da meta! `+(ok?"É hora de manter a tração, recuperar os desvios e acelerar cada operação. Temos força para ir além! ":"Cada regional abaixo da meta precisa de um plano de recuperação para hoje. ")+"Cada entrega conta, cada regional faz a diferença. Vamos juntos! PRA CIMA!"};}
 function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;editorialAtual();atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
@@ -1314,8 +1346,8 @@ function editarTextos(){if(!D){toastMsg("Carregue uma edição primeiro.");retur
  <b style="display:block;margin-top:16px">Mensagem do dia</b><label>Texto</label><textarea id="eEx" rows="4" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)">${ed.texto||""}</textarea><label>Assinatura</label><input id="eEa" value="${ed.autor||"Rafael Ximenes"}">
  <b style="display:block;margin-top:16px">Frase do dia</b><label>Frase</label><input id="eFx" value="${(fr.texto||"").replace(/"/g,"&quot;")}"><label>Autor</label><input id="eFa" value="${fr.autor||""}">
  <div style="display:flex;gap:8px;margin-top:14px"><button class="btn" id="eSave" style="flex:1">Salvar</button><button class="btn" id="eSavePub" style="flex:1;background:#1e8e4e">Salvar e publicar</button></div></div>`);
- const salvar=()=>{D.dds={titulo:$("#eDt").value.trim(),texto:$("#eDx").value.trim(),autor:$("#eDa").value.trim()};D.editorial=$("#eEx").value.trim()?{texto:$("#eEx").value.trim(),autor:$("#eEa").value.trim()}:null;
-  D.frase=$("#eFx").value.trim()?{texto:$("#eFx").value.trim(),autor:$("#eFa").value.trim()}:null;guardar(D);document.querySelector(".sheet").remove();show(cur);toastMsg("Textos atualizados.");};
+ const salvar=()=>{D.dds={titulo:$("#eDt").value.trim(),texto:$("#eDx").value.trim(),autor:$("#eDa").value.trim(),manual:true};D.editorial=$("#eEx").value.trim()?{texto:$("#eEx").value.trim(),autor:$("#eEa").value.trim(),manual:true}:null;
+  D.frase=$("#eFx").value.trim()?{texto:$("#eFx").value.trim(),autor:$("#eFa").value.trim(),manual:true}:null;guardar(D);document.querySelector(".sheet").remove();show(cur);toastMsg("Textos atualizados.");};
  $("#eSave").onclick=salvar;$("#eSavePub").onclick=()=>{salvar();publicar();};}
 /* ===== FACE ID (WebAuthn) ===== */
 const fid={get on(){return !!LS.get("farolFaceId",null)}};
