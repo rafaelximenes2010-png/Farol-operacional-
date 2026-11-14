@@ -69,20 +69,29 @@
   function revistaHTML() { window.__LOGO = LOGO_DATA; return window.FarolRevista.html(); }
   async function revistaPDF() {
     await libs(); await logoData();
-    const box = document.createElement("div"); box.style.cssText = "position:absolute;left:0;top:0;z-index:-5;pointer-events:none"; box.innerHTML = revistaHTML(); document.body.appendChild(box);
-    await Promise.all([...box.querySelectorAll("img")].map(i => i.complete && i.naturalWidth ? 0 : new Promise(r => { i.onload = i.onerror = r; }))); await new Promise(r => setTimeout(r, 150));
-    const pdf = new window.jspdf.jsPDF({ unit: "pt", format: "a4" });
-    const pages = box.querySelectorAll(".rv");
-    for (let i = 0; i < pages.length; i++) {
-      const cv = await window.html2canvas(pages[i], { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollX: 0, scrollY: -window.scrollY, windowWidth: 794 });
-      // o logo é desenhado direto no canvas (o html2canvas nem sempre captura imagens)
-      const li = pages[i].querySelector(".lg img"); if (li) { const pr = pages[i].getBoundingClientRect(), r = li.getBoundingClientRect(); const lim = await img(LOGO_DATA);
-        const k = cv.width / pr.width, cx = cv.getContext("2d"); cx.setTransform(1, 0, 0, 1, 0, 0); cx.drawImage(lim, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); }
-      if (i) pdf.addPage();
-      pdf.addImage(cv.toDataURL("image/jpeg", .9), "JPEG", 0, 0, 595.28, 841.89);
-    }
-    box.remove();
-    return pdf.output("blob");
+    // capa opaca por cima da tela enquanto a revista é montada (as páginas ficam atrás dela e nunca aparecem)
+    const capa = document.createElement("div");
+    capa.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#0b1a3f;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font:600 15px system-ui,-apple-system,sans-serif";
+    capa.innerHTML = '<div style="font-size:30px">📰</div><div>Gerando a revista do dia…</div><div id="rvProg" style="opacity:.7;font-size:13px">página 1 de 6</div>';
+    const box = document.createElement("div"); box.style.cssText = "position:absolute;left:0;top:0;width:794px;z-index:-5;pointer-events:none";
+    document.body.appendChild(capa);
+    try {
+      box.innerHTML = revistaHTML(); document.body.appendChild(box);
+      await Promise.all([...box.querySelectorAll("img")].map(i => i.complete && i.naturalWidth ? 0 : new Promise(r => { i.onload = i.onerror = r; }))); await new Promise(r => setTimeout(r, 150));
+      const pdf = new window.jspdf.jsPDF({ unit: "pt", format: "a4" });
+      const pages = box.querySelectorAll(".rv");
+      for (let i = 0; i < pages.length; i++) {
+        const pr0 = document.getElementById("rvProg"); if (pr0) pr0.textContent = `página ${i + 1} de ${pages.length}`;
+        const cv = await window.html2canvas(pages[i], { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollX: 0, scrollY: -window.scrollY, windowWidth: 794, ignoreElements: el => el === capa });
+        // o logo é desenhado direto no canvas (o html2canvas nem sempre captura imagens)
+        const li = pages[i].querySelector(".lg img"); if (li) { const pr = pages[i].getBoundingClientRect(), r = li.getBoundingClientRect(); const lim = await img(LOGO_DATA);
+          const k = cv.width / pr.width, cx = cv.getContext("2d"); cx.setTransform(1, 0, 0, 1, 0, 0); cx.drawImage(lim, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); }
+        if (i) pdf.addPage();
+        pdf.addImage(cv.toDataURL("image/jpeg", .9), "JPEG", 0, 0, 595.28, 841.89);
+        cv.width = cv.height = 0;
+      }
+      return pdf.output("blob");
+    } finally { box.remove(); capa.remove(); }
   }
 
   /* ---------- tela do pacote ---------- */
