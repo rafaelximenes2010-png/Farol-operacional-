@@ -782,7 +782,12 @@ function vReg(){const r=[...D.reg].sort((a,b)=>b[3]-a[3]);const mx=Math.max(...r
 function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>{a+=x[2];real.push(a);});
  for(let i=0;i<n;i++){metaL.push(M.metaOrc*(i+1)/n);projL.push(i<9?null:M.acum+(M.proj-M.acum)*(i-9)/(n-10));}
  const mxp=Math.max(...D.proj3.map(p=>p[1]),M.metaOrc/1e6);
- return `<div class="kpis">
+ const Y=anoAcum(),A=anoProj(M.proj),metaA=D.metaAno,pcA=A.tot/metaA*100,fA=faixaAting(pcA);
+ const fxTxt=f=>f<0?"abaixo da meta":f===0?"meta 100%":"super meta "+FAIXAS[f][0];
+ return `<h2>Ano ${Y.ano} <small>acumulado e fechamento projetado</small></h2><div class="kpis">
+  <div class="card kpi hero" data-m="acumano"><div class="l">Acumulado do ano</div><div class="v">${mi(Y.real)}</div><div class="s"><b>${pct(Y.pc,1)}</b> da meta orçada até o D-1 · ${Y.de}→${Y.ate}</div></div>
+  <div class="card kpi lit" data-m="superano"><div class="l">Projeção de fechamento do ano</div><div class="v">${mi(A.tot)}</div><div class="s"><b>${pct(pcA,1)}</b> da meta do ano (${mi(metaA)}) · ${fxTxt(fA)}</div></div></div>
+ <h2>Mês <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} · até o D-1</small></h2><div class="kpis">
   <div class="card kpi hero" data-m="falta"><div class="l">Falta p/ meta orçada</div><div class="v">${mi(falta)}</div><div class="s">meta ${mi(M.metaOrc)} · BI ${mi(M.metaBI)}</div></div>
   <div class="card kpi lit" data-m="du"><div class="l">Dias úteis restantes</div><div class="v">${M.duRest}</div><div class="s">seg–sex, sem feriados</div></div>
   <div class="card kpi" data-m="necDU"><div class="l">Necessário / dia útil</div><div class="v">${mi(necDU)}</div><div class="s">realizado: ${mi(M.mediaDU)}/dia útil</div></div>
@@ -797,7 +802,14 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  <h2>Projeção por regional <small>meta do mês × ating. parcial</small></h2>
  <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Desvio vs prop.</th><th>Projeção</th><th>Falta p/ meta</th><th>Necessário/dia útil</th><th>Quadrante</th></tr></thead><tbody>
  ${D.reg.map(x=>{const fl=x[2]-x[1];const q=x[7];return `<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td class="${x[6]>=0?"up":"dn"}">${x[6]>=0?"+":"−"}${mi(Math.abs(x[6])).replace("R$ ","R$ ")}</td><td>${mi(x[2]*x[3]/100)}</td><td>${mi(fl)}</td><td>${brl(fl/M.duRest)}</td><td>${q==="—"?"—":`<span class="q ${q==="Crítico"?"c":q==="Proteger margem"?"p":"a"}">${q}</span>`}</td></tr>`}).join("")}
- </tbody></table></div></div>`;}
+ </tbody></table></div></div>
+ <h2>Super meta do ano · quanto falta <small>mesma base do acumulado (${pct(Y.pc,1)}) e da projeção (${pct(pcA,1)})</small></h2>
+ <div class="card fx2" data-m="superano">${FAIXAS.map(f=>{const v=metaA*(1+f[1]/100),ok=A.tot>=v,falt=Math.max(0,v-Y.real),mr=Math.max(1,D.orc.length-A.nFech);return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(Y.real/v*100,1)} · projeção ${ok?"✓ atinge":pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${falt?"faltam "+mi(falt)+" · "+mi(falt/mr)+"/mês":"✓ atingida"}</small></div>`;}).join("")}
+ <p class="note" style="margin:4px 2px 0">Acumulado do ano = ${A.nFech} meses fechados (${mi(A.real)}) + ${D.orc[A.mI]?D.orc[A.mI][0]:"mês"} até o D-1 (${mi(M.acum)}). Projeção do ano = meses fechados + projeção do mês (${mi(M.proj)}) + orçado dos meses seguintes (${mi(A.fut)}). "Por mês" = o que falta dividido pelos ${Math.max(1,D.orc.length-A.nFech)} meses restantes, incluindo o atual.</p></div>`;}
+/* acumulado do ano até o D-1: meses fechados + mês atual, contra a meta orçada do mesmo período */
+function anoAcum(){const A=anoProj(M.proj),fech=D.orc.filter(x=>x[3]!=null&&!x[5]),mo=fech.reduce((a,x)=>a+(x[1]||0),0);
+ const real=A.real+M.acum,meta=mo+M.metaAcOrc,ano=(d1.data||"").slice(6)||String(new Date().getFullYear());
+ return {real,meta,pc:real/meta*100,fechReal:A.real,fechMeta:mo,ano,de:(D.orc[0]||["Jan"])[0],ate:(d1.data||"").slice(0,5)};}
 function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);const sO=closed.reduce((s,x)=>s+x[1],0),sR=closed.reduce((s,x)=>s+x[3],0);
  return vSuper()+`<div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
  <div class="kpis">
@@ -1038,7 +1050,12 @@ function metric(id){const diasUteis=D.dias.filter(x=>!["sáb","dom"].includes(x[
  {const A=anoProj(M.proj),meta=D.metaAno;T.superano={t:"Super meta 2026",v:mi(A.tot),src:SRC.est,what:"Fechamento projetado do ano: meses fechados (realizado) + mês atual (projeção Power BI) + meses seguintes (orçado), comparado com a meta orçada do ano e as super metas.",
   fx:`Ano projetado = ${mi(A.real)} + ${mi(A.nov)} + ${mi(A.fut)} = ${mi(A.tot)}
 Atingimento = ${mi(A.tot)} ÷ ${mi(meta)} = ${pct(A.tot/meta*100,1)}`,
-  rows:FAIXAS.map(f=>[f[0]==="Meta"?"Meta orçada do ano":"Super meta "+f[0],mi(meta*(1+f[1]/100))])};}
+  rows:FAIXAS.map(f=>[f[0]==="Meta"?"Meta orçada do ano":"Super meta "+f[0],mi(meta*(1+f[1]/100))])};
+  const Y=anoAcum();T.acumano={t:"Acumulado do ano",v:mi(Y.real),src:SRC.est,what:"Tudo o que o grupo faturou no ano até o D-1 (meses fechados + mês atual até ontem), comparado com a meta orçada do mesmo período. É a mesma base usada no cálculo da super meta.",
+  fx:`Realizado = ${mi(Y.fechReal)} (meses fechados) + ${mi(M.acum)} (mês até o D-1) = ${mi(Y.real)}
+Meta do período = ${mi(Y.fechMeta)} + ${mi(M.metaAcOrc)} = ${mi(Y.meta)}
+Atingimento = ${mi(Y.real)} ÷ ${mi(Y.meta)} = ${pct(Y.pc,1)}`,
+  rows:[["Meses fechados",mi(Y.fechReal)+" · "+pct(Y.fechReal/Y.fechMeta*100,1)],["Mês atual até o D-1",mi(M.acum)+" · "+pct(M.acum/M.metaAcOrc*100,1)],["Meta orçada do ano",mi(meta)],["Projeção do ano",mi(A.tot)+" · "+pct(A.tot/meta*100,1)]]};}
  return T[id];}
 function mSheet(id){const m=metric(id);if(!m)return;
  openSheet(`<div class="sh"><b>${m.t}</b><button id="xS">×</button></div>
