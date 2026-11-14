@@ -1,6 +1,6 @@
 /* Farol Operacional · PACOTE DO DIA
    A partir da edição carregada (edição da equipe do dia), gera:
-   1) a revista impressa em PDF (A4, 2 páginas, com o logo do Grupo LOS);
+   1) a revista impressa em PDF (A4, 6 páginas, padrão Morning Operational News — revista.js);
    2) o cartão do dia em imagem (para o WhatsApp);
    3) o texto do WhatsApp.
    E envia tudo junto pelo compartilhamento do celular (WhatsApp). */
@@ -66,38 +66,7 @@
   /* ---------- revista impressa (PDF A4, 2 páginas) ---------- */
   let LOGO_DATA = "icons/logo-los.png";
   async function logoData() { try { const b = await (await fetch("icons/logo-los.png")).blob(); LOGO_DATA = await new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); }); } catch (e) {} }
-  function revistaHTML() {
-    const css = `<style>.rv{width:794px;height:1123px;background:#fff;color:#14213d;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;position:relative;overflow:hidden}
-.rv .hd{background:linear-gradient(135deg,#0b1a3f,#1b3a7a 70%,#2346a0);color:#fff;padding:26px 34px 22px}.rv .lg{background:#fff;border-radius:12px;padding:8px 14px;display:inline-block}.rv .lg img{height:64px;display:block}
-.rv .tt{font-weight:900;font-style:italic;font-size:40px;line-height:1;margin-top:14px}.rv .tt span{color:#c7d6ff}.rv .sb{font-size:13px;opacity:.85;margin-top:6px}.rv .ey{color:#ff8a8a;font-size:11px;font-weight:800;letter-spacing:.2em;margin-top:12px}
-.rv .bd{padding:18px 34px}.rv .k4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.rv .k{border:1px solid #e3e7ef;border-radius:12px;padding:10px}.rv .k small{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:#5b6478}.rv .k b{display:block;font-size:20px;margin:4px 0 2px}.rv .k i{font-style:normal;font-size:10px;color:#5b6478}
-.rv h3{font-size:11px;letter-spacing:.14em;color:#0f2350;margin:16px 0 8px;border-bottom:2px solid #d32f2f;padding-bottom:4px;display:inline-block}
-.rv .fr{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.rv .fr div{border:1px solid #e3e7ef;border-radius:10px;text-align:center;padding:6px 2px}.rv .fr em{display:block;width:16px;height:16px;border-radius:50%;margin:0 auto 4px}.rv .fr small{display:block;font-size:8px;font-weight:700;min-height:20px}.rv .fr b{font-size:15px}
-.rv p{font-size:11.5px;line-height:1.5;margin:0 0 6px}.rv .dds{background:#fff8dc;border-left:8px solid #f2c200;border-radius:8px;padding:10px 12px}.rv .ed{border-left:4px solid #1b3a7a;padding:4px 12px;font-family:Georgia,serif}
-.rv table{width:100%;border-collapse:collapse;font-size:10px}.rv th{background:#0f2350;color:#fff;font-size:8.5px;padding:5px;text-align:right}.rv td{padding:4px 5px;border-bottom:1px solid #eef1f6;text-align:right}.rv th:first-child,.rv td:first-child{text-align:left}
-.rv .ft{position:absolute;left:0;right:0;bottom:0;background:#0f2350;color:#fff;font-size:12px;font-weight:800;font-style:italic;padding:12px 34px;display:flex;justify-content:space-between}.rv .ft span{opacity:.6;font-weight:500;font-style:normal;font-size:10px}
-.rv .rq{background:linear-gradient(135deg,#9b1c1c,#1b2a5a);color:#fff;border-radius:12px;padding:12px 16px;font-weight:800;font-style:italic;font-size:14px}</style>`;
-    const hd = (t) => `<div class="hd"><div class="lg"><img src="${LOGO_DATA}" style="height:64px;width:auto"></div><div class="ey">CT LOS · FAROL OPERACIONAL · REVISTA DIÁRIA DE OPERAÇÕES</div><div class="tt">MORNING <span>OPERATIONAL NEWS</span></div><div class="sb">${t}</div></div>`;
-    const ft = n => `<div class="ft">Carro parado é prejuízo. Vamos pra cima!<span>Morning Operational News · CT LOS · página ${n} de 2</span></div>`;
-    const resumo = (document.querySelector(".lei") || {}).innerText || "";
-    const p1 = `<div class="rv">${hd(`Edição de ${new Date().toLocaleDateString("pt-BR")} · Resultado de ${d1.dia}, ${d1.data} · Grupo LOS consolidado`)}<div class="bd">
-<div class="k4"><div class="k"><small>FATURAMENTO D-1</small><b>${mi(d1.fat)}</b><i>meta ${mi(d1.meta)}</i></div><div class="k"><small>ATINGIMENTO D-1</small><b style="color:${corH(atD1)}">${pct(atD1)}</b><i>${sg(d1.fat - d1.meta)}</i></div><div class="k"><small>ACUMULADO DO MÊS</small><b>${mi(M.acum)}</b><i>${pct(atAcO)} orçada · ${pct(atAcB)} BI</i></div><div class="k"><small>PROJEÇÃO DO MÊS</small><b>${mi(M.proj)}</b><i>projeção</i></div></div>
-<h3>FAROL DO DIA POR REGIONAL</h3><div class="fr">${D.farol.map(([n, p]) => `<div><em style="background:${corH(p)}"></em><small>${n}</small><b style="color:${corH(p)}">${pct(p)}</b></div>`).join("")}</div>
-${D.dds ? `<h3>SEGURANÇA EM PRIMEIRO LUGAR · DDS</h3><div class="dds"><p><b>${D.dds.titulo}</b></p><p>${D.dds.texto}</p><p><b>— ${D.dds.autor}</b></p></div>` : ""}
-${D.editorial ? `<h3>MENSAGEM DO DIA</h3><div class="ed"><p>${D.editorial.texto}</p><p style="text-align:right"><i>— ${D.editorial.autor}</i></p></div>` : ""}
-<h3>RESUMO DO DIA</h3>${resumo.split("\n").filter(Boolean).map(l => `<p>${l}</p>`).join("")}
-${D.frase ? `<div class="rq" style="margin-top:10px">“${D.frase.texto}” — ${D.frase.autor}</div>` : ""}</div>${ft(1)}</div>`;
-    let ac = 0, am = 0;
-    const p2 = `<div class="rv">${hd(`Números da edição · ${d1.data}`)}<div class="bd">
-<h3>FECHAMENTO DO MÊS POR REGIONAL</h3><table><tr><th>REGIONAL</th><th>FATURAMENTO</th><th>META DO MÊS</th><th>ATING. TOTAL</th><th>ATING. PARCIAL</th><th>NECESSÁRIO/DIA ÚTIL</th><th>QUADRANTE</th></tr>
-${D.reg.map(r => `<tr><td><b>${r[0]}</b></td><td>${brl(r[1])}</td><td>${brl(r[2])}</td><td>${pct(r[1] / r[2] * 100)}</td><td style="color:${corH(r[3])};font-weight:800">${pct(r[3])}</td><td>${brl((r[2] - r[1]) / M.duRest)}</td><td>${r[7]}</td></tr>`).join("")}</table>
-<h3>PERFORMANCE POR DIA</h3><table><tr><th>DATA</th><th>FATURAMENTO</th><th>META</th><th>ATING.</th><th>DESVIO</th><th>ACUMULADO</th><th>ATING. ACUM.</th></tr>
-${D.dias.map(x => { ac += x[2]; am += x[3]; const p = x[2] / x[3] * 100; return `<tr><td>${x[0]} ${x[1]}</td><td>${brl(x[2])}</td><td>${brl(x[3])}</td><td style="color:${corH(p)};font-weight:800">${pct(p)}</td><td>${sg(x[2] - x[3])}</td><td>${brl(ac)}</td><td>${pct(ac / am * 100)}</td></tr>`; }).join("")}</table>
-<h3>PASSADO × FUTURO</h3><div class="k4"><div class="k"><small>FALTA P/ META ORÇADA</small><b>${mi(falta)}</b><i>meta ${mi(M.metaOrc)}</i></div><div class="k"><small>DIAS ÚTEIS</small><b>${M.duRest}</b><i>restantes</i></div><div class="k"><small>NECESSÁRIO/DIA ÚTIL</small><b>${mi(necDU)}</b><i>média real ${mi(M.mediaDU)}</i></div><div class="k"><small>FECHAMENTO</small><b>${D.proj3.map(p => p[1]).sort((a, b) => a - b).map(v => v.toLocaleString("pt-BR", { minimumFractionDigits: 1 })).filter((v, i, a) => i === 0 || i === a.length - 1).join("–")} mi</b><i>3 projeções (projeção)</i></div></div>
-${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:#7a5200">⚠ ${D.avisos.join(" ")}</p>` : ""}
-<p style="margin-top:10px;font-size:9.5px;color:#5b6478">Fonte: ${D.meta.fonte}. Projeções do Power BI e do ritmo do mês. Gerado pelo app Farol Operacional.</p></div>${ft(2)}</div>`;
-    return css + p1 + p2;
-  }
+  function revistaHTML() { window.__LOGO = LOGO_DATA; return window.FarolRevista.html(); }
   async function revistaPDF() {
     await libs(); await logoData();
     const box = document.createElement("div"); box.style.cssText = "position:absolute;left:0;top:0;z-index:-5;pointer-events:none"; box.innerHTML = revistaHTML(); document.body.appendChild(box);

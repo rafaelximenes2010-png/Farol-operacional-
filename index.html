@@ -750,8 +750,7 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
 
  <h2>Arquivos do dia <small>edição de ${d1.data}</small></h2>
  <div class="card acts" style="padding:0">
- <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista em PDF</b><small>Morning Operational News completa</small></div><span class="chev">›</span></button>
- <button type="button" class="a" data-pacote><span class="i"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></span><div><b>Pacote WhatsApp</b><small>Cartão, revista e resumo do dia</small></div><span class="chev">›</span></button>
+ <button type="button" class="a" data-revista><span class="i"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><b>Revista do dia</b><small>Morning Operational News · PDF completo (6 páginas)</small></div><span class="chev">›</span></button>
  </div>
  <h2 class="mkth">Mercado <small>PIB · IPCA · cimento · celulose · diesel · dólar</small></h2><div class="card mkt mktc" id="mktHoje"></div>
  <p class="motto">Carro parado é <em>prejuízo</em>. Vamos pra cima!</p>`;}
@@ -1460,6 +1459,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
 (async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 </script>
+<script src="revista.js"></script>
 <script src="pacote.js"></script>
 </body>
 </html>
