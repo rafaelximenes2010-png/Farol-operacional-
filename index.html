@@ -240,7 +240,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .tl3 i:nth-child(1).on{background:#ff3b30;box-shadow:0 0 6px 1px rgba(255,59,48,.75)}.tl3 i:nth-child(2).on{background:#ffb800;box-shadow:0 0 6px 1px rgba(255,184,0,.75)}.tl3 i:nth-child(3).on{background:#2fd16b;box-shadow:0 0 6px 1px rgba(47,209,107,.75)}
 .fln{min-width:0}.fln b{display:block;font-size:14px;font-weight:650;letter-spacing:0}.fln small{display:block;color:var(--ink2);font-size:12px;margin-top:2px;font-variant-numeric:tabular-nums}
 .flbar{display:block;position:relative;height:3px;border-radius:999px;background:var(--line);margin-top:7px;overflow:visible}.flbar span{position:absolute;inset:0 auto 0 0;border-radius:999px}.flbar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2);opacity:.6;border-radius:2px}
-.flr.g .flbar span{background:linear-gradient(90deg,#1e8e4e,#2fd16b)}.flr.y .flbar span{background:linear-gradient(90deg,#b8770a,#ffb800)}.flr.r .flbar span{background:linear-gradient(90deg,#a01f1f,#ff5a4f)}
+.flr.s .flp b{background:rgba(148,163,184,.14);color:var(--ink2)}.flr.s .fln b{opacity:.75}.flr.g .flbar span{background:linear-gradient(90deg,#1e8e4e,#2fd16b)}.flr.y .flbar span{background:linear-gradient(90deg,#b8770a,#ffb800)}.flr.r .flbar span{background:linear-gradient(90deg,#a01f1f,#ff5a4f)}
 .flp{display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:74px}.flp b{font-size:15px;font-weight:800;padding:5px 10px;border-radius:8px;font-variant-numeric:tabular-nums}.flp small{font-size:10.5px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase}.flr.g .flp b{background:rgba(34,197,94,.14);color:#22c55e}.flr.y .flp b{background:rgba(245,180,0,.16);color:#f5b400}.flr.r .flp b{background:rgba(255,77,77,.14);color:#ff5a5a}
 .tipchart [data-tip]{transition:opacity .15s}.tipchart.sel [data-tip]{opacity:.45}.tipchart.sel [data-tip].on{opacity:1}
 .tipbox{position:relative;padding-right:40px!important;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-left:4px solid #7c5cff;border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.5;animation:tipIn .18s ease}
@@ -512,6 +512,11 @@ function barsChart(items,w=360,h=190){const pad={l:24,r:4,t:18,b:22};const maxV=
 const C={g:"#1e8e4e",y:"#d08a0e",r:"#c62828"};
 /* ===== telas ===== */
 const regByName=n=>D.reg.find(r=>r[0]===n);
+/* regionais que aparecem sempre, mesmo sem dado na edição */
+const REG_FIXAS=["NORDESTE 1","NORDESTE 2"];
+const semFarol=()=>REG_FIXAS.filter(n=>!D.farol.some(f=>f[0]===n));
+const semFech=()=>REG_FIXAS.filter(n=>!regByName(n));
+const titReg=n=>n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX");
 function resumoHtml(){const f=D.farol,g=f.filter(x=>x[1]>=100),y=f.filter(x=>x[1]>=90&&x[1]<100),r=f.filter(x=>x[1]<90);
  const ag=D.reg.filter(x=>x[3]<100);const best=f.reduce((m,x)=>x[1]>m[1]?x:m);const L=(id,t)=>`<a data-m="${id}">${t}</a>`;
  const nm=x=>`<a data-reg="${x[0]}">${tit(x[0])}</a> (${pct(x[1])})`;const lista=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
@@ -687,11 +692,12 @@ function vHoje0(){const f=D.farol;const nG=f.filter(x=>x[1]>=100).length,nY=f.fi
    <div class="flht" data-info="Farol do dia: variação do acumulado de cada regional dividida pela meta do dia. Verde ≥ 100%, amarelo 90–99%, vermelho abaixo de 90%."><small>Farol do dia · ${d1.data}</small><b>${nG} de ${f.length}</b><span>regionais no verde</span>
    <div class="flhl"><em class="g">● ${nG} acima da meta</em><em class="y">● ${nY} próximas</em><em class="r">● ${nR} em atenção</em></div></div></div>
   <div class="flsum"><div class="seg3"><span style="flex:${nG||.0001};background:var(--g)"></span><span style="flex:${nY||.0001};background:var(--y)"></span><span style="flex:${nR||.0001};background:var(--r)"></span></div>
-  <div class="flleg"><span><i style="background:var(--g)"></i><b>${nG}</b> acima</span><span><i style="background:var(--y)"></i><b>${nY}</b> próximo</span><span><i style="background:var(--r)"></i><b>${nR}</b> atenção</span></div></div>
+  <div class="flleg"><span><i style="background:var(--g)"></i><b>${nG}</b> acima</span><span><i style="background:var(--y)"></i><b>${nY}</b> próximo</span><span><i style="background:var(--r)"></i><b>${nR}</b> atenção</span>${semFarol().length?`<span><i style="background:var(--ink2)"></i><b>${semFarol().length}</b> sem dado</span>`:""}</div></div>
   ${[...f].sort((a,b)=>b[1]-a[1]).map(([n,p,tp])=>{const c=cor(p),r=regByName(n),w=Math.min(100,p/ Math.max(150,...f.map(x=>x[1])) *100),m100=100/Math.max(150,...f.map(x=>x[1]))*100;
    return `<button type="button" class="flr ${c}" data-reg="${n}"><span class="tl3"><i class="${c==="r"?"on":""}"></i><i class="${c==="y"?"on":""}"></i><i class="${c==="g"?"on":""}"></i></span>
    <span class="fln"><b>${n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX")}</b><small>${r?"Mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"><span style="width:${w}%"></span><em style="left:${m100}%"></em></span></span>
    <span class="flp"><b>${pct(p)}</b><small>${tp==="m"?"mês":"D-1"}</small></span></button>`;}).join("")}
+  ${semFarol().map(n=>{const r=regByName(n);return `<button type="button" class="flr s" data-reg="${n}"><span class="tl3"><i></i><i></i><i></i></span><span class="fln"><b>${titReg(n)}</b><small>${r?"Mês "+pct(r[3])+" · "+mi(r[1]):"sem fechamento do mês"}</small><span class="flbar"></span></span><span class="flp"><b>—</b><small>sem dado D-1</small></span></button>`;}).join("")}
  </div>
  <h2>Desempenho diário <small>faturamento e atingimento, dia a dia</small></h2>
  ${tickerHtml()}
@@ -726,10 +732,10 @@ function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3]
  <tr class="tot"><td>Total</td><td>${M.acum.toLocaleString("pt-BR")}</td><td>${M.metaAcBI.toLocaleString("pt-BR")}</td><td>${pct(atAcB)}</td><td class="up">${sg(M.acum-M.metaAcBI)}</td><td></td><td></td><td>${pct(M.mgT,2)}</td><td>${pct(M.mgA,2)}</td></tr></tbody></table></div></div>`;}
 function vReg(){const r=[...D.reg].sort((a,b)=>b[3]-a[3]);const mx=Math.max(...r.map(x=>x[3]));
  return `<h2>Ranking do mês <small>atingimento parcial · linha = 100%</small></h2>
- <div class="card rank">${r.map(x=>`<div class="rk" data-reg="${x[0]}"><span>${x[0]}</span><div class="bar"><span style="width:${x[3]/mx*100}%;background:${C[cor(x[3])]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x[3])]}">${pct(x[3])}</span></div>`).join("")}</div>
+ <div class="card rank">${r.map(x=>`<div class="rk" data-reg="${x[0]}"><span>${x[0]}</span><div class="bar"><span style="width:${x[3]/mx*100}%;background:${C[cor(x[3])]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x[3])]}">${pct(x[3])}</span></div>`).join("")}${semFech().map(n=>`<div class="rk" data-reg="${n}"><span>${n}</span><div class="bar"></div><span style="color:var(--ink2)">sem dado</span></div>`).join("")}</div>
  <h2>Fechamento do mês por regional</h2>
  <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Faturamento</th><th>Meta do mês</th><th>Ating. total</th><th>Ating. parcial</th><th>Mg. terc.</th><th>Mg. agr.</th></tr></thead><tbody>
- ${D.reg.map(x=>`<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2].toLocaleString("pt-BR")}</td><td>${pct(x[1]/x[2]*100)}</td><td><span class="pill ${cor(x[3])}">${pct(x[3])}</span></td><td>${pct(x[4],2)}</td><td>${pct(x[5],2)}</td></tr>`).join("")}
+ ${D.reg.map(x=>`<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2].toLocaleString("pt-BR")}</td><td>${pct(x[1]/x[2]*100)}</td><td><span class="pill ${cor(x[3])}">${pct(x[3])}</span></td><td>${pct(x[4],2)}</td><td>${pct(x[5],2)}</td></tr>`).join("")}${semFech().map(n=>`<tr data-reg="${n}" style="cursor:pointer;color:var(--ink2)"><td><b>${n}</b></td><td colspan="6">sem dado no fechamento por regional desta edição</td></tr>`).join("")}
  </tbody></table></div>
  ${(()=>{const sf=D.farol.filter(f=>!regByName(f[0])).map(f=>f[0]);const dif=M.acum-D.reg.reduce((s,x)=>s+x[1],0);return sf.length?`<div class="warn">⚠ ${sf.join(" e ")} aparecem no farol do dia, mas não no fechamento do mês. As linhas exibidas somam ${brl(dif)} a menos que o acumulado do grupo.</div>`:""})()}</div>
  ${D.ger&&D.ger.length?`<h2>Fechamento por gerente <small>atingimento parcial</small></h2><div class="card fx2">${[...D.ger].sort((a,b)=>b[3]-a[3]).map(g=>`<div class="r ${g[3]>=100?"ok":""}"><b>${g[0].replace(/\b(\w)(\w*)/g,(m,a,b)=>a+b.toLowerCase()).replace(/\(pa\)/i,"(PA)")}</b><span class="v" style="color:${C[cor(g[3])]}">${pct(g[3])}</span><small>${mi(g[1])} de ${mi(g[2])} · margem terc. ${pct(g[4],2)}</small><small style="text-align:right">${g[3]<100?"faltam "+mi(g[2]-g[1]):"✓ no ritmo"}</small></div>`).join("")}</div>`:""}

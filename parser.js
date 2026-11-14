@@ -109,9 +109,10 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
     const secR = (reg.split(/Fechamento por regional/i)[1] || "").split(/\n\s*Total\s/)[0];
     const totR = ((reg.split(/Fechamento por regional/i)[1] || "").match(/\n\s*Total\s+([\d.]+)\s+([\d.]+)/) || []);
     const regs = []; let semReg = 0;
-    secR.split("\n").forEach(l => { const r = l.match(/^\s*([A-ZÇÃÁÉÍÓÚÂÊÔ][A-ZÇÃÁÉÍÓÚÂÊÔ0-9\/ \-]*?)\s+([\d.]+)\s+([\d.]+)\s+(\d+)%\s+(\d+)%\s+(?:([\d,]+)%)?(?:\s+([\d,]+)%)?/);
+    secR.split("\n").forEach(l => { const r = l.match(/^\s*([A-ZÇÃÁÉÍÓÚÂÊÔ][A-ZÇÃÁÉÍÓÚÂÊÔ0-9\/ \-]*?)\s+([\d.]+)\s+([\d.]+)\s+(\d+)%\s+(\d+)%(?:\s+(-?[\d,]+)%)?(?:\s+(-?[\d,]+)%)?/);
       if (r) { const fat = num(r[2]), meta = num(r[3]), parc = +r[5]; regs.push([r[1].trim(), fat, meta, parc, r[6] ? num(r[6]) : null, r[7] ? num(r[7]) : null, Math.round(fat - fat / (parc / 100)), "—"]); }
-      else { const z = l.match(/^\s*([\d.]{5,})\s+([\d,]+)%/); if (z) semReg += num(z[1]); } });
+      else { const z = l.match(/^\s*([\d.]{5,})\s+([\d,]+)%/); if (z) semReg += num(z[1]); else if (/^\s*NORDESTE/i.test(l)) av.push("Linha não lida no fechamento por regional: " + l.trim()); } });
+    ["NORDESTE 1", "NORDESTE 2"].forEach(n => { if (!regs.some(r => nReg(r[0]) === n)) av.push(n + " não veio no fechamento por regional do PDF; aparece como “sem dado”."); });
     if (!regs.length) throw new Error("Não encontrei o “Fechamento por regional” no PDF de regionais.");
     regs.forEach(r => { r[7] = r[3] < 100 ? "Crítico" : (r[4] != null && r[4] < 3) ? "Proteger margem" : "Alavancar"; });
     const ger = []; const secG = (reg.split(/Fechamento por gerente/i)[1] || "").split(/Fechamento por regional/i)[0].split(/\n\s*Total\s/)[0];
