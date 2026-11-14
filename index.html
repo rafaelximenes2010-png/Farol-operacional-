@@ -38,6 +38,7 @@ h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;f
 .kpi .v{font-size:24px;font-weight:800;margin:6px 0 2px;letter-spacing:-.5px}
 .kpi .s{font-size:12px;color:var(--ink2)}
 .kpi.lit{background:linear-gradient(135deg,#0b3d26,#15803d);color:#fff;border:0;box-shadow:0 6px 18px rgba(21,128,61,.28)}.kpi.lit .l,.kpi.lit .s{color:rgba(255,255,255,.85)}.kpi.lit .v,.kpi.lit .v.up,.kpi.lit .v.dn{color:#fff}.kpi.lit.bad{background:linear-gradient(135deg,#5a1414,#b91c1c);box-shadow:0 6px 18px rgba(185,28,28,.28)}
+.kpi.kano .v{font-size:21px;white-space:nowrap;letter-spacing:-.6px}.cres{margin:6px 0 6px;padding:7px 9px;border-radius:10px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}.cres b{display:block;font-size:19px;font-weight:900;letter-spacing:-.3px}.cres.up b{color:#7ef0a8}.cres.dn b{color:#ffb4b4}.cres span{display:block;font-size:11.5px;font-weight:700;color:#fff;opacity:.92;margin-top:1px}
 .kpi.hero{background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border:0}.kpi.hero .l,.kpi.hero .s{color:rgba(255,255,255,.8)}
 .est{display:inline-block;font-size:10px;font-weight:700;background:#ede9fe;color:#5b21b6;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}
 .up{color:var(--g)}.dn{color:var(--r)}.hero .up{color:#7ef0a8}
@@ -785,8 +786,8 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  const Y=anoAcum(),A=anoProj(M.proj),metaA=D.metaAno,pcA=A.tot/metaA*100,fA=faixaAting(pcA);
  const fxTxt=f=>f<0?"abaixo da meta":f===0?"meta 100%":"super meta "+FAIXAS[f][0];
  return `<h2>Ano ${Y.ano} <small>acumulado e fechamento projetado</small></h2><div class="kpis">
-  <div class="card kpi hero" data-m="acumano"><div class="l">Acumulado do ano</div><div class="v">${mi(Y.real)}</div><div class="s"><b>${pct(Y.pc,1)}</b> da meta orçada até o D-1 · ${Y.de}→${Y.ate}</div></div>
-  <div class="card kpi lit" data-m="superano"><div class="l">Projeção de fechamento do ano</div><div class="v">${mi(A.tot)}</div><div class="s"><b>${pct(pcA,1)}</b> da meta do ano (${mi(metaA)}) · ${fxTxt(fA)}</div></div></div>
+  <div class="card kpi hero kano" data-m="acumano"><div class="l">Acumulado do ano</div><div class="v">${mi(Y.real)}</div>${cresc(Y.real-Y.meta,Y.pc,"vs meta até o D-1")}<div class="s">${pct(Y.pc,1)} da meta orçada · ${Y.de}→${Y.ate}</div></div>
+  <div class="card kpi lit kano" data-m="superano"><div class="l">Projeção do ano</div><div class="v">${mi(A.tot)}</div>${cresc(A.tot-metaA,pcA,"vs meta do ano")}<div class="s">meta ${mi(metaA)} · ${fxTxt(fA)}</div></div></div>
  <h2>Mês <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} · até o D-1</small></h2><div class="kpis">
   <div class="card kpi hero" data-m="falta"><div class="l">Falta p/ meta orçada</div><div class="v">${mi(falta)}</div><div class="s">meta ${mi(M.metaOrc)} · BI ${mi(M.metaBI)}</div></div>
   <div class="card kpi lit" data-m="du"><div class="l">Dias úteis restantes</div><div class="v">${M.duRest}</div><div class="s">seg–sex, sem feriados</div></div>
@@ -806,6 +807,8 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  <h2>Super meta do ano · quanto falta <small>mesma base do acumulado (${pct(Y.pc,1)}) e da projeção (${pct(pcA,1)})</small></h2>
  <div class="card fx2" data-m="superano">${FAIXAS.map(f=>{const v=metaA*(1+f[1]/100),ok=A.tot>=v,falt=Math.max(0,v-Y.real),mr=Math.max(1,D.orc.length-A.nFech);return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(Y.real/v*100,1)} · projeção ${ok?"✓ atinge":pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${falt?"faltam "+mi(falt)+" · "+mi(falt/mr)+"/mês":"✓ atingida"}</small></div>`;}).join("")}
  <p class="note" style="margin:4px 2px 0">Acumulado do ano = ${A.nFech} meses fechados (${mi(A.real)}) + ${D.orc[A.mI]?D.orc[A.mI][0]:"mês"} até o D-1 (${mi(M.acum)}). Projeção do ano = meses fechados + projeção do mês (${mi(M.proj)}) + orçado dos meses seguintes (${mi(A.fut)}). "Por mês" = o que falta dividido pelos ${Math.max(1,D.orc.length-A.nFech)} meses restantes, incluindo o atual.</p></div>`;}
+/* destaque do crescimento sobre a meta (R$ e %) */
+function cresc(dif,pc,txt){const up=dif>=0;return `<div class="cres ${up?"up":"dn"}"><b>${up?"▲ +":"▼ −"}${mi(Math.abs(dif)).replace("R$ ","R$ ")}</b><span>${up?"+":"−"}${pct(Math.abs(pc-100),1)} ${txt}</span></div>`;}
 /* acumulado do ano até o D-1: meses fechados + mês atual, contra a meta orçada do mesmo período */
 function anoAcum(){const A=anoProj(M.proj),fech=D.orc.filter(x=>x[3]!=null&&!x[5]),mo=fech.reduce((a,x)=>a+(x[1]||0),0);
  const real=A.real+M.acum,meta=mo+M.metaAcOrc,ano=(d1.data||"").slice(6)||String(new Date().getFullYear());
