@@ -147,8 +147,9 @@ ${D.avisos && D.avisos.length ? `<p style="margin-top:12px;font-size:10px;color:
   async function gerarRevista() {
     if (!D) { toastMsg("Carregue a edição da equipe do dia primeiro."); return; }
     toastMsg("Preparando a revista…");
-    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null; if (!orig) { toastMsg("A revista do dia ainda não foi publicada. Assim que o admin enviar a revista, ela segue exatamente no formato original."); return; }
-      const pdf = orig;
+    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null;
+      // sem a revista original do dia (edição feita só com os PDFs do Power BI): gera a revista pelo app
+      const pdf = orig || await revistaPDF();
       prontoParaEnviar("Revista do dia", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), texto(), false);
     } catch (e) { toastMsg("Não consegui preparar a revista: " + e.message); } }
   window.FarolPacote = { abrir, texto, cartao, revistaPDF, gerarRevista };
