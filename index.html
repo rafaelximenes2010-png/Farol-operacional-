@@ -32,13 +32,13 @@ main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;-w
 h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:20px 4px 10px;display:flex;align-items:center;gap:8px}
 h2 small{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500;font-size:11px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:14px;box-shadow:0 1px 2px rgba(15,35,80,.04)}
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(min-width:760px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpis{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media(min-width:760px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .kpi .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:700}
 .kpi .v{font-size:24px;font-weight:800;margin:6px 0 2px;letter-spacing:-.5px}
 .kpi .s{font-size:12px;color:var(--ink2)}
 .kpi.lit{background:linear-gradient(135deg,#0b3d26,#15803d);color:#fff;border:0;box-shadow:0 6px 18px rgba(21,128,61,.28)}.kpi.lit .l,.kpi.lit .s{color:rgba(255,255,255,.85)}.kpi.lit .v,.kpi.lit .v.up,.kpi.lit .v.dn{color:#fff}.kpi.lit.bad{background:linear-gradient(135deg,#5a1414,#b91c1c);box-shadow:0 6px 18px rgba(185,28,28,.28)}
-.kpi.kano .v{font-size:21px;white-space:nowrap;letter-spacing:-.6px}.cres{display:inline-block;margin:4px 0 6px;padding:3px 9px;border-radius:999px;font-size:13px;font-weight:800;white-space:nowrap;background:rgba(126,240,168,.16);color:#7ef0a8}.cres.dn{background:rgba(255,155,155,.16);color:#ffb4b4}.cres small{font-size:11px;font-weight:600;opacity:.9}
+.kpi.kano{min-width:0;overflow:hidden}.kpi.kano .v{font-size:19px;white-space:nowrap;letter-spacing:-.6px}.cres{display:inline-block;max-width:100%;margin:3px 0 5px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;background:rgba(126,240,168,.16);color:#7ef0a8}.cres.dn{background:rgba(255,155,155,.16);color:#ffb4b4}.cres small{font-size:11px;font-weight:600;opacity:.9}
 .kpi.hero{background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border:0}.kpi.hero .l,.kpi.hero .s{color:rgba(255,255,255,.8)}
 .est{display:inline-block;font-size:10px;font-weight:700;background:#ede9fe;color:#5b21b6;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}
 .up{color:var(--g)}.dn{color:var(--r)}.hero .up{color:#7ef0a8}
@@ -201,7 +201,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
  main>.blk:has(.tw),main>.blk:has(.lei),main>.blk:has(.dds),main>.blk:has(.farol),main>.blk:has(.fx2),main>.blk:has(.sim){grid-column:auto}
  main>.blk:has(table){grid-column:1/-1}
  main>.blk h2{margin-top:0}
- .kpis{grid-template-columns:repeat(4,1fr);gap:14px}.kpi .v{font-size:30px}
+ .kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.kpi .v{font-size:30px}
  .farol{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
  nav.tabs{grid-column:1;grid-row:1/3;flex-direction:column;justify-content:flex-start;gap:4px;padding:18px 14px;border-top:0;border-right:1px solid var(--line);background:linear-gradient(180deg,#0b1a3f,#132a5c);}
  nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;font-size:14.5px;padding:12px 14px;color:rgba(255,255,255,.75);border-radius:12px}
@@ -697,7 +697,7 @@ function tkSvg(m){const S=tkSerie(m),P=S.pts,R=S.ref,n=P.length,dk=matchMedia("(
  g+=`<g class="tkc" style="display:none"><line y1="${pt}" y2="${h-pb}" stroke="var(--ink2)" stroke-width="1"/><circle r="4.5" fill="var(--bg)" stroke="${col}" stroke-width="2.2"/></g>`;
  return `<svg class="tksv" viewBox="0 0 ${w} ${h}" data-w="${w}" data-n="${n}" data-pl="${pl}" data-pr="${pr}">${g}</svg>`;}
 function tkHead(m,i){const S=tkSerie(m),P=S.pts,n=P.length;i=i==null?n-1:i;const v=P[i],pv=i>0?P[i-1]:null,d=D.dias[i];
- let c="";if(m==="acum"){const dv=v-S.ref[i];c=`<div class="c ${dv>=0?"up":"dn"}">${dv>=0?"▲ +":"▼ −"}${mi(Math.abs(dv))} vs meta</div>`;}
+ let c="";if(m==="acum"){const dv=v-S.ref[i];c=`<div class="c ${dv>=0?"up":"dn"}">${dv>=0?"▲ +":"▼ −"}${mi(Math.abs(dv))}</div>`;}
  else if(pv!=null){const ch=m==="ating"?v-pv:(v/pv-1)*100;c=`<div class="c ${ch>=0?"up":"dn"}">${ch>=0?"▲ +":"▼ "}${m==="ating"?pct(ch,1).replace("%","")+" p.p.":pct(ch,1)} vs ${D.dias[i-1][0]}</div>`;}
  return `<div><div class="l">${S.tit}</div><div class="v">${S.fmt(v)}</div>${c}</div><div class="dt">${d[0]} · ${d[1]}<br>${S.refN}: ${S.fmt(S.ref[i])}</div>`;}
 function tickerHtml(){if(!D.dias||D.dias.length<2)return"";const m=tkModo,P=D.dias.map(x=>x[2]),tot=P.reduce((a,b)=>a+b,0);
