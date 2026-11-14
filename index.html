@@ -489,7 +489,11 @@ const st=p=>p>=100?"Acima da meta":p>=90?"Próximo da meta":"Em atenção";
 let M,d1,atD1,atAcO,atAcB,falta,necDU;
 function normRegs(X){if(!X)return;const n=x=>{x=String(x||"").trim().toUpperCase().replace(/\s+/g," ");return x==="NORDESTE"?"NORDESTE 1":x;};(X.reg||[]).forEach(r=>r[0]=n(r[0]));(X.farol||[]).forEach(f=>f[0]=n(f[0]));}
 function mergeFarol(Dx,R){if(!R||!R.farol||!R.farol.length)return;normRegs(Dx);normRegs(R);R.farol.forEach(([n,p])=>{const f=Dx.farol.find(x=>x[0]===n);if(f){f[1]=p;f.length=2;}else Dx.farol.push([n,p]);});}
-function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
+/* editorial herdado de outra edição (dia carregado só com os PDFs do BI): refaz com os números do dia */
+function editorialAtual(){const e=D.editorial;if(!e||!e.texto||!d1)return;const p=Math.round(atD1),m=e.texto.match(/Fechamos o D-1 com (\d+)%/);
+ if(!((e.de&&e.de!==d1.data)||(m&&+m[1]!==p)))return;const n=(D.farol||[]).filter(x=>typeof x[1]==="number"&&x[1]>=100).length,ok=p>=100;
+ D.editorial={autor:e.autor||"Rafael Ximenes",auto:true,texto:(ok?"RESULTADO FORTE, FOCO NA SUPERMETA! ":"HORA DE VIRAR O JOGO! ")+`Fechamos o D-1 com ${p}% de atingimento e ${n} ${n===1?"regional":"regionais"} acima da meta! `+(ok?"É hora de manter a tração, recuperar os desvios e acelerar cada operação. Temos força para ir além! ":"Cada regional abaixo da meta precisa de um plano de recuperação para hoje. ")+"Cada entrega conta, cada regional faz a diferença. Vamos juntos! PRA CIMA!"};}
+function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;editorialAtual();atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
 /* ===== gráficos SVG ===== */
 function lineChart(series,w=360,h=200,opts={}){const pad={l:38,r:8,t:12,b:24};const xs=series[0].pts.length;
  const maxV=opts.max||Math.max(...series.flatMap(s=>s.pts.filter(v=>v!=null)))*1.08;const X=i=>pad.l+(w-pad.l-pad.r)*i/((opts.n||xs)-1);const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;

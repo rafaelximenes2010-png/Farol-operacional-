@@ -148,7 +148,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       mes: { acum, metaAcOrc, metaAcBI, metaOrc, metaBI, proj, mgT: tot ? num(tot[4]) : null, mgA: tot ? num(tot[5]) : null, mediaDU, diasMeta: dias.filter(x => x[2] >= x[3]).length, diasTot: dias.length, duRest, metaMediaRest: (metaBI - metaAcBI) / Math.max(1, duRest) },
       proj3: [["Power BI", proj / 1e6], ["Calendário de metas", acum / metaAcBI * metaBI / 1e6], ["Ritmo por dia útil", (acum + mediaDU * duRest) / 1e6]],
       farol, reg: regs, ger, dias, orc, metaAno: (prev && prev.metaAno) || null,
-      dds: prev && prev.dds || null, editorial: prev && prev.editorial || null, frase: prev && prev.frase || null, avisos: av
+      dds: prev && prev.dds || null, editorial: prev && prev.editorial ? Object.assign({}, prev.editorial, { de: prev.editorial.de || prev.d1.data }) : null, frase: prev && prev.frase || null, avisos: av
     };
   }
   root.FarolPDF = Object.assign(root.FarolPDF || {}, { parseBI, tipo });
