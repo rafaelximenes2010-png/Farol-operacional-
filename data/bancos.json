@@ -1,0 +1,104 @@
+{
+ "inicio": "2026-11-13",
+ "obs": "DDS e frases usados quando a edição não traz textos novos. Um item por dia, a partir de inicio, sem repetir. Quando faltarem poucos dias, novos itens são acrescentados no fim (renovação automática).",
+ "dds": [
+  [
+   "Cinto de segurança, sempre!",
+   "O cinto salva vidas em qualquer trajeto, curto ou longo. Antes de dar a partida, confira se você e todos no veículo estão com o cinto bem ajustado. Não existe viagem rápida demais para usar o cinto."
+  ],
+  [
+   "Cansaço também é risco",
+   "Dirigir com sono é tão perigoso quanto dirigir alcoolizado. Respeite as pausas e o descanso obrigatório. Sentiu os olhos pesando? Pare em local seguro. Chegar mais tarde é melhor do que não chegar."
+  ],
+  [
+   "Checklist antes de sair",
+   "Pneus, freios, luzes, retrovisores, nível de óleo e documentação: confira tudo antes de iniciar a viagem. Encontrou algo errado? Não saia, avise o líder. O checklist bem feito evita acidentes e paradas na estrada."
+  ],
+  [
+   "Velocidade sob controle",
+   "Respeite os limites da via e da empresa. Em descidas, use o freio motor; em curvas, reduza antes de entrar. Velocidade a mais não traz ganho de tempo que compense o risco."
+  ],
+  [
+   "Chuva pede mais cuidado",
+   "Na pista molhada, a distância de frenagem aumenta muito. Reduza a velocidade, aumente a distância do veículo da frente e acenda os faróis. Com visibilidade ruim, pare em local seguro e espere."
+  ],
+  [
+   "EPI é proteção de verdade",
+   "Capacete, óculos, luvas, botina e colete não são enfeite: são a última barreira entre você e o acidente. No pátio, na carga e na descarga, use o EPI completo e em bom estado."
+  ],
+  [
+   "Carga bem amarrada",
+   "Carga solta ou mal distribuída tomba, desloca e provoca acidentes graves. Confira cintas, travas e lona antes de sair e durante as paradas. Respeite o limite de peso por eixo."
+  ],
+  [
+   "Atenção aos pontos cegos",
+   "Antes de mudar de faixa, manobrar ou dar ré, confira os retrovisores e sinalize. Na dúvida, desça e olhe. Pedestres, motos e ciclistas podem estar onde você não vê."
+  ],
+  [
+   "Manobra de ré com apoio",
+   "Sempre que possível, faça a ré com ajuda de um sinaleiro e em velocidade mínima. Combine os sinais antes e pare se perder o contato visual. Uma manobra apressada pode custar uma vida."
+  ],
+  [
+   "Álcool e direção não se misturam",
+   "Nenhuma quantidade de álcool é segura para dirigir. Os reflexos diminuem e a percepção de risco também. Bebeu, não dirija. Viu um colega nessa situação? Fale com ele e com o líder."
+  ],
+  [
+   "Hidratação e alimentação",
+   "Calor, longas jornadas e pouca água levam à fadiga e à perda de atenção. Beba água ao longo do dia e faça refeições leves nas paradas. Cuidar do corpo também é cuidar da segurança."
+  ],
+  [
+   "Ultrapassagem só com segurança",
+   "Ultrapasse apenas em trecho permitido, com visibilidade e espaço de sobra. Veículo pesado precisa de mais distância para concluir a manobra. Na dúvida, não ultrapasse."
+  ],
+  [
+   "Pátio é área de risco",
+   "No pátio, circule só pelas faixas de pedestre, respeite a sinalização e nunca passe entre veículos em manobra. Motorista: velocidade máxima de pátio e atenção redobrada."
+  ],
+  [
+   "Pare, pense e aja",
+   "Antes de qualquer tarefa fora da rotina, pare um minuto e pense nos riscos. Se não estiver seguro, não faça: chame o líder. Ninguém é cobrado por parar uma atividade insegura."
+  ]
+ ],
+ "frases": [
+  [
+   "Somos o que fazemos repetidamente. A excelência, portanto, não é um ato, mas um hábito.",
+   "Will Durant"
+  ],
+  [
+   "A qualidade nunca é um acidente; é sempre o resultado de um esforço inteligente.",
+   "John Ruskin"
+  ],
+  [
+   "Talento vence jogos, mas trabalho em equipe e inteligência vencem campeonatos.",
+   "Michael Jordan"
+  ],
+  [
+   "O sucesso é a soma de pequenos esforços repetidos dia após dia.",
+   "Robert Collier"
+  ],
+  [
+   "Nenhum de nós é tão inteligente quanto todos nós.",
+   "Ken Blanchard"
+  ],
+  [
+   "O que pode ser medido pode ser melhorado.",
+   "Peter Drucker"
+  ],
+  [
+   "A melhor maneira de prever o futuro é criá-lo.",
+   "Peter Drucker"
+  ],
+  [
+   "Unir-se é um bom começo, manter a união é um progresso, e trabalhar em conjunto é a vitória.",
+   "Henry Ford"
+  ],
+  [
+   "Não é o mais forte que sobrevive, nem o mais inteligente, mas o que melhor se adapta às mudanças.",
+   "Leon C. Megginson"
+  ],
+  [
+   "Grandes coisas nos negócios nunca são feitas por uma pessoa. São feitas por uma equipe.",
+   "Steve Jobs"
+  ]
+ ]
+}

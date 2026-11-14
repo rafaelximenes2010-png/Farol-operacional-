@@ -517,11 +517,15 @@ const FRASES_BANCO=[
 ["Unir-se é um bom começo, manter a união é um progresso, e trabalhar em conjunto é a vitória.","Henry Ford"],
 ["Não é o mais forte que sobrevive, nem o mais inteligente, mas o que melhor se adapta às mudanças.","Leon C. Megginson"],
 ["Grandes coisas nos negócios nunca são feitas por uma pessoa. São feitas por uma equipe.","Steve Jobs"]];
-const idxDia=(iso,n)=>Math.floor(Date.parse(iso+"T12:00:00Z")/864e5)%n;
+/* bancos vivos em data/bancos.json (renovados quando acabam); os de cima são reserva */
+let BANCOS=null;setTimeout(()=>{if(!BANCOS)BANCOS=LS.get("farolBancos",null);fetch("data/bancos.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.dds&&j.frases){BANCOS=j;LS.set("farolBancos",j);}}).catch(()=>{});},0);
+const diasDesde=(iso,ini)=>Math.round((Date.parse(iso+"T12:00:00Z")-Date.parse(ini+"T12:00:00Z"))/864e5);
+function itemBanco(tipo,iso){if(!BANCOS)BANCOS=LS.get("farolBancos",null);const B=BANCOS&&BANCOS[tipo]&&BANCOS[tipo].length?BANCOS[tipo]:(tipo==="dds"?DDS_BANCO:FRASES_BANCO),ini=(BANCOS&&BANCOS.inicio)||"2026-11-13";
+ const k=diasDesde(iso,ini),n=B.length;return B[((k%n)+n)%n];}
 function textosAtuais(){if(!d1)return;const iso=isoOf(d1.data),e=edicoes(),ka=Object.keys(e).filter(k=>k<iso).sort().pop(),ant=ka?e[ka]:null;
  const bi=!!(D.meta&&/Power BI/.test(D.meta.fonte||"")),herdado=(o,campo)=>o&&!o.manual&&!o.banco&&((o.de&&o.de!==d1.data)||(bi&&ant&&ant[campo]&&ant[campo].texto===o.texto));
- if(!D.dds||herdado(D.dds,"dds")){const b=DDS_BANCO[idxDia(iso,DDS_BANCO.length)];D.dds={titulo:b[0],texto:b[1],autor:(D.dds&&D.dds.autor)||"Rafael Ximenes",banco:true};}
- if(!D.frase||herdado(D.frase,"frase")){const f=FRASES_BANCO[idxDia(iso,FRASES_BANCO.length)];D.frase={texto:f[0],autor:f[1],banco:true};}}
+ if(!D.dds||herdado(D.dds,"dds")){const b=itemBanco("dds",iso);D.dds={titulo:b[0],texto:b[1],autor:(D.dds&&D.dds.autor)||"Rafael Ximenes",banco:true};}
+ if(!D.frase||herdado(D.frase,"frase")){const f=itemBanco("frases",iso);D.frase={texto:f[0],autor:f[1],banco:true};}}
 function editorialAtual(){textosAtuais();const e=D.editorial;if(!e||!e.texto||!d1||e.manual)return;const p=Math.round(atD1),m=e.texto.match(/Fechamos o D-1 com (\d+)%/);
  if(!((e.de&&e.de!==d1.data)||(m&&+m[1]!==p)))return;const n=(D.farol||[]).filter(x=>typeof x[1]==="number"&&x[1]>=100).length,ok=p>=100;
  D.editorial={autor:e.autor||"Rafael Ximenes",auto:true,texto:(ok?"RESULTADO FORTE, FOCO NA SUPERMETA! ":"HORA DE VIRAR O JOGO! ")+`Fechamos o D-1 com ${p}% de atingimento e ${n} ${n===1?"regional":"regionais"} acima da meta! `+(ok?"É hora de manter a tração, recuperar os desvios e acelerar cada operação. Temos força para ir além! ":"Cada regional abaixo da meta precisa de um plano de recuperação para hoje. ")+"Cada entrega conta, cada regional faz a diferença. Vamos juntos! PRA CIMA!"};}
