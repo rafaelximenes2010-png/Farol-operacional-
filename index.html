@@ -1018,7 +1018,9 @@ function guardar(Dx){const e=edicoes();e[isoOf(Dx.d1.data)]=Dx;const ks=Object.k
 async function loadData(){
  if(API.base){try{const r=await fetch(API.base.replace(/\/$/,"")+"/api/hoje",{credentials:"include"});if(!r.ok)throw new Error("HTTP "+r.status);
    const j=await r.json();j.meta=Object.assign(j.meta||{},{modo:"api"});guardar(j);return j;}catch(e){toastMsg("Sem conexão com a API ("+e.message+").");}}
- const pub=await carregarPublicada();if(pub) return pub;
+ const pub=await carregarPublicada();
+ /* edição carregada no aparelho mais nova que a publicada (ex.: upload ainda não publicado): abre a mais nova */
+ if(pub){const e0=edicoes(),kl=Object.keys(e0).sort().pop();if(kl&&kl>isoOf(pub.d1.data)&&e0[kl]){LS.set("farolAtual",kl);setTimeout(()=>toastMsg("Abrindo a edição de "+e0[kl].d1.data+" deste aparelho. Ela ainda não foi publicada para a equipe."),1200);return e0[kl];}return pub;}
  const e=edicoes(),k=LS.get("farolAtual",null)||Object.keys(e).sort().pop();if(k&&e[k]) return e[k];
  return null;}
 /* --- leitura do PDF (pdf.js) --- */
