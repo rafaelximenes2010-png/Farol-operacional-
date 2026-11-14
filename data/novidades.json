@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.14-a",
+   "data": "14/11/2026",
+   "itens": [
+    "Central de atualizações mais limpa: mostra só as 3 últimas novidades do app (o histórico completo continua registrado)"
+   ]
+  },
+  {
    "v": "2026.11.12-e",
    "data": "12/11/2026",
    "itens": [
