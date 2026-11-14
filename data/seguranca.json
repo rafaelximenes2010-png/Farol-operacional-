@@ -1,5 +1,5 @@
 {
- "data": "2026-11-13",
+ "data": "2026-11-14",
  "horas": [
   7,
   11,
@@ -7,22 +7,22 @@
  ],
  "dicas": [
   {
-   "dica": "Respeite a velocidade da via. Com carga a granel, curva sempre devagar.",
-   "titulo": "Além da Velocidade e do Capacete: Os Fatores Cruciais na Severidade dos Sinistros Viários Envolvendo…",
-   "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/artigos/alem-da-velocidade-e-do-capacete-os-fatores-cruciais-na-severidade-dos-sinistros-viarios-envolvendo-motocicletas"
-  },
-  {
-   "dica": "Álcool e direção: tolerância zero. Nem um gole antes de dirigir.",
-   "titulo": "Motorista alcoolizado suspeito de provocar colisão e fugir a pé é detido pela PRF em Serra Talhada",
-   "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxPQmdvekNKSVB6dm5EblA4cDdBeHpmMXZBbWJISWxDN1hzZW9WcERPa1BKbW5SRjduZ2k5YVVZN3M2cHRKU1pkSHZpc3UxU1VjUmtwS3VvS0RNaXFLNUVSOHlBZGxzWk43bXB0SDhFV0pxZ3BZRUxuYzY1elZqX2VNdnNOVnF6ZjNaRHY0M3dQSjB1cVhuVmpySm5BdTVvdlRfc1hrMzNWM25XdkdXWG1sZ3JtbXZpa05lTUZGai1uT3llZmk0VHVyMGdsWjd1ZG1KZGhLM0ZVbmo3TG1DU1EtWGlJd3pyNzQ2ZFl3aEhYeHVQYzkzRU8wUUN0Z2phME5t?oc=5"
-  },
-  {
    "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "Sinalização de caminhões com produtos perigosos exige atenção para evitar acidentes",
-   "fonte": "Portal O Carreteiro",
-   "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5"
+   "titulo": "Observadores Certificados levam conhecimento sobre segurança viária por meio de palestras do ONSV",
+   "fonte": "Observatório Nacional de Segurança Viária",
+   "url": "https://www.onsv.org.br/comunicacao/materias/observadores-certificados-levam-conhecimento-sobre-seguranca-viaria-a-empresas-e-instituicoes-por-meio-de-palestras-do-onsv"
+  },
+  {
+   "dica": "Carga dentro do limite e lona conferida antes de sair.",
+   "titulo": "Estudo identifica riscos psicossociais no ambiente de trabalho",
+   "fonte": "Revista Proteção",
+   "url": "https://protecao.com.br/noticias/geral/estudo-identifica-riscos-psicossociais-no-ambiente-de-trabalho/"
+  },
+  {
+   "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
+   "titulo": "PRF recupera carga de cosmético e perfumaria roubada avaliada em cerca de R$ 1 milhão em Juiz de Fora (MG)",
+   "fonte": "PRF",
+   "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxNekJOaVJLdXgyRmNWRTZ4UWVOUHpmVExWQXg2REVzMGxmM3dQNWZMelVTS1hkNEtQSFZ4TXRHU01vVUZTdHZoRW5OUm9HWFJVaHBuN2p2b29PMkJfdjBsQjFDUHZoenhOeEpGSTNJTVFuZ0hZdGRNaGhKNnV4QmJoNUdzaEhQeXpYOFVva1ZGRjllX09IRWZVcmtSQTJValUxbFBkLUJULUlnRldDQm5IbzlFTXVtcTd6QlVFX3d1dGtXU0pseXpBeXJna2ZBTkFwMm9aSUI0Y0tlTkF5Y3hKQUd2NzNiS19ySjRYTk90MWowWi16WjFiYzhlVkJnS1R4QVZmM1BsQndLUQ?oc=5"
   }
  ],
  "fontes": [
@@ -43,16 +43,19 @@
   "https://news.google.com/rss/articles/CBMixgFBVV95cUxQY3JpSVR2N1JidlhTLVk2QkxscjRHTWRuZUlRUFEzeEJRNDQ3NnRrQ00wcFo2VWZKQXZJMW1VdmdIcUVQOWNTdDc4YzgwajJVX255b3h1WlFYMDBPS3l0bTZwS29TYTFEWUFDMFZ4UnhyZkF2dlRwdEgxSmFEUGJZOTJoSWsybzNYRkkzM2RUZ3RISHRvdWtPNWM3cE81Y0h3RXVoV2NCdFZWRmFYZ3pGM01ReWZvOU45TUp0V3JTVWt0NEtOWXfSAdQBQVVfeXFMUFRkZ2tGWGtCUHJlVEdCaXM2Z0pxRVRtaS1mSnN3WVdoWDZhOVpOelBCenFYdkQ2NkRHc29md2RTN19idnVLRGc2Ti14SXJrUHpqMFBkeUVjckVEVVJmai00QlE3NVY4LW5DUXZYZWJxNG41S0dMSWNaQi1SdEJJSHUySkNTbVVrSmdPYUJXQkRzdVFIdHNXMFNDRXlRUkZoV1Q4UE1zQWd3MVRYS29hQlF5ZU1PYldyVGUwZnFUc1JubEFFODdTQWJ1SHFjYmRTTk5MTFc?oc=5",
   "https://www.onsv.org.br/comunicacao/artigos/alem-da-velocidade-e-do-capacete-os-fatores-cruciais-na-severidade-dos-sinistros-viarios-envolvendo-motocicletas",
   "https://news.google.com/rss/articles/CBMigAJBVV95cUxPQmdvekNKSVB6dm5EblA4cDdBeHpmMXZBbWJISWxDN1hzZW9WcERPa1BKbW5SRjduZ2k5YVVZN3M2cHRKU1pkSHZpc3UxU1VjUmtwS3VvS0RNaXFLNUVSOHlBZGxzWk43bXB0SDhFV0pxZ3BZRUxuYzY1elZqX2VNdnNOVnF6ZjNaRHY0M3dQSjB1cVhuVmpySm5BdTVvdlRfc1hrMzNWM25XdkdXWG1sZ3JtbXZpa05lTUZGai1uT3llZmk0VHVyMGdsWjd1ZG1KZGhLM0ZVbmo3TG1DU1EtWGlJd3pyNzQ2ZFl3aEhYeHVQYzkzRU8wUUN0Z2phME5t?oc=5",
-  "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5"
+  "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5",
+  "https://www.onsv.org.br/comunicacao/materias/observadores-certificados-levam-conhecimento-sobre-seguranca-viaria-a-empresas-e-instituicoes-por-meio-de-palestras-do-onsv",
+  "https://protecao.com.br/noticias/geral/estudo-identifica-riscos-psicossociais-no-ambiente-de-trabalho/",
+  "https://news.google.com/rss/articles/CBMiigJBVV95cUxNekJOaVJLdXgyRmNWRTZ4UWVOUHpmVExWQXg2REVzMGxmM3dQNWZMelVTS1hkNEtQSFZ4TXRHU01vVUZTdHZoRW5OUm9HWFJVaHBuN2p2b29PMkJfdjBsQjFDUHZoenhOeEpGSTNJTVFuZ0hZdGRNaGhKNnV4QmJoNUdzaEhQeXpYOFVva1ZGRjllX09IRWZVcmtSQTJValUxbFBkLUJULUlnRldDQm5IbzlFTXVtcTd6QlVFX3d1dGtXU0pseXpBeXJna2ZBTkFwMm9aSUI0Y0tlTkF5Y3hKQUd2NzNiS19ySjRYTk90MWowWi16WjFiYzhlVkJnS1R4QVZmM1BsQndLUQ?oc=5"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
   "Revista Proteção: 10",
   "ANAMT: erro fetch failed",
   "PRF: 25",
-  "Fundacentro: 17",
+  "Fundacentro: 16",
   "Ministério do Trabalho: 25",
-  "Notícias: 6"
+  "Notícias: 5"
  ],
- "atualizado": "2026-11-13T10:38:32.627Z"
+ "atualizado": "2026-11-14T10:23:08.656Z"
 }
