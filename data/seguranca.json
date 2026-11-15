@@ -1,5 +1,5 @@
 {
- "data": "2026-11-14",
+ "data": "2026-11-15",
  "horas": [
   7,
   11,
@@ -7,22 +7,22 @@
  ],
  "dicas": [
   {
-   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "Observadores Certificados levam conhecimento sobre segurança viária por meio de palestras do ONSV",
-   "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/materias/observadores-certificados-levam-conhecimento-sobre-seguranca-viaria-a-empresas-e-instituicoes-por-meio-de-palestras-do-onsv"
-  },
-  {
-   "dica": "Carga dentro do limite e lona conferida antes de sair.",
-   "titulo": "Estudo identifica riscos psicossociais no ambiente de trabalho",
-   "fonte": "Revista Proteção",
-   "url": "https://protecao.com.br/noticias/geral/estudo-identifica-riscos-psicossociais-no-ambiente-de-trabalho/"
+   "dica": "Checklist pré-viagem: freios, pneus e luzes antes de sair do pátio.",
+   "titulo": "Usuários da BR-277/PR podem ‘entrar na área de escape’ em experiência virtual com caminhão sem freios",
+   "fonte": "Estradas",
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOV2hxSnhaRURjUURfTEFVdmVlcWhGLUlvQWRtWUk5V2VtSDJTV0M0ejZMeUVZclNRQ2N4S3BCZDBPd0VEdXJ1dGVJVkZBakllOF9Ua1JHVTRNR2U4TGtMWWt1a2RSbG5PTElRd25yc25nYUJjNlBZallleXpNNW8ySWxUZGExNUt1OHl4aFIyMkdRTGNGeEluc3cxeWY1SGdjdm9JbDBvV2lXakFXNlc2NG5UQmRHRGJ5LTNXVGdVMUl0UQ?oc=5"
   },
   {
    "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
-   "titulo": "PRF recupera carga de cosmético e perfumaria roubada avaliada em cerca de R$ 1 milhão em Juiz de Fora (MG)",
-   "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxNekJOaVJLdXgyRmNWRTZ4UWVOUHpmVExWQXg2REVzMGxmM3dQNWZMelVTS1hkNEtQSFZ4TXRHU01vVUZTdHZoRW5OUm9HWFJVaHBuN2p2b29PMkJfdjBsQjFDUHZoenhOeEpGSTNJTVFuZ0hZdGRNaGhKNnV4QmJoNUdzaEhQeXpYOFVva1ZGRjllX09IRWZVcmtSQTJValUxbFBkLUJULUlnRldDQm5IbzlFTXVtcTd6QlVFX3d1dGtXU0pseXpBeXJna2ZBTkFwMm9aSUI0Y0tlTkF5Y3hKQUd2NzNiS19ySjRYTk90MWowWi16WjFiYzhlVkJnS1R4QVZmM1BsQndLUQ?oc=5"
+   "titulo": "EROC Nordeste mobiliza Observadores Certificados e representantes de instituições pela segurança viária",
+   "fonte": "Observatório Nacional de Segurança Viária",
+   "url": "https://www.onsv.org.br/comunicacao/materias/eroc-nordeste-mobiliza-observadores-certificados-e-representantes-de-instituicoes-pela-seguranca-viaria"
+  },
+  {
+   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
+   "titulo": "Encontro Paraense reúne profissionais de Engenharia de Segurança do Trabalho",
+   "fonte": "Revista Proteção",
+   "url": "https://protecao.com.br/noticias/eventos/encontro-paraense-reune-profissionais-de-engenharia-de-seguranca-do-trabalho/"
   }
  ],
  "fontes": [
@@ -46,16 +46,19 @@
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE9tN3Jqa0VGU2pYSzdqbHM2c0xqWnlkZl84LUNxbUdDeVNnVUk0RjhtRXFsYnk5a01JX2lQZHdCemUyN2J5eVBjUjF2dm00T1UzWm9mQUtkM3diZ3VTdy1Nb3p3NHNjVTZMU1RSOGlPYw?oc=5",
   "https://www.onsv.org.br/comunicacao/materias/observadores-certificados-levam-conhecimento-sobre-seguranca-viaria-a-empresas-e-instituicoes-por-meio-de-palestras-do-onsv",
   "https://protecao.com.br/noticias/geral/estudo-identifica-riscos-psicossociais-no-ambiente-de-trabalho/",
-  "https://news.google.com/rss/articles/CBMiigJBVV95cUxNekJOaVJLdXgyRmNWRTZ4UWVOUHpmVExWQXg2REVzMGxmM3dQNWZMelVTS1hkNEtQSFZ4TXRHU01vVUZTdHZoRW5OUm9HWFJVaHBuN2p2b29PMkJfdjBsQjFDUHZoenhOeEpGSTNJTVFuZ0hZdGRNaGhKNnV4QmJoNUdzaEhQeXpYOFVva1ZGRjllX09IRWZVcmtSQTJValUxbFBkLUJULUlnRldDQm5IbzlFTXVtcTd6QlVFX3d1dGtXU0pseXpBeXJna2ZBTkFwMm9aSUI0Y0tlTkF5Y3hKQUd2NzNiS19ySjRYTk90MWowWi16WjFiYzhlVkJnS1R4QVZmM1BsQndLUQ?oc=5"
+  "https://news.google.com/rss/articles/CBMiigJBVV95cUxNekJOaVJLdXgyRmNWRTZ4UWVOUHpmVExWQXg2REVzMGxmM3dQNWZMelVTS1hkNEtQSFZ4TXRHU01vVUZTdHZoRW5OUm9HWFJVaHBuN2p2b29PMkJfdjBsQjFDUHZoenhOeEpGSTNJTVFuZ0hZdGRNaGhKNnV4QmJoNUdzaEhQeXpYOFVva1ZGRjllX09IRWZVcmtSQTJValUxbFBkLUJULUlnRldDQm5IbzlFTXVtcTd6QlVFX3d1dGtXU0pseXpBeXJna2ZBTkFwMm9aSUI0Y0tlTkF5Y3hKQUd2NzNiS19ySjRYTk90MWowWi16WjFiYzhlVkJnS1R4QVZmM1BsQndLUQ?oc=5",
+  "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOV2hxSnhaRURjUURfTEFVdmVlcWhGLUlvQWRtWUk5V2VtSDJTV0M0ejZMeUVZclNRQ2N4S3BCZDBPd0VEdXJ1dGVJVkZBakllOF9Ua1JHVTRNR2U4TGtMWWt1a2RSbG5PTElRd25yc25nYUJjNlBZallleXpNNW8ySWxUZGExNUt1OHl4aFIyMkdRTGNGeEluc3cxeWY1SGdjdm9JbDBvV2lXakFXNlc2NG5UQmRHRGJ5LTNXVGdVMUl0UQ?oc=5",
+  "https://www.onsv.org.br/comunicacao/materias/eroc-nordeste-mobiliza-observadores-certificados-e-representantes-de-instituicoes-pela-seguranca-viaria",
+  "https://protecao.com.br/noticias/eventos/encontro-paraense-reune-profissionais-de-engenharia-de-seguranca-do-trabalho/"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
   "Revista Proteção: 10",
   "ANAMT: erro fetch failed",
   "PRF: 25",
-  "Fundacentro: 16",
+  "Fundacentro: 15",
   "Ministério do Trabalho: 25",
   "Notícias: 5"
  ],
- "atualizado": "2026-11-14T10:23:08.656Z"
+ "atualizado": "2026-11-15T10:24:16.078Z"
 }
