@@ -446,6 +446,12 @@ main h2 small{color:var(--ink2);font-weight:500;letter-spacing:.02em;text-transf
 .ipb li{display:block!important;position:relative;padding-left:34px;line-height:1.9}.ipb li i{position:absolute;left:0;top:2px}.ipb li span.k{display:inline!important;padding:2px 7px;white-space:nowrap}
 
 header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-highlight-color:transparent}header .logo:active,header .ht:active{opacity:.7}
+.bq{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:16px;background:var(--card);color:var(--ink)}
+.bqr{display:grid;gap:8px;margin-top:10px}.bqi{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;font:inherit}
+.bqi small{display:block;color:var(--ink2);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}.bqi b{display:block;font-size:14.5px}.bqi span{display:block;color:var(--ink2);font-size:12.5px;margin-top:3px;line-height:1.35}
+.bqi mark{background:#ffd54a;color:#111;border-radius:3px;padding:0 1px}.bqchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.bqchips button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer}
+.achado{outline:3px solid #ffd54a;outline-offset:4px;border-radius:14px;transition:outline-color 1.2s}
+@media (max-width:480px){header .hrow{gap:7px}header .hbtn{width:34px;height:34px}header .ht b{font-size:16px}header .hrow:has(#bBack[style*="inline-block"]) .logo{display:none}}
 </style>
 </head>
 <body>
@@ -457,7 +463,7 @@ header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-h
     <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
     <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
-    <button class="inst" id="bInst" title="Instalar no computador">⬇ Instalar app</button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
+    <button class="inst" id="bInst" title="Instalar no computador">⬇ Instalar app</button><button class="hbtn" id="bBusca" aria-label="Buscar no app" title="Buscar no app"><svg viewBox="0 0 24 24"><path d="M9 21l1.2-11h3.6L15 21z"/><path d="M8.5 21h7"/><path d="M10 7h4l-.4 3h-3.2z"/><path d="M12 4.5V7"/><path d="M6.5 6.5L3 5M17.5 6.5L21 5"/></svg></button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
   </div>
   <div class="upd"><span class="dot"></span><span id="updT">Carregando…</span>
     <span class="datebar"><select id="dSel" aria-label="Escolher dia"></select></span></div>
@@ -1480,6 +1486,42 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
 (async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
+
+/* ===== BUSCA NO APP (farolzinho no topo) ===== */
+const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const ABA_NOME={hoje:"Hoje",mes:"Mês",reg:"Regionais",proj:"Projeção",orc:"Orçamento"};
+let BUSCA_IX=null,BUSCA_DE=null;
+function buscaIndice(){const chave=D?JSON.stringify(D.d1)+(D.meta&&D.meta.atualizado||""):"";if(BUSCA_IX&&BUSCA_DE===chave)return BUSCA_IX;const ix=[];
+ if(D){Object.keys(V).forEach(t=>{let h="";try{h=V[t]()+xtraHtml(t);}catch(e){return;}const box=document.createElement("div");box.innerHTML=h;
+  box.querySelectorAll("script,style,svg").forEach(x=>x.remove());box.querySelectorAll("*").forEach(x=>x.append(" "));const hs=[...box.querySelectorAll("h2")];
+  hs.forEach(h2=>{const tit=(h2.childNodes[0]&&h2.childNodes[0].textContent||h2.textContent).trim();if(!tit)return;let txt="",n=h2.nextElementSibling;while(n&&n.tagName!=="H2"){txt+=" "+n.textContent;n=n.nextElementSibling;}
+   ix.push({tipo:"sec",aba:t,tit,txt:txt.replace(/\s+/g," ").trim()});});});
+  (D.reg||[]).forEach(r=>ix.push({tipo:"reg",aba:"reg",tit:titReg(r[0]),nome:r[0],txt:"regional operação "+r[0]}));
+  if(D.dds)ix.push({tipo:"msg",tit:"Mensagens do dia",txt:"dds segurança "+D.dds.titulo+" "+D.dds.texto+" "+(D.editorial?"editorial mensagem "+D.editorial.texto:"")+" "+(D.frase?"frase para o dia "+D.frase.texto+" "+D.frase.autor:"")});}
+ ix.push({tipo:"rev",tit:"Revista do dia",txt:"morning operational news pdf revista completa baixar enviar whatsapp"});
+ ix.forEach(x=>{x.n=semAc(x.tit+" "+x.txt);x.nt=semAc(x.tit);});BUSCA_IX=ix;BUSCA_DE=chave;return ix;}
+function buscaTrecho(txt,ws){const n=semAc(txt);let i=-1;for(const w of ws){i=n.indexOf(w);if(i>=0)break;}if(i<0)return esc0(txt.slice(0,110))+(txt.length>110?"…":"");
+ const a=Math.max(0,i-45),b=Math.min(txt.length,i+75);let t=esc0(txt.slice(a,b));ws.forEach(w=>{if(w.length<2)return;t=t.replace(new RegExp("("+[...w].map(c=>c.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("[\\u0300-\\u036f]?")+")","gi"),m=>"<mark>"+m+"</mark>");});return (a?"…":"")+t+(b<txt.length?"…":"");}
+const esc0=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function buscar(q){const ws=semAc(q).split(/\s+/).filter(Boolean);if(!ws.length)return [];
+ return buscaIndice().map(x=>{if(!ws.every(w=>x.n.includes(w)))return null;let sc=0;ws.forEach(w=>{if(x.nt.includes(w))sc+=5;if(x.nt.startsWith(w))sc+=3;});if(x.tipo==="reg")sc+=2;return Object.assign({sc},x);}).filter(Boolean).sort((a,b)=>b.sc-a.sc).slice(0,25);}
+function buscaIr(x){document.querySelectorAll(".sheet").forEach(s=>s.remove());
+ if(x.tipo==="msg"){msgSheet();return;}if(x.tipo==="rev"){FarolPacote.gerarRevista();return;}if(x.tipo==="reg"){if(cur!=="reg")show("reg");regSheet(x.nome);return;}
+ if(cur!==x.aba)show(x.aba);setTimeout(()=>{const h=[...document.querySelectorAll("#main h2")].find(h=>((h.childNodes[0]&&h.childNodes[0].textContent)||"").trim()===x.tit);if(!h)return;const alvo=h.closest(".blk")||h;
+  alvo.scrollIntoView({behavior:"smooth",block:"start"});alvo.classList.add("achado");setTimeout(()=>alvo.classList.remove("achado"),2200);},120);}
+function abrirBusca(){openSheet(`<div class="sh"><b>🔎 Buscar no Farol</b><button id="xS">×</button></div>
+ <input id="bqIn" class="bq" type="search" placeholder="Seção, regional, indicador ou palavra…" autocomplete="off" autocapitalize="off" spellcheck="false">
+ <div class="bqchips" id="bqCh">${["Farol do dia","Onde agir","Projeção","Ritmo","Margem","Super meta","DDS","Nordeste","Orçamento","Revista"].map(c=>`<button type="button">${c}</button>`).join("")}</div><div class="bqr" id="bqR"></div>`);
+ const inp=$("#bqIn"),out=$("#bqR");let res=[];
+ const pinta=()=>{const q=inp.value.trim();$("#bqCh").style.display=q?"none":"flex";if(!q){out.innerHTML=D?"":`<p class="note">Carregue uma edição para buscar nos indicadores.</p>`;return;}
+  res=buscar(q);const ws=semAc(q).split(/\s+/).filter(Boolean);
+  out.innerHTML=res.length?res.map((x,i)=>`<button type="button" class="bqi" data-i="${i}"><small>${x.tipo==="reg"?"Regional":x.tipo==="msg"?"Mensagens":x.tipo==="rev"?"Revista":ABA_NOME[x.aba]}</small><b>${esc0(x.tit)}</b><span>${buscaTrecho(x.tipo==="sec"?x.txt:x.txt.replace(/^regional operação /,""),ws)}</span></button>`).join(""):`<p class="note">Nada encontrado para “${esc0(q)}”.</p>`;};
+ inp.addEventListener("input",pinta);inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&res[0]){e.preventDefault();buscaIr(res[0]);}});
+ out.addEventListener("click",e=>{const b=e.target.closest(".bqi");if(b)buscaIr(res[+b.dataset.i]);});
+ $("#bqCh").addEventListener("click",e=>{const b=e.target.closest("button");if(b){inp.value=b.textContent;pinta();}});
+ setTimeout(()=>inp.focus(),60);pinta();}
+$("#bBusca").onclick=abrirBusca;
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();abrirBusca();}});
 </script>
 <script src="revista.js"></script>
 <script src="pacote.js"></script>

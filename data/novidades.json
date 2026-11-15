@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.15-a",
+   "data": "15/11/2026",
+   "itens": [
+    "Busca no app: toque no farolzinho no topo e encontre seções, regionais, indicadores e as mensagens do dia (no computador, Ctrl+K)",
+    "Farol do dia mostra só as operações com resultado no D-1; as demais seguem no acumulado do mês",
+    "Botão Ver/Ocultar na senha da equipe (Entrada do administrador)"
+   ]
+  },
+  {
    "v": "2026.11.14-a",
    "data": "14/11/2026",
    "itens": [
