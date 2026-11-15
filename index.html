@@ -555,7 +555,8 @@ const C={g:"#1e8e4e",y:"#d08a0e",r:"#c62828"};
 const regByName=n=>D.reg.find(r=>r[0]===n);
 /* regionais que aparecem sempre, mesmo sem dado na edição */
 const REG_FIXAS=["NORDESTE 1","NORDESTE 2"];
-const semFarol=()=>REG_FIXAS.filter(n=>!D.farol.some(f=>f[0]===n));
+/* farol do dia: operação sem resultado no D-1 (fora do farol da revista) não aparece; continua no acumulado */
+const semFarol=()=>[];
 const semFech=()=>REG_FIXAS.filter(n=>!regByName(n));
 const titReg=n=>n.toLowerCase().replace(/(^|[\s\/-])(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\bLosx\b/,"LOSX");
 function resumoHtml(){const f=D.farol,g=f.filter(x=>x[1]>=100),y=f.filter(x=>x[1]>=90&&x[1]<100),r=f.filter(x=>x[1]<90);
