@@ -1,6 +1,14 @@
 {
  "alertas": [
   {
+   "id": "ptax-16/11/2026",
+   "nivel": "importante",
+   "titulo": "Dólar sobe 1,43%",
+   "texto": "PTAX de 16/11/2026: R$ 5,7324 (Banco Central). Impacta diesel, peças e contratos atrelados ao câmbio.",
+   "data": "16/11/2026",
+   "em": "2026-11-16T16:56:48.698Z"
+  },
+  {
    "id": "ipca-10/2026",
    "nivel": "importante",
    "titulo": "IPCA de outubro: 0,14%",
@@ -17,5 +25,5 @@
    "em": "2026-11-12T19:00:00Z"
   }
  ],
- "atualizado": "2026-11-16T11:30:28.558Z"
+ "atualizado": "2026-11-16T16:56:50.104Z"
 }
