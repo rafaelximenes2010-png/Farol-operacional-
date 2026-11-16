@@ -1411,9 +1411,18 @@ function adminSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Faro
  <li>No Safari, entre em github.com › foto › <b>Settings</b> › <b>Developer settings</b> › <b>Personal access tokens</b> › <b>Fine-grained tokens</b> › <b>Generate new token</b>.</li>
  <li>Nome: Farol · Expiração: 1 ano · <b>Only select repositories</b> › Farol-operacional-.</li>
  <li>Permissions › Repository › <b>Contents: Read and write</b> › Generate token.</li><li>Copie o código (github_pat_…) e cole acima.</li></ol></details></div>`);
- $("#aSave").onclick=async()=>{const v={repo:"rafaelximenes2010-png/Farol-operacional-",pasta:"",branch:"main",token:$("#aTok").value.trim(),senha:$("#aPw").value};LS.set("farolGh",v);LS.set("farolAutoPub",$("#aAuto").checked?1:0);
-  $("#aMsg").textContent="Testando…";try{const r=await fetch(`https://api.github.com/repos/${v.repo}`,{headers:{Authorization:"Bearer "+v.token}});const j=await r.json();
-   $("#aMsg").innerHTML=r.ok&&j.permissions&&j.permissions.push?"✅ Token válido. Publicação automática pronta.":"❌ Token sem permissão de escrita ("+(j.message||r.status)+").";}catch(e){$("#aMsg").textContent="❌ "+e.message;}};}
+ $("#aSave").onclick=async()=>{const ant=LS.get("farolGh",{})||{};const tok=$("#aTok").value.replace(/\s+/g,"");
+  const v={repo:"rafaelximenes2010-png/Farol-operacional-",pasta:"",branch:"main",token:tok||ant.token||"",senha:$("#aPw").value};
+  LS.set("farolAutoPub",$("#aAuto").checked?1:0);if(v.senha)LS.set("farolSenha",v.senha);
+  if(!v.token){$("#aMsg").innerHTML="⚠️ Falta colar o token. Crie em github.com (passos abaixo), copie o código que começa com <b>github_pat_</b> e cole no campo acima.";const d=document.querySelector("#aMsg+details,details");if(d)d.open=true;return;}
+  if(!/^(github_pat_|ghp_)/.test(v.token)){$("#aMsg").innerHTML="⚠️ Isso não parece um token do GitHub. Ele começa com <b>github_pat_</b>.";return;}
+  LS.set("farolGh",v);$("#aMsg").textContent="Testando…";
+  try{const r=await fetch(`https://api.github.com/repos/${v.repo}`,{headers:{Authorization:"Bearer "+v.token,Accept:"application/vnd.github+json"}});const j=await r.json().catch(()=>({}));
+   if(r.status===401){$("#aMsg").innerHTML="❌ O GitHub não reconheceu o token (inválido, expirado ou copiado pela metade). Gere um novo e cole de novo.";return;}
+   if(r.status===404||r.status===403){$("#aMsg").innerHTML="❌ O token não dá acesso ao repositório <b>Farol-operacional-</b>. Em <i>Repository access</i>, escolha <b>Only select repositories</b> e marque ele.";return;}
+   if(!r.ok){$("#aMsg").textContent="❌ GitHub respondeu "+r.status+(j.message?" ("+j.message+")":"")+". Tente de novo em instantes.";return;}
+   if(j.permissions&&j.permissions.push===false){$("#aMsg").innerHTML="❌ Token aceito, mas só de leitura. Em <i>Permissions › Contents</i>, escolha <b>Read and write</b> e gere de novo.";return;}
+   $("#aMsg").innerHTML="✅ Token válido. A partir de agora, cada revista que você carregar é publicada para toda a equipe.";}catch(e){$("#aMsg").textContent="❌ Sem conexão com o GitHub agora: "+e.message;}};}
 /* ===== ATUALIZAÇÃO AUTOMÁTICA NOS APARELHOS ===== */
 async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=await fetch("data/ultimo.enc?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const txt=await r.text();
  const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
