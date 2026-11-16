@@ -476,7 +476,7 @@ header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-h
   <button data-t="mes"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 16v-5M11 16V7M16 16v-8M21 16V4"/></svg>Mês</button>
   <button data-t="reg"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Regionais</button>
   <button data-t="proj"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Projeção</button>
-  <button data-t="orc"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h3M8 17h6"/></svg>Orçamento</button>
+  <button data-t="orc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>Meta</button>
   <div class="mkt" id="mktSide"></div>
   <div class="side-foot"><img src="icons/logo-los.png" alt="Grupo LOS">Indicadores operacionais diários.<br>Carro parado é prejuízo.</div>
 </nav>
@@ -1498,7 +1498,7 @@ if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){docum
 
 /* ===== BUSCA NO APP (farolzinho no topo) ===== */
 const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
-const ABA_NOME={hoje:"Hoje",mes:"Mês",reg:"Regionais",proj:"Projeção",orc:"Orçamento"};
+const ABA_NOME={hoje:"Hoje",mes:"Mês",reg:"Regionais",proj:"Projeção",orc:"Meta"};
 let BUSCA_IX=null,BUSCA_DE=null;
 function buscaIndice(){const chave=D?JSON.stringify(D.d1)+(D.meta&&D.meta.atualizado||""):"";if(BUSCA_IX&&BUSCA_DE===chave)return BUSCA_IX;const ix=[];
  if(D){Object.keys(V).forEach(t=>{let h="";try{h=V[t]()+xtraHtml(t);}catch(e){return;}const box=document.createElement("div");box.innerHTML=h;
@@ -1520,7 +1520,7 @@ function buscaIr(x){document.querySelectorAll(".sheet").forEach(s=>s.remove());
   alvo.scrollIntoView({behavior:"smooth",block:"start"});alvo.classList.add("achado");setTimeout(()=>alvo.classList.remove("achado"),2200);},120);}
 function abrirBusca(){openSheet(`<div class="sh"><b>🔎 Buscar no Farol</b><button id="xS">×</button></div>
  <input id="bqIn" class="bq" type="search" placeholder="Seção, regional, indicador ou palavra…" autocomplete="off" autocapitalize="off" spellcheck="false">
- <div class="bqchips" id="bqCh">${["Farol do dia","Onde agir","Projeção","Ritmo","Margem","Super meta","DDS","Nordeste","Orçamento","Revista"].map(c=>`<button type="button">${c}</button>`).join("")}</div><div class="bqr" id="bqR"></div>`);
+ <div class="bqchips" id="bqCh">${["Farol do dia","Onde agir","Projeção","Ritmo","Margem","Super meta","DDS","Nordeste","Meta","Revista"].map(c=>`<button type="button">${c}</button>`).join("")}</div><div class="bqr" id="bqR"></div>`);
  const inp=$("#bqIn"),out=$("#bqR");let res=[];
  const pinta=()=>{const q=inp.value.trim();$("#bqCh").style.display=q?"none":"flex";if(!q){out.innerHTML=D?"":`<p class="note">Carregue uma edição para buscar nos indicadores.</p>`;return;}
   res=buscar(q);const ws=semAc(q).split(/\s+/).filter(Boolean);
