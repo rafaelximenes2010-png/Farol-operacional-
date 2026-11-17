@@ -56,7 +56,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
     // ---- textos: DDS, editorial, frase do dia
     const ddsM = all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const edM = all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
-    const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”\n]+)”/);
+    const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”]{1,80}?)\s*”/);
     const limpa = s => s.replace(/\*\*/g, "").replace(/-\n/g, "").replace(/\s*\n\s*/g, " ").replace(/^E\s+stamos/, "Estamos").replace(/^(\w)\s+(\w)/, "$1$2").trim();
     const D = {
       meta: { modo: "pdf", fonte: "PDF da revista (Power BI importado)", atualizado: dataD1 },
@@ -69,7 +69,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       metaAno,
       dds: ddsM ? { titulo: ddsM[1].trim().replace(/^(.)(.*)$/, (a, b, c) => b + c.toLowerCase()), texto: limpa(ddsM[2]), autor: ddsM[3].trim() } : null,
       editorial: edM ? { texto: limpa(edM[1]), autor: edM[2].trim() } : null,
-      frase: frM ? { texto: limpa(frM[1]).replace(/\.$/, "."), autor: frM[2].trim() } : null,
+      frase: frM ? { texto: limpa(frM[1]).replace(/\.$/, "."), autor: frM[2].replace(/\s+/g, " ").trim() } : null,
       avisos: []
     };
     if (!farol.length) D.avisos.push("Farol por regional não encontrado no PDF.");
@@ -89,7 +89,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
   const SEM = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"], AB = ["dom","seg","ter","qua","qui","sex","sáb"];
   const FER = ["01-01","04-03","04-21","05-01","09-07","10-12","11-02","11-15","11-20","12-25"];
   const util = d => { const w = d.getUTCDay(), md = d.toISOString().slice(5, 10); return w > 0 && w < 6 && !FER.includes(md); };
-  const tipo = txt => /Fechamento por regional/i.test(txt) ? "reg" : /Faturamento do dia/i.test(txt) ? "dia" : null;
+  const tipo = txt => /MORNING\s*OPERATIONAL\s*NEWS/i.test(txt) ? null : /Fechamento por regional/i.test(txt) ? "reg" : /Faturamento do dia/i.test(txt) ? "dia" : null;
   function parseBI(dia, reg, prev) {
     const av = [];
     // ---------- arquivo 1: performance diária
