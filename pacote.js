@@ -63,9 +63,9 @@
     return new Promise(ok => c.toBlob(b => ok(b), "image/png"));
   }
 
-  /* ---------- revista impressa (PDF A4, 2 páginas) ---------- */
-  let LOGO_DATA = "icons/logo-los.png";
-  async function logoData() { try { const b = await (await fetch("icons/logo-los.png")).blob(); LOGO_DATA = await new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); }); } catch (e) {} }
+  /* ---------- revista do dia (PDF A4, 2 páginas · padrão simplificado de 17/11/2026) ---------- */
+  let LOGO_DATA = "icons/marca-los.png";
+  async function logoData() { try { const b = await (await fetch("icons/marca-los.png")).blob(); LOGO_DATA = await new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); }); } catch (e) {} }
   function revistaHTML() { window.__LOGO = LOGO_DATA; return window.FarolRevista.html(); }
   async function revistaPDF() {
     await libs(); await logoData();
@@ -82,16 +82,32 @@
       const pages = box.querySelectorAll(".rv");
       for (let i = 0; i < pages.length; i++) {
         const pr0 = document.getElementById("rvProg"); if (pr0) pr0.textContent = `página ${i + 1} de ${pages.length}`;
-        const cv = await window.html2canvas(pages[i], { scale: 2, useCORS: true, backgroundColor: "#ffffff", scrollX: 0, scrollY: -window.scrollY, windowWidth: 794, ignoreElements: el => el === capa });
+        const cv = await window.html2canvas(pages[i], { scale: 3, useCORS: true, backgroundColor: "#ffffff", scrollX: 0, scrollY: -window.scrollY, windowWidth: 794, ignoreElements: el => el === capa });
         // o logo é desenhado direto no canvas (o html2canvas nem sempre captura imagens)
         const li = pages[i].querySelector(".lg img"); if (li) { const pr = pages[i].getBoundingClientRect(), r = li.getBoundingClientRect(); const lim = await img(LOGO_DATA);
           const k = cv.width / pr.width, cx = cv.getContext("2d"); cx.setTransform(1, 0, 0, 1, 0, 0); cx.drawImage(lim, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); }
         if (i) pdf.addPage();
-        pdf.addImage(cv.toDataURL("image/jpeg", .9), "JPEG", 0, 0, 595.28, 841.89);
+        pdf.addImage(cv, "PNG", 0, 0, 595.28, 841.89, undefined, "FAST"); // PNG: sem perda (antes JPEG 90%)
         cv.width = cv.height = 0;
       }
       return pdf.output("blob");
     } finally { box.remove(); capa.remove(); }
+  }
+
+  /* PDF em alta definição: usa o motor de impressão do navegador (texto e gráficos vetoriais, igual ao "Salvar como PDF") */
+  async function revistaImprimir() {
+    if (!D) { toastMsg("Carregue a edição da equipe do dia primeiro."); return; }
+    await logoData();
+    const box = document.createElement("div"); box.id = "rvPrint"; box.innerHTML = revistaHTML();
+    const st = document.createElement("style"); st.id = "rvPrintCss";
+    st.textContent = "#rvPrint{display:none}@media print{@page{size:A4;margin:0}html,body{margin:0!important;padding:0!important;background:#fff!important;display:block!important;height:auto!important;max-width:none!important;overflow:visible!important}body>*:not(#rvPrint){display:none!important}#rvPrint{display:block!important}#rvPrint .rv{width:210mm!important;height:296.5mm!important;page-break-after:always;break-after:page}#rvPrint .rv:last-child{page-break-after:auto;break-after:auto}}";
+    document.head.appendChild(st); document.body.appendChild(box);
+    await Promise.all([...box.querySelectorAll("img")].map(i => i.complete && i.naturalWidth ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+    const t0 = document.title; document.title = nomeBase();
+    let feito = false; const limpar = () => { if (feito) return; feito = true; document.title = t0; box.remove(); st.remove(); window.removeEventListener("afterprint", limpar); };
+    window.addEventListener("afterprint", limpar);
+    try { window.print(); } catch (e) { toastMsg("Este aparelho não abriu a impressão. Use Baixar revista em PDF."); }
+    setTimeout(limpar, 60000);
   }
 
   /* ---------- tela do pacote ---------- */
@@ -104,18 +120,20 @@
 <div style="display:grid;gap:8px;margin-top:12px">
 <button class="btn" id="pkSend" style="background:#25d366" disabled>Enviar no WhatsApp (cartão + revista + texto)</button>
 <button class="btn sec2" id="pkCopy">Copiar texto</button>
-<button class="btn sec2" id="pkPdf" disabled>Baixar revista em PDF</button></div>
+<button class="btn sec2" id="pkPdf" disabled>Baixar revista em PDF</button>
+<button class="btn sec2" id="pkHd">🖨️ Salvar PDF em alta definição (impressão)</button></div>
 <p class="note">No celular, toque em Enviar e escolha o WhatsApp: vão o cartão com o logo do Grupo LOS, a revista em PDF anexa e o texto. No computador, os arquivos são baixados e o WhatsApp abre com o texto.</p>`);
     const t = texto(); document.getElementById("pkTxt").textContent = t;
     document.getElementById("pkCopy").onclick = async () => { try { await navigator.clipboard.writeText(t); toastMsg("Texto copiado."); } catch (e) { toastMsg("Não foi possível copiar."); } };
     let png, pdf;
     try { png = await cartao(); document.getElementById("pkPrev").innerHTML = `<img src="${URL.createObjectURL(png)}" style="width:100%;max-width:320px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.2)">`; }
     catch (e) { document.getElementById("pkPrev").textContent = "Não consegui gerar o cartão: " + e.message; }
-    try { pdf = (typeof revistaOriginal === "function" && await revistaOriginal()) || await revistaPDF(); document.getElementById("pkPdf").disabled = false; }
+    try { pdf = await revistaPDF(); document.getElementById("pkPdf").disabled = false; }
     catch (e) { toastMsg("Não consegui gerar a revista: " + e.message); }
     document.getElementById("pkSend").disabled = false; try { logEv("pacote"); } catch (e) {}
     const baixar = (blob, nome) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); a.remove(); };
     document.getElementById("pkPdf").onclick = () => pdf && baixar(pdf, nomeBase() + ".pdf");
+    document.getElementById("pkHd").onclick = () => { document.querySelector(".sheet")?.remove(); revistaImprimir(); };
     document.getElementById("pkSend").onclick = async () => { try { await navigator.clipboard.writeText(t); } catch (e) {}
       const files = []; if (png) files.push(new File([png], "Farol_CT_LOS_" + isoOf(d1.data) + ".png", { type: "image/png" })); if (pdf) files.push(new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }));
       try { if (navigator.canShare && navigator.canShare({ files })) { await navigator.share({ files, text: t, title: "Morning Operational News · " + d1.data }); return; } } catch (e) { if (e.name === "AbortError") return; }
@@ -125,10 +143,9 @@
   async function gerarRevista() {
     if (!D) { toastMsg("Carregue a edição da equipe do dia primeiro."); return; }
     toastMsg("Preparando a revista…");
-    try { const orig = typeof revistaOriginal === "function" ? await revistaOriginal() : null;
-      // sem a revista original do dia (edição feita só com os PDFs do Power BI): gera a revista pelo app
-      const pdf = orig || await revistaPDF();
+    try { // padrão de 17/11/2026: a revista é sempre gerada pelo app (modelo simplificado de 2 páginas)
+      const pdf = await revistaPDF();
       prontoParaEnviar("Revista do dia", new File([pdf], nomeBase() + ".pdf", { type: "application/pdf" }), texto(), false);
     } catch (e) { toastMsg("Não consegui preparar a revista: " + e.message); } }
-  window.FarolPacote = { abrir, texto, cartao, revistaPDF, gerarRevista };
+  window.FarolPacote = { abrir, texto, cartao, revistaPDF, revistaImprimir, gerarRevista };
 })();
