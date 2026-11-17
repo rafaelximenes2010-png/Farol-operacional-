@@ -1,0 +1,46 @@
+name: Versão do app
+# Garante que toda mudança de código chegue a 100% dos aparelhos:
+# se um push alterar o app sem subir o CACHE do sw.js, este robô sobe sozinho (farol-vN -> farol-vN+1).
+# Com o CACHE novo, cada app aberto detecta a versão em até 5 minutos e recarrega quando estiver livre.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "instalar.html"
+      - "manifest.webmanifest"
+      - "*.js"
+      - "icons/**"
+      - "vendor/**"
+permissions:
+  contents: write
+concurrency:
+  group: versao-app
+  cancel-in-progress: false
+jobs:
+  versao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Subir CACHE se o push não subiu
+        env:
+          ANTES: ${{ github.event.before }}
+          DEPOIS: ${{ github.sha }}
+        run: |
+          set -e
+          if git cat-file -e "$ANTES" 2>/dev/null && git diff --name-only "$ANTES" "$DEPOIS" | grep -qx "sw.js"; then
+            echo "O push já trouxe sw.js com versão nova. Nada a fazer."; exit 0
+          fi
+          git config user.name "Farol Operacional (automático)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for t in 1 2 3; do
+            git pull --rebase -q origin main
+            N=$(grep -o 'const CACHE="farol-v[0-9]*"' sw.js | grep -o '[0-9]*$')
+            sed -i "s/const CACHE=\"farol-v$N\"/const CACHE=\"farol-v$((N+1))\"/" sw.js
+            git add sw.js
+            git commit -q -m "Versão do app: farol-v$((N+1)) (automático)"
+            if git push -q origin HEAD:main; then echo "Publicado farol-v$((N+1))"; exit 0; fi
+            git reset -q --hard origin/main; sleep 5
+          done
+          exit 1

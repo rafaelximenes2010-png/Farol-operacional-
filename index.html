@@ -1189,7 +1189,18 @@ async function convidarSheet(){const inst=matchMedia("(display-mode: standalone)
 let deferredInstall=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("#bInst").style.display="inline-block";});
 async function doInstall(){if(!deferredInstall){const h=$("#instHow");if(h){LS.set("farolInstOculto",0);h.textContent=instAjuda();return;}location.href="instalar.html";return;}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("#bInst").style.display="none";}
-if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
+/* ===== ATUALIZAÇÃO AUTOMÁTICA DO APP (todos os aparelhos) =====
+   A cada 5 min com o app aberto, e sempre que ele volta para a tela, procura versão nova (sw.js).
+   Quando acha, a versão nova assume e o app recarrega sozinho assim que estiver livre (sem janela aberta nem digitação). */
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+ const swTinha=!!navigator.serviceWorker.controller;let swPend=false;
+ const swLivre=()=>!document.querySelector(".sheet")&&!document.getElementById("rvPrint")&&!(document.activeElement&&/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+ const swRecarregar=()=>{if(!swPend)return;if(document.hidden||swLivre()){swPend=false;try{sessionStorage.setItem("farolAtualizado","1");}catch(e){}location.reload();}};
+ navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{const chk=()=>{if(!document.hidden&&navigator.onLine!==false)reg.update().catch(()=>{});};
+  setInterval(chk,5*60*1000);document.addEventListener("visibilitychange",chk);window.addEventListener("online",chk);}).catch(()=>{});
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!swTinha)return;swPend=true;swRecarregar();});
+ document.addEventListener("visibilitychange",swRecarregar);setInterval(swRecarregar,15000);
+}
 
 /* ===== ABERTURA (farol: vermelho → amarelo → verde) ===== */
 function splash(){return new Promise(res=>{const sp=$("#splash");if(!sp)return res();const L=sp.querySelectorAll(".tl i");const on=i=>L.forEach((x,k)=>x.classList.toggle("on",k===i));
@@ -1494,7 +1505,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 
 /* ===== BUSCA NO APP (farolzinho no topo) ===== */
 const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
