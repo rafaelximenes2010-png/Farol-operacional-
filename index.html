@@ -141,7 +141,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .tl i.y.on{background:#ffb800;box-shadow:0 0 28px 8px rgba(255,184,0,.7),inset 0 -4px 8px rgba(0,0,0,.3)}
 .tl i.g.on{background:#2fd16b;box-shadow:0 0 34px 12px rgba(47,209,107,.75),inset 0 -4px 8px rgba(0,0,0,.3)}
 .sp-brand{margin-top:26px;text-align:center;opacity:0;transform:translateY(8px);transition:all .5s}.sp-brand.on{opacity:1;transform:none}
-.sp-brand .lg{background:#fff;border-radius:16px;padding:10px 18px;display:inline-block}.sp-brand .lg img{height:54px;display:block}
+.sp-brand .lg{background:#fff;border-radius:16px;padding:12px 20px;display:inline-block;box-shadow:0 10px 30px rgba(0,0,0,.35)}.sp-brand .lg img{height:52px;width:auto;display:block}
 .sp-brand b{display:block;color:#fff;font-size:22px;margin-top:14px;letter-spacing:.3px}.sp-brand small{color:rgba(255,255,255,.7);font-size:13px}
 .welcome{background:linear-gradient(135deg,#e9f6ee,#f3fbf6);border:1px solid #cbe9d6;color:#14532d;border-radius:14px;padding:12px 14px;margin-top:12px;font-size:14px;display:flex;gap:10px;align-items:center}
 @media (prefers-color-scheme:dark){.welcome{background:#123524;border-color:#1e5a3a;color:#c9f2d8}}
@@ -169,7 +169,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .t-dia{background:#e6efff;color:#1b3a7a}.t-reg{background:#e5f4ea;color:#1e8e4e}.t-mes{background:#efe9ff;color:#5b21b6}.t-rit{background:#fff4d6;color:#8a5a00}.t-pri{background:#fde8e8;color:#b0263a}
 @media (prefers-color-scheme:dark){.t-dia{background:#16264a;color:#a9c1ff}.t-reg{background:#123524;color:#8fe0b0}.t-mes{background:#2e2150;color:#c9b6ff}.t-rit{background:#3a2c0c;color:#f5d38a}.t-pri{background:#3d1717;color:#ff9b9b}}
 .lock{position:fixed;inset:0;z-index:90;background:radial-gradient(circle at 50% 38%,#1f3f86,#0b1a3f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;padding:24px;text-align:center}
-.lock .lg{background:#fff;border-radius:16px;padding:10px 18px}.lock .lg img{height:50px;display:block}.lock button{border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-width:240px}
+.lock .lg{background:#fff;border-radius:16px;padding:10px 18px}.lock .lg img{height:48px;width:auto;display:block}.lock button{border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;min-width:240px}
 #ccSeg{flex-wrap:wrap}#ccSeg button{flex:1 1 30%;font-size:12px}.sim .seg button{font-size:12px;padding:9px 4px}.simg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}.simg>div{min-width:0}.simg small{display:block;font-size:11px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .stp{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}.stp button{border:0;background:var(--bg);width:38px;height:44px;font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}
 .stp input{flex:1;min-width:0;width:100%;border:0;text-align:center;font:inherit;font-size:18px;font-weight:800;background:transparent;color:var(--ink);padding:0}.stp span{font-weight:700;color:var(--ink2);padding-right:4px}
@@ -456,12 +456,12 @@ header .logo,header .ht,.side-brand,nav.tabs .brand{cursor:pointer;-webkit-tap-h
 </head>
 <body>
 <div id="splash"><div class="tl"><i class="r"></i><i class="y"></i><i class="g"></i></div>
-<div class="sp-brand"><div class="lg"><img src="icons/logo-los.png" alt="Grupo LOS"></div><b>Farol Operacional</b><small>CT LOS · indicadores do dia</small></div></div>
+<div class="sp-brand"><div class="lg"><img src="icons/marca-los.png" alt="Grupo LOS · Soluções em Transporte e Logística"></div><b>Farol Operacional</b><small>CT LOS · indicadores do dia</small></div></div>
 <input type="file" id="pdfIn" accept="application/pdf" multiple hidden>
 <header>
   <div class="hrow">
     <button class="hbtn" id="bBack" aria-label="Voltar" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <div class="logo" style="background:none;padding:0;overflow:hidden"><img src="icons/icone-96.png" alt="Farol Grupo LOS" style="width:36px;height:36px;border-radius:10px;display:block"></div>
+    <div class="logo" style="background:#fff;padding:4px;overflow:hidden;width:36px;height:36px;border-radius:10px;box-sizing:border-box;flex:0 0 auto"><img src="icons/simbolo-los-t.png" alt="Grupo LOS" style="width:100%;height:100%;object-fit:contain;display:block"></div>
     <div class="ht"><b>Farol Operacional</b><small id="hSub">CT LOS · Grupo LOS</small></div>
     <button class="inst" id="bInst" title="Instalar no computador">⬇ Instalar app</button><button class="hbtn" id="bBusca" aria-label="Buscar no app" title="Buscar no app"><svg viewBox="0 0 24 24"><path d="M9 21l1.2-11h3.6L15 21z"/><path d="M8.5 21h7"/><path d="M10 7h4l-.4 3h-3.2z"/><path d="M12 4.5V7"/><path d="M6.5 6.5L3 5M17.5 6.5L21 5"/></svg></button><button class="hbtn" id="bTema" aria-label="Dia e noite"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button class="hbtn" id="bAl" aria-label="Alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i></i></button><button class="avatar" id="bCfg" aria-label="Perfil e menu"><span id="avIni">?</span><span class="on"></span></button>
   </div>
@@ -1389,7 +1389,7 @@ async function fidAtivar(){const u=perfil()||{nome:"Usuário",email:"usuario@far
  catch(e){toastMsg("Face ID não ativado ("+e.name+").");return false;}}
 async function fidVerificar(){try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:"public-key",id:ub64(LS.get("farolFaceId",""))}],userVerification:"required",timeout:60000}});return true;}catch(e){return false;}}
 function telaBloqueio(){return new Promise(res=>{const d=document.createElement("div");d.className="lock";const n=primeiroNome();
- d.innerHTML=`<div class="lg"><img src="icons/logo-los.png" alt="Grupo LOS"></div><b style="font-size:20px">Farol Operacional</b><div style="opacity:.8">${n?`Olá, ${n}. `:""}Desbloqueie para ver os indicadores.</div><button type="button" id="lkF" style="background:#fff;color:#0f2350">🔓 Desbloquear com Face ID</button><button type="button" id="lkS" style="background:rgba(255,255,255,.14);color:#fff">Usar a senha da equipe</button>`;
+ d.innerHTML=`<div class="lg"><img src="icons/marca-los.png" alt="Grupo LOS"></div><b style="font-size:20px">Farol Operacional</b><div style="opacity:.8">${n?`Olá, ${n}. `:""}Desbloqueie para ver os indicadores.</div><button type="button" id="lkF" style="background:#fff;color:#0f2350">🔓 Desbloquear com Face ID</button><button type="button" id="lkS" style="background:rgba(255,255,255,.14);color:#fff">Usar a senha da equipe</button>`;
  document.body.appendChild(d);$("#lkF").onclick=async()=>{if(await fidVerificar()){d.remove();res(true);}else toastMsg("Não reconheci. Tente de novo ou use a senha.");};
  $("#lkS").onclick=()=>{d.remove();LS.set("farolSenha","");res(false);};});}
 async function oferecerFaceId(){if(fid.on||LS.get("farolFaceIdNao",0)||!(await fidDisponivel()))return;

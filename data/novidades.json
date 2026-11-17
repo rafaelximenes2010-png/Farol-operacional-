@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.17-b",
+   "data": "17/11/2026",
+   "itens": [
+    "Marca Grupo LOS na abertura do app, na tela de desbloqueio e no topo de todas as telas"
+   ]
+  },
+  {
    "v": "2026.11.17-a",
    "data": "17/11/2026",
    "itens": [
