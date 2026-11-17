@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.17-a",
+   "data": "17/11/2026",
+   "itens": [
+    "Central de Automação › Ajustes: senha da equipe salva neste aparelho com botão Ver/Ocultar (só administrador)"
+   ]
+  },
+  {
    "v": "2026.11.15-a",
    "data": "15/11/2026",
    "itens": [
