@@ -6,7 +6,8 @@
    "itens": [
     "Atualização automática em todos os aparelhos: o app procura versão nova a cada 5 minutos e sempre que volta para a tela, e recarrega sozinho quando você não estiver no meio de uma ação",
     "Computador: símbolo e marca Grupo LOS também na barra lateral",
-    "Atualização de indicadores: a revista do dia carregada sozinha é reconhecida como revista (antes era confundida com o PDF D-1 Regionais) e a frase do dia é lida mesmo quando o autor quebra de linha"
+    "Atualização de indicadores: a revista do dia carregada sozinha é reconhecida como revista (antes era confundida com o PDF D-1 Regionais) e a frase do dia é lida mesmo quando o autor quebra de linha",
+    "Histórico completo em todos os aparelhos: o app baixa sozinho as edições publicadas dos últimos 40 dias que ainda não estavam no aparelho (antes cada aparelho só guardava os dias em que estava aberto)"
    ]
   },
   {

@@ -1438,7 +1438,17 @@ function adminSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Faro
 async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=await fetch("data/ultimo.enc?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const txt=await r.text();
  const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
   Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);D=Dx;compute();paintHead();show(cur);toastMsg("Edição atualizada: "+Dx.d1.data);}}catch(e){}}
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNovaEdicao();});setInterval(checarNovaEdicao,5*60*1000);
+/* histórico completo em todos os aparelhos: baixa do servidor toda edição publicada (últimos 40 dias) que ainda não está no aparelho.
+   Dia sem edição no servidor é reconsultado a cada 6 h. Edições têm ~5 KB. */
+let _sincHist=false;
+async function sincronizarHistorico(){if(_sincHist||!D)return;const senha=LS.get("farolSenha","");if(!senha)return;_sincHist=true;
+ try{const ed=edicoes(),fal=LS.get("farolFaltas",{}),agora=Date.now(),ult=Object.keys(ed).sort().pop()||isoOf(d1.data),fim=new Date(ult+"T12:00:00Z");let novos=0;
+  for(let i=0;i<=40;i++){const d=new Date(fim);d.setUTCDate(d.getUTCDate()-i);const k=d.toISOString().slice(0,10);if(ed[k])continue;if(fal[k]&&agora-fal[k]<6*3600e3)continue;
+   try{const r=await fetch("data/edicoes/"+k+".enc?t="+agora,{cache:"no-store"});if(!r.ok){fal[k]=agora;continue;}const X=await decifrar(await r.text(),senha);
+    if(X&&X.d1&&isoOf(X.d1.data)===k){X.meta=Object.assign(X.meta||{},{modo:"equipe"});ed[k]=X;novos++;delete fal[k];}}catch(e){}}
+  if(novos){const n={};Object.keys(ed).sort().slice(-62).forEach(k=>n[k]=ed[k]);LS.set("farolEdicoes",n);paintHead();}
+  LS.set("farolFaltas",fal);}finally{_sincHist=false;}}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checarNovaEdicao().then(sincronizarHistorico);});setInterval(()=>checarNovaEdicao().then(sincronizarHistorico),5*60*1000);
 
 /* ===== DIA E NOITE ===== */
 function aplicaTema(){const t=LS.get("farolTema","auto");const escuro=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);
@@ -1505,7 +1515,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();setTimeout(sincronizarHistorico,3000);try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 
 /* ===== BUSCA NO APP (farolzinho no topo) ===== */
 const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
