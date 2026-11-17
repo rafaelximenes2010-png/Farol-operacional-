@@ -17,6 +17,7 @@
   const lista = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " e " + a[a.length - 1];
   const SEMm = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
   const MES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const tituloDDS = t => { t = String(t || "").replace(/^[^A-Za-zÀ-ÿ0-9]+/, "").replace(/^dds\s*[:·-]\s*/i, "").trim().replace(/\.$/, ""); t = t.charAt(0).toUpperCase() + t.slice(1); return /[.!?]$/.test(t) ? t : t + "."; };
   const esc = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   const CSS = `<style>
@@ -142,7 +143,7 @@
    <div class="rs-fa${abaixo.length ? " vm" : ""}"><b>${abaixo.length ? "ABAIXO DA META PROPORCIONAL" : "META PROPORCIONAL"}</b>${txtAbaixo}</div>
   </div>
  </div>
- ${D.dds ? `<div class="rs-dds"><b>SEGURANÇA EM PRIMEIRO LUGAR · DDS DO DIA</b>${D.dds.titulo ? `<strong>${esc(String(D.dds.titulo).replace(/^\s*DDS:\s*/i, ""))}.</strong> ` : ""}${esc(D.dds.texto)}${D.dds.autor ? ` <i>— ${esc(D.dds.autor)}</i>` : ""}</div>` : ""}
+ ${D.dds ? `<div class="rs-dds"><b>SEGURANÇA EM PRIMEIRO LUGAR · DDS DO DIA</b>${D.dds.titulo ? `<strong>${esc(tituloDDS(D.dds.titulo))}</strong> ` : ""}${esc(D.dds.texto)}${D.dds.autor ? ` <i>— ${esc(D.dds.autor)}</i>` : ""}</div>` : ""}
  ${D.frase ? `<div class="rs-fz"><b>PARA O DIA</b>“${esc(String(D.frase.texto).replace(/^[“"]|[”"]$/g, ""))}”${D.frase.autor ? ` — ${esc(D.frase.autor)}` : ""}</div>` : ""}
 </div>${rodape(`Fontes: ${fonte}. Projeção conforme o Power BI, não é resultado realizado`, 1)}</div>`;
 
