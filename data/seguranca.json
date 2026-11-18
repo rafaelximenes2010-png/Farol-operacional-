@@ -1,5 +1,5 @@
 {
- "data": "2026-11-17",
+ "data": "2026-11-18",
  "horas": [
   7,
   11,
@@ -7,22 +7,10 @@
  ],
  "dicas": [
   {
-   "dica": "Respeite a velocidade da via. Com carga a granel, curva sempre devagar.",
-   "titulo": "Membro do Conselho Deliberativo do ONSV apresenta pesquisa sobre velocidade insegura em congresso nacional de…",
+   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
+   "titulo": "Na Fenatran, Observatório defende formação contínua para os motoristas do futuro",
    "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/materias/membro-do-conselho-deliberativo-do-observatorio-apresenta-pesquisa-sobre-velocidade-insegura-em-congresso-nacional-de-transportes"
-  },
-  {
-   "dica": "Hidrate-se ao longo do dia. Calor tira a atenção.",
-   "titulo": "MPT processa Atacadão por calor excessivo em lojas de Sergipe/PE",
-   "fonte": "Revista Proteção",
-   "url": "https://protecao.com.br/noticias/geral/mpt-processa-atacadao-por-calor-excessivo-em-lojas-de-sergipe-pe/"
-  },
-  {
-   "dica": "Sentiu sono, pare. Pausa respeitada é vida preservada.",
-   "titulo": "BR 116 - Motorista de van alega cansaço e entrega direção à pessoa não habilitada",
-   "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQTjNjR2EzcVZQY1lKS1hWQmhBcXBsazZObEIxdXoxek5kRnJZZzd0cFdMRzhGWHRWUndxcTJZbjRQalA0SF9aR3AybkVBT3lFRkdMV1lfY0NycHR4YlctVzNnb1dGVGVvNGh0REUwVng4YV9KRWptLURXVUpaclg2cC1HcVQ2NTlPUWUwU1FXbldrR3pERWZoZFpnODBmLVo2SzFrcURTMk1XanZfeDNHRUt3UUd4UHpHZDBxejk2Snh5N25lakZZVDZ3LUpUcXFJSGVmajh5TC1zOUdXbVdsNA?oc=5"
+   "url": "https://www.onsv.org.br/comunicacao/materias/na-fenatran-observatorio-defende-formacao-continua-para-os-motoristas-do-futuro"
   }
  ],
  "fontes": [
@@ -55,16 +43,17 @@
   "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPZVFweDFNMjJFZkpnWDl0a0FNT3h6cjYyb3c3dnQ1QVBHenhJNGRrRFQ1RmdmTWpHdU9IMDVoQjNwbkJqWHdUZjFuTExIekdubGNwSlFzVnFIcHdiN2NvY09vbC1SQTd2ejdxc3ZfclRJa3RYR09feWUweXpRTDRaam9XNk1rbEtjdDdWN2dEZ0l2SWRLNWxIWEpsdm9KeU5FQ3llLTdrRGxlYmFrYW5DSUJGTWRiN3hLMzdGRlJKUzRMUXI3Nk42X1BoU2xaN24xejJvcm5wWUw4WDdua3hvYTBjbktHeWNONldiM1g1Rnk?oc=5",
   "https://www.onsv.org.br/comunicacao/materias/membro-do-conselho-deliberativo-do-observatorio-apresenta-pesquisa-sobre-velocidade-insegura-em-congresso-nacional-de-transportes",
   "https://protecao.com.br/noticias/geral/mpt-processa-atacadao-por-calor-excessivo-em-lojas-de-sergipe-pe/",
-  "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQTjNjR2EzcVZQY1lKS1hWQmhBcXBsazZObEIxdXoxek5kRnJZZzd0cFdMRzhGWHRWUndxcTJZbjRQalA0SF9aR3AybkVBT3lFRkdMV1lfY0NycHR4YlctVzNnb1dGVGVvNGh0REUwVng4YV9KRWptLURXVUpaclg2cC1HcVQ2NTlPUWUwU1FXbldrR3pERWZoZFpnODBmLVo2SzFrcURTMk1XanZfeDNHRUt3UUd4UHpHZDBxejk2Snh5N25lakZZVDZ3LUpUcXFJSGVmajh5TC1zOUdXbVdsNA?oc=5"
+  "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQTjNjR2EzcVZQY1lKS1hWQmhBcXBsazZObEIxdXoxek5kRnJZZzd0cFdMRzhGWHRWUndxcTJZbjRQalA0SF9aR3AybkVBT3lFRkdMV1lfY0NycHR4YlctVzNnb1dGVGVvNGh0REUwVng4YV9KRWptLURXVUpaclg2cC1HcVQ2NTlPUWUwU1FXbldrR3pERWZoZFpnODBmLVo2SzFrcURTMk1XanZfeDNHRUt3UUd4UHpHZDBxejk2Snh5N25lakZZVDZ3LUpUcXFJSGVmajh5TC1zOUdXbVdsNA?oc=5",
+  "https://www.onsv.org.br/comunicacao/materias/na-fenatran-observatorio-defende-formacao-continua-para-os-motoristas-do-futuro"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
-  "Revista Proteção: 10",
-  "ANAMT: erro fetch failed",
-  "PRF: 25",
-  "Fundacentro: 12",
-  "Ministério do Trabalho: 25",
-  "Notícias: 5"
+  "Revista Proteção: erro 403",
+  "ANAMT: 10",
+  "PRF: erro 503",
+  "Fundacentro: erro 503",
+  "Ministério do Trabalho: erro 503",
+  "Notícias: erro 503"
  ],
- "atualizado": "2026-11-17T10:39:49.081Z"
+ "atualizado": "2026-11-18T10:39:13.836Z"
 }
