@@ -1,6 +1,14 @@
 {
  "versoes": [
   {
+   "v": "2026.11.18-a",
+   "data": "18/11/2026",
+   "itens": [
+    "Avisos para todos: o administrador publica um aviso (ex.: “Flash Atualizado!”) e cada aparelho mostra o banner e a notificação do aparelho, uma vez",
+    "Título do DDS lido da revista sem emoji nem prefixo"
+   ]
+  },
+  {
    "v": "2026.11.17-d",
    "data": "17/11/2026",
    "itens": [

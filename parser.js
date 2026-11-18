@@ -67,7 +67,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       proj3: p3 ? [["Power BI", num(p3[1])], ["Calendário de metas", num(p3[2])], ["Ritmo por dia útil", num(p3[3])]] : [["Power BI", proj / 1e6]],
       farol, reg, dias, orc: Array.from({ length: 12 }, (_, i) => orc[i] || [["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][i], null, null, null, null]),
       metaAno,
-      dds: ddsM ? { titulo: ddsM[1].trim().replace(/^(.)(.*)$/, (a, b, c) => b + c.toLowerCase()), texto: limpa(ddsM[2]), autor: ddsM[3].trim() } : null,
+      dds: ddsM ? { titulo: (t => { t = t.replace(/^[^A-Za-zÀ-ÿ0-9]+/, "").replace(/^dds\s*[:·-]\s*/i, "").trim().replace(/\.$/, ""); return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase(); })(ddsM[1].trim()), texto: limpa(ddsM[2]), autor: ddsM[3].trim() } : null,
       editorial: edM ? { texto: limpa(edM[1]), autor: edM[2].trim() } : null,
       frase: frM ? { texto: limpa(frM[1]).replace(/\.$/, "."), autor: frM[2].replace(/\s+/g, " ").trim() } : null,
       avisos: []
