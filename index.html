@@ -1442,7 +1442,7 @@ async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=awai
    Texto público (o repositório é público): nunca colocar números no aviso. */
 async function checarAviso(){try{const a=await (await fetch("data/aviso.json?t="+Date.now(),{cache:"no-store"})).json();
  if(!a||!a.id||!a.titulo)return;if(a.ate&&Date.now()>Date.parse(a.ate))return;const vis=LS.get("farolAvisosVistos",[]);if(vis.includes(a.id))return;
- LS.set("farolAvisosVistos",[a.id,...vis].slice(0,50));notifBanner(a.titulo,a.texto||"",{tag:"FAROL · AVISO",dur:15000});
+ LS.set("farolAvisosVistos",[a.id,...vis].slice(0,50));notifBanner(a.titulo,a.texto||"",{tag:"AVISO",dur:15000});
  if("Notification" in window&&Notification.permission==="granted"){const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto||"",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"aviso-"+a.id};
   reg?reg.showNotification(a.titulo,o):new Notification(a.titulo,o);}}catch(e){}}
 /* histórico completo em todos os aparelhos: baixa do servidor toda edição publicada (últimos 40 dias) que ainda não está no aparelho.
