@@ -1,5 +1,5 @@
 {
- "data": "2026-11-18",
+ "data": "2026-11-19",
  "horas": [
   7,
   11,
@@ -7,10 +7,22 @@
  ],
  "dicas": [
   {
+   "dica": "Silo e tanque: nunca entre sem liberação e sem vigia.",
+   "titulo": "Trabalhador que perdeu fertilidade e perna em acidente com silo será indenizado por dano existencial",
+   "fonte": "Revista Proteção",
+   "url": "https://protecao.com.br/noticias/geral/trabalhador-que-perdeu-fertilidade-e-perna-em-acidente-com-silo-sera-indenizado-por-dano-existencial/"
+  },
+  {
    "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "Na Fenatran, Observatório defende formação contínua para os motoristas do futuro",
-   "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/materias/na-fenatran-observatorio-defende-formacao-continua-para-os-motoristas-do-futuro"
+   "titulo": "PRF prende motorista após passageira denunciar agressões em Pau dos Ferros/RN",
+   "fonte": "PRF",
+   "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQNi1YYW1HdXM2QnZPaTdYdXp4N0kySzU3REdoUjBMNkFPU01pZ0JoTXdjYURBTE1tRTBDcklyVGs3OXpuWGxDOVhxZ1J0bjlPdFFRQ3hpVi1PRUNlLS1YRzlPaDJFVlc1czZrbnd5bnhfZFhTeGg1WXBGaFp3aGxPRGJ6dFpuZGlFZ1pHRkxKZjF0ZzJhemZJMW1iT2xOQV9oNXdFanpCYm9WSzBWR3FCTHBTSVFON0UyUTVZUzVkYUVIQXRNSTRWaVhtWWFRdldPUlc0dzZVbVhTUm1oQ2c2dVVYXzk0X0dzU0JOa0tLWG8?oc=5"
+  },
+  {
+   "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
+   "titulo": "Prefeitura leva projeto Condutor Consciente a motoristas",
+   "fonte": "Prefeitura de Manaus",
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNV0kxVG9WeW9VV2FZN0xGSk5YOGNWNjhCVjd3N0F3MVB5SVN1U0RWUEFjNjd3RVhYbWg4Z0c4X1F6VGJRVHJ0QTUyV1lSRGFhWUdscVdNQnZvd0dLdTBJeE9CMnN4eGFiQVJqbjBOeFhiWTRSdGRLTHV5NVpGRktZV3Fuc1lqQVd0LW84Y3JoYXdIc29ETXZPVTdsakJSWUhVaVE?oc=5"
   }
  ],
  "fontes": [
@@ -44,16 +56,19 @@
   "https://www.onsv.org.br/comunicacao/materias/membro-do-conselho-deliberativo-do-observatorio-apresenta-pesquisa-sobre-velocidade-insegura-em-congresso-nacional-de-transportes",
   "https://protecao.com.br/noticias/geral/mpt-processa-atacadao-por-calor-excessivo-em-lojas-de-sergipe-pe/",
   "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQTjNjR2EzcVZQY1lKS1hWQmhBcXBsazZObEIxdXoxek5kRnJZZzd0cFdMRzhGWHRWUndxcTJZbjRQalA0SF9aR3AybkVBT3lFRkdMV1lfY0NycHR4YlctVzNnb1dGVGVvNGh0REUwVng4YV9KRWptLURXVUpaclg2cC1HcVQ2NTlPUWUwU1FXbldrR3pERWZoZFpnODBmLVo2SzFrcURTMk1XanZfeDNHRUt3UUd4UHpHZDBxejk2Snh5N25lakZZVDZ3LUpUcXFJSGVmajh5TC1zOUdXbVdsNA?oc=5",
-  "https://www.onsv.org.br/comunicacao/materias/na-fenatran-observatorio-defende-formacao-continua-para-os-motoristas-do-futuro"
+  "https://www.onsv.org.br/comunicacao/materias/na-fenatran-observatorio-defende-formacao-continua-para-os-motoristas-do-futuro",
+  "https://protecao.com.br/noticias/geral/trabalhador-que-perdeu-fertilidade-e-perna-em-acidente-com-silo-sera-indenizado-por-dano-existencial/",
+  "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQNi1YYW1HdXM2QnZPaTdYdXp4N0kySzU3REdoUjBMNkFPU01pZ0JoTXdjYURBTE1tRTBDcklyVGs3OXpuWGxDOVhxZ1J0bjlPdFFRQ3hpVi1PRUNlLS1YRzlPaDJFVlc1czZrbnd5bnhfZFhTeGg1WXBGaFp3aGxPRGJ6dFpuZGlFZ1pHRkxKZjF0ZzJhemZJMW1iT2xOQV9oNXdFanpCYm9WSzBWR3FCTHBTSVFON0UyUTVZUzVkYUVIQXRNSTRWaVhtWWFRdldPUlc0dzZVbVhTUm1oQ2c2dVVYXzk0X0dzU0JOa0tLWG8?oc=5",
+  "https://news.google.com/rss/articles/CBMiogFBVV95cUxNV0kxVG9WeW9VV2FZN0xGSk5YOGNWNjhCVjd3N0F3MVB5SVN1U0RWUEFjNjd3RVhYbWg4Z0c4X1F6VGJRVHJ0QTUyV1lSRGFhWUdscVdNQnZvd0dLdTBJeE9CMnN4eGFiQVJqbjBOeFhiWTRSdGRLTHV5NVpGRktZV3Fuc1lqQVd0LW84Y3JoYXdIc29ETXZPVTdsakJSWUhVaVE?oc=5"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
-  "Revista Proteção: erro 403",
+  "Revista Proteção: 10",
   "ANAMT: 10",
-  "PRF: erro 503",
-  "Fundacentro: erro 503",
-  "Ministério do Trabalho: erro 503",
-  "Notícias: erro 503"
+  "PRF: 25",
+  "Fundacentro: 16",
+  "Ministério do Trabalho: 25",
+  "Notícias: 4"
  ],
- "atualizado": "2026-11-18T10:39:13.836Z"
+ "atualizado": "2026-11-19T10:34:54.522Z"
 }
