@@ -4,10 +4,10 @@
   {
    "id": "usd",
    "nome": "Dólar · PTAX venda",
-   "valor": "R$ 5,8102",
-   "var": "+0,43%",
+   "valor": "R$ 5,8889",
+   "var": "+1,35%",
    "dir": 1,
-   "ref": "18/11 · Banco Central",
+   "ref": "19/11 · Banco Central",
    "fonte": "Banco Central do Brasil (PTAX)",
    "nota": "Taxa oficial de câmbio calculada pelo Banco Central a partir das cotações do mercado à vista. O app busca a PTAX mais recente direto do Banco Central sempre que abre.",
    "link": "https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes",
@@ -232,5 +232,5 @@
    "of": false
   }
  ],
- "buscaAuto": "2026-11-19T11:07:51.143Z"
+ "buscaAuto": "2026-11-19T16:43:01.238Z"
 }
