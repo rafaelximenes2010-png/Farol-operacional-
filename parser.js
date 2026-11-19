@@ -54,8 +54,17 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
     const quad = (all.split("FECHAMENTO PROJETADO POR REGIONAL")[1] || "").split("LEITURAS")[0];
     quad.split("\n").forEach(l => { const t = l.trim().split(/\s{2,}/); const r = reg.find(x => x[0] === t[0]); if (r && t.length >= 8) r[7] = t[7]; });
     // ---- textos: DDS, editorial, frase do dia
-    const ddsM = all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
-    const edM = all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
+    // bloco de texto logo após um título: para na assinatura ("— nome"), na letra capitular do parágrafo seguinte
+    // ou no próximo título em caixa alta (layout da revista gerada pelo CT LOS Farol, sem assinatura)
+    const bloco = re => { const m = all.match(re); if (!m) return null; const L = all.slice(m.index + m[0].length).split("\n"), out = []; let autor = "";
+      for (const l of L) { const t = l.trim();
+        if (/^—\s*\S/.test(t)) { autor = t.replace(/^—\s*/, ""); break; }
+        if (out.length && (t === "" || /^\S{1,2}$/.test(t) && !/^\d/.test(t) || /^[A-ZÀ-Ú0-9][A-ZÀ-Ú0-9 ·:/-]{5,}$/.test(t) && t === t.toUpperCase() && !/[a-zà-ú]/.test(t) && out.length > 1 || /^([A-ZÀ-Ú] ){3,}/.test(t))) break;
+        if (out.length > 40) break; out.push(l); }
+      return out.length ? { linhas: out, autor } : null; };
+    const ddsB = bloco(/D D S D O D I A\s*(?:🦺)?\s*\n/), edB = bloco(/Mensagem\s*\n?do dia\s*\n/);
+    const ddsM = ddsB && ddsB.linhas.length > 1 ? [null, ddsB.linhas[0].trim(), ddsB.linhas.slice(1).join("\n"), ddsB.autor] : all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
+    const edM = edB ? [null, edB.linhas.join("\n"), edB.autor] : all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”]{1,80}?)\s*”/);
     const limpa = s => s.replace(/\*\*/g, "").replace(/-\n/g, "").replace(/\s*\n\s*/g, " ").replace(/^E\s+stamos/, "Estamos").replace(/^(\w)\s+(\w)/, "$1$2").trim();
     const D = {
@@ -67,8 +76,8 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       proj3: p3 ? [["Power BI", num(p3[1])], ["Calendário de metas", num(p3[2])], ["Ritmo por dia útil", num(p3[3])]] : [["Power BI", proj / 1e6]],
       farol, reg, dias, orc: Array.from({ length: 12 }, (_, i) => orc[i] || [["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][i], null, null, null, null]),
       metaAno,
-      dds: ddsM ? { titulo: (t => { t = t.replace(/^[^A-Za-zÀ-ÿ0-9]+/, "").replace(/^dds\s*[:·-]\s*/i, "").trim().replace(/\.$/, ""); return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase(); })(ddsM[1].trim()), texto: limpa(ddsM[2]), autor: ddsM[3].trim() } : null,
-      editorial: edM ? { texto: limpa(edM[1]), autor: edM[2].trim() } : null,
+      dds: ddsM ? { titulo: (t => { t = t.replace(/^[^A-Za-zÀ-ÿ0-9]+/, "").replace(/^dds\s*[:·-]\s*/i, "").trim().replace(/\.$/, ""); return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase(); })(ddsM[1].trim()), texto: limpa(ddsM[2]), autor: (ddsM[3] || "").trim() } : null,
+      editorial: edM ? { texto: limpa(edM[1]), autor: (edM[2] || "").trim() } : null,
       frase: frM ? { texto: limpa(frM[1]).replace(/\.$/, "."), autor: frM[2].replace(/\s+/g, " ").trim() } : null,
       avisos: []
     };

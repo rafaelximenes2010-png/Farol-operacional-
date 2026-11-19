@@ -581,7 +581,7 @@ function resumoHtml(){const f=D.farol,g=f.filter(x=>x[1]>=100),y=f.filter(x=>x[1
  +(ag.length?row("t-pri","Prioridade",ag.map(x=>`<a data-reg="${x[0]}">${tit(x[0])}</a>: ${pct(x[3])} no mês, devendo ${brl(-x[6])} até o D-1; precisa de ${brl((x[2]-x[1])/M.duRest)} por dia útil.`)):"");}
 const tit=n=>n;
 function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</b><button id="xS">×</button></div>
- <div class="card dds"><div><div class="k">DDS do dia · ${d1.data}</div><b class="t">🦺 ${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>
+ <div class="card dds"><div><div class="k">DDS do dia · ${d1.data}</div><b class="t">🦺 ${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">${D.dds.autor?"— "+D.dds.autor:""}</p></div></div>
  ${D.frase?`<div class="sec">Para o dia</div><div class="card frase">“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal">— ${D.frase.autor}</div></div>`:""}
  <p class="note">A mensagem de segurança aparece todos os dias no topo do app. Com a API, o administrador cadastra os temas do DDS no painel e eles ficam guardados no histórico.</p>`);}
 
@@ -673,10 +673,10 @@ function xtraHtml(t){return (XTRA_POR[t]||[]).map(k=>{let o;try{o=XTRA[k]();}cat
 /* ===== Mensagens do dia num único item no topo ===== */
 function msgBar(){if(!D.dds&&!D.editorial&&!D.frase)return"";const n=[D.dds,D.editorial,D.frase].filter(Boolean).length;
  return `<button type="button" class="msgbar" id="msgBar"><span class="mi1">📣</span><span class="mt"><b>Mensagens do dia</b><small>${D.dds?"🦺 "+D.dds.titulo:""}${D.editorial?" · ✉️ Editorial":""}${D.frase?" · 💡 Para o dia":""}</small></span><span class="mc">${n}</span><span class="chev">›</span></button>`;}
-function msgTexto(){let t=`📣 *Mensagens do dia · CT LOS*\n`;if(D.dds)t+=`\n🦺 *DDS — ${D.dds.titulo}*\n${D.dds.texto}\n— ${D.dds.autor}\n`;if(D.editorial)t+=`\n✉️ *Mensagem do dia*\n${D.editorial.texto}\n— ${D.editorial.autor}\n`;if(D.frase)t+=`\n💡 *Para o dia*\n“${D.frase.texto}”\n— ${D.frase.autor}\n`;return t+`\n*Carro parado é prejuízo. Pra cima!* 🚀`;}
+function msgTexto(){let t=`📣 *Mensagens do dia · CT LOS*\n`;if(D.dds)t+=`\n🦺 *DDS — ${D.dds.titulo}*\n${D.dds.texto}${D.dds.autor?"\n— "+D.dds.autor:""}\n`;if(D.editorial)t+=`\n✉️ *Mensagem do dia*\n${D.editorial.texto}${D.editorial.autor?"\n— "+D.editorial.autor:""}\n`;if(D.frase)t+=`\n💡 *Para o dia*\n“${D.frase.texto}”\n— ${D.frase.autor}\n`;return t+`\n*Carro parado é prejuízo. Pra cima!* 🚀`;}
 function msgSheet(){openSheet(`<div class="sh"><b>Mensagens do dia</b><button id="xS">×</button></div>
- ${D.dds?`<div class="card dds" style="margin-bottom:10px"><div><div class="k">🦺 Segurança em primeiro lugar · DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">— ${D.dds.autor}</p></div></div>`:""}
- ${D.editorial?`<div class="card edit" style="margin-bottom:10px"><div class="k">✉️ Mensagem do dia · Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">— ${D.editorial.autor}</div></div>`:""}
+ ${D.dds?`<div class="card dds" style="margin-bottom:10px"><div><div class="k">🦺 Segurança em primeiro lugar · DDS do dia</div><b class="t">${D.dds.titulo}</b><p>${D.dds.texto}</p><p style="margin-top:8px;font-weight:700">${D.dds.autor?"— "+D.dds.autor:""}</p></div></div>`:""}
+ ${D.editorial?`<div class="card edit" style="margin-bottom:10px"><div class="k">✉️ Mensagem do dia · Editorial</div><p>${D.editorial.texto}</p><div class="note" style="text-align:right;margin:8px 0 0;font-style:italic">${D.editorial.autor?"— "+D.editorial.autor:""}</div></div>`:""}
  ${D.frase?`<div class="card frase" style="margin-bottom:10px"><div class="k" style="font-style:normal">💡 Para o dia</div>“${D.frase.texto}”<div style="font-size:13px;margin-top:6px;font-style:normal;color:var(--ink2)">— ${D.frase.autor}</div></div>`:""}
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" id="msWa" style="background:#25d366">💬 Enviar no WhatsApp</button><button class="btn sec2" id="msCp">📋 Copiar texto</button></div>`);
  $("#msWa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(msgTexto()),"_blank");
