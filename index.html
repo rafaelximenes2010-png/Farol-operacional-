@@ -891,7 +891,21 @@ setInterval(ddsTick,60000);document.addEventListener("visibilitychange",()=>{if(
 async function ativarNotif(){if(!("Notification" in window)){toastMsg("Este aparelho não suporta notificações. No iPhone, instale o app na tela de início.");return;}
  const p=await Notification.requestPermission();if(p!=="granted"){toastMsg("Notificações não autorizadas.");return;}LS.set("farolNotif",1);
  try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync){const st=await navigator.permissions.query({name:"periodic-background-sync"});if(st.state==="granted")await reg.periodicSync.register("farol-mercado",{minInterval:6*3600e3});await reg.periodicSync.register("farol-dds",{minInterval:3600e3});await reg.periodicSync.register("farol-aviso",{minInterval:3600e3});}}catch(e){}
- document.querySelector(".sheet")?.remove();setTimeout(testeNotif,400);}
+ pushInscrever();document.querySelector(".sheet")?.remove();setTimeout(testeNotif,400);}
+/* NOTIFICAÇÃO COM A TELA BLOQUEADA (Web Push): inscreve o aparelho no Worker de notificações (api/push-worker.js).
+   O endereço do Worker fica em data/push.json; sem endereço, nada acontece. iPhone: só com o app instalado na tela de início (iOS 16.4+). */
+async function pushInscrever(){try{if(!("PushManager" in window)||!("Notification" in window)||Notification.permission!=="granted")return;
+ const cfg=await (await fetch("data/push.json?t="+Date.now(),{cache:"no-store"})).json();const W=(cfg&&cfg.worker||"").replace(/\/$/,"");if(!W)return;
+ const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+ if(!sub){const k=(await (await fetch(W+"/vapid",{cache:"no-store"})).json()).chave;const raw=Uint8Array.from(atob(k.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((k.length+3)%4)),c=>c.charCodeAt(0));
+  sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:raw});}
+ const pf=LS.get("farolPerfil",{})||{};const j=JSON.stringify(sub);if(LS.get("farolPushEnv","")===j+W)return;
+ const r=await fetch(W+"/inscrever",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sub:sub.toJSON(),nome:pf.nome||"",regional:pf.regional||""})});
+ if(r.ok)LS.set("farolPushEnv",j+W);}catch(e){}}
+/* indicação no ícone do app (bolinha com número): o push acende; abrir o app apaga */
+function badgeLimpar(){try{navigator.clearAppBadge&&navigator.clearAppBadge();caches.open("farol-badge").then(c=>c.put("n",new Response("0"))).catch(()=>{});}catch(e){}}
+badgeLimpar();setTimeout(pushInscrever,4000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){badgeLimpar();pushInscrever();}});
 setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
 

@@ -1,6 +1,6 @@
 // Farol Operacional — service worker
 // Rede primeiro para o app (recebe as atualizações na hora) e cópia guardada para abrir sem internet.
-const CACHE="farol-v101"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","revista.js","pacote.js","seguranca.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/marca-los.png","icons/simbolo-los-t.png","icons/simbolo-los.png","icons/icone-96.png"];
+const CACHE="farol-v102"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","revista.js","pacote.js","seguranca.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/marca-los.png","icons/simbolo-los-t.png","icons/simbolo-los.png","icons/icone-96.png"];
 // instalação busca tudo direto do servidor (ignora cópias antigas do navegador) e assume na hora
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP.map(u=>new Request(u,{cache:"reload"})))));self.skipWaiting();});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))));self.clients.claim();});
@@ -24,5 +24,11 @@ self.addEventListener("periodicsync",e=>{if(e.tag!=="farol-mercado")return;e.wai
 self.addEventListener("periodicsync",e=>{if(e.tag!=="farol-aviso")return;e.waitUntil((async()=>{try{
   const a=await (await fetch("data/aviso.json?t="+Date.now(),{cache:"no-store"})).json();if(!a||!a.id||(a.ate&&Date.now()>Date.parse(a.ate)))return;
   const c=await caches.open("farol-aviso");const v=await c.match("visto");if(v&&(await v.text())===a.id)return;await c.put("visto",new Response(a.id));
-  await self.registration.showNotification(a.titulo,{body:a.texto||"",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"aviso-"+a.id});}catch(x){}})());});
-self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(self.clients.matchAll({type:"window"}).then(w=>w.length?w[0].focus():self.clients.openWindow("./")));});
+  await self.registration.showNotification(a.titulo,{body:a.texto||"",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"aviso-"+a.id});await badgeMais();}catch(x){}})());});
+// notificação com a tela bloqueada (Web Push, vem do Worker api/push-worker.js) + indicação no ícone do app
+async function badgeMais(){try{const c=await caches.open("farol-badge");const r=await c.match("n");const n=(r?parseInt(await r.text(),10)||0:0)+1;await c.put("n",new Response(String(n)));if(self.navigator.setAppBadge)await self.navigator.setAppBadge(n);}catch(x){}}
+self.addEventListener("push",e=>{let d={};try{d=e.data?e.data.json():{};}catch(x){d={texto:e.data?e.data.text():""};}
+  e.waitUntil((async()=>{if(d.id){try{const c=await caches.open("farol-aviso");await c.put("visto",new Response(d.id));}catch(x){}}
+    await self.registration.showNotification(d.titulo||"Farol Operacional",{body:d.texto||"",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:d.tag||"farol",data:{url:d.url||"./"}});
+    await badgeMais();})());});
+self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(w=>w.length?w[0].focus():self.clients.openWindow((e.notification.data&&e.notification.data.url)||"./")));});
