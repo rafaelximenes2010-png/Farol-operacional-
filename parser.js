@@ -62,7 +62,7 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
         if (out.length && (t === "" || /^\S{1,2}$/.test(t) && !/^\d/.test(t) || /^[A-ZÀ-Ú0-9][A-ZÀ-Ú0-9 ·:/-]{5,}$/.test(t) && t === t.toUpperCase() && !/[a-zà-ú]/.test(t) && out.length > 1 || /^([A-ZÀ-Ú] ){3,}/.test(t))) break;
         if (out.length > 40) break; out.push(l); }
       return out.length ? { linhas: out, autor } : null; };
-    const ddsB = bloco(/D D S D O D I A\s*(?:🦺)?\s*\n/), edB = bloco(/Mensagem\s*\n?do dia\s*\n/);
+    const ddsB = bloco(/(?:D D S D O D I A|S E G U R A N Ç A E M P R I M E I R O L U G A R · [^\n]*)\s*(?:🦺)?\s*\n/), edB = bloco(/Mensagem\s*\n?do dia\s*\n/);
     const ddsM = ddsB && ddsB.linhas.length > 1 ? [null, ddsB.linhas[0].trim(), ddsB.linhas.slice(1).join("\n"), ddsB.autor] : all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const edM = edB ? [null, edB.linhas.join("\n"), edB.autor] : all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”]{1,80}?)\s*”/);
