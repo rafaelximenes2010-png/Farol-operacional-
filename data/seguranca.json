@@ -1,5 +1,5 @@
 {
- "data": "2026-11-20",
+ "data": "2026-11-21",
  "horas": [
   7,
   11,
@@ -8,21 +8,15 @@
  "dicas": [
   {
    "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "PRF prende motorista que fugiu após sinistro com vítima grave em Extremoz/RN",
-   "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQYkl5STFiT3pnR1dfVFRJblR5b0FSdm1aRENwOU1YV0VNdzU5V3RrTGdGaWN1VVo1VW9nZXNJb3pyUDRmUDhvNm84U0FrLXhqNTJwRUQzTnVQajhWMFJlbUtTZmlMdjU4STVKYVlNaWQwSE0zbWtsWTNBNEhLdG8yMTlkcDNFa3dFZTFlLUdZcUdyY3VMdUZYTUdZQlJlaDFubDNoU1FEeHdULXpkYkUxU3l5WVRrMDR5TlBoSEtITmhIQjJTb0x2dVF0VXhyQ01WUXVscHJvaktYUl92NTExRXYxeGlPUlRKdDkyTzZn?oc=5"
-  },
-  {
-   "dica": "EPI completo na operação: capacete, óculos, luva e bota.",
-   "titulo": "Elas na Proteção — com Vitória Bastos",
-   "fonte": "Revista Proteção",
-   "url": "https://protecao.com.br/multimidia/elas-na-protecao-com-vitoria-bastos/"
+   "titulo": "A comunicação no trânsito - Sinais não verbais que se comunicam",
+   "fonte": "Observatório Nacional de Segurança Viária",
+   "url": "https://www.onsv.org.br/blog-do-observatorio/a-comunicacao-no-transito-sinais-nao-verbais-que-se-comunicam"
   },
   {
    "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
-   "titulo": "Animaseg cria comitê para alinhar certificação e ensaios de EPIs",
-   "fonte": "Revista Proteção",
-   "url": "https://protecao.com.br/noticias/geral/animaseg-cria-comite-para-alinhar-certificacao-e-ensaios-de-epis/"
+   "titulo": "PRF inicia Operação Dia da Consciência Negra 2026 nas rodovias federais do Ceará",
+   "fonte": "PRF",
+   "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5"
   }
  ],
  "fontes": [
@@ -62,16 +56,18 @@
   "https://news.google.com/rss/articles/CBMiogFBVV95cUxNV0kxVG9WeW9VV2FZN0xGSk5YOGNWNjhCVjd3N0F3MVB5SVN1U0RWUEFjNjd3RVhYbWg4Z0c4X1F6VGJRVHJ0QTUyV1lSRGFhWUdscVdNQnZvd0dLdTBJeE9CMnN4eGFiQVJqbjBOeFhiWTRSdGRLTHV5NVpGRktZV3Fuc1lqQVd0LW84Y3JoYXdIc29ETXZPVTdsakJSWUhVaVE?oc=5",
   "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQYkl5STFiT3pnR1dfVFRJblR5b0FSdm1aRENwOU1YV0VNdzU5V3RrTGdGaWN1VVo1VW9nZXNJb3pyUDRmUDhvNm84U0FrLXhqNTJwRUQzTnVQajhWMFJlbUtTZmlMdjU4STVKYVlNaWQwSE0zbWtsWTNBNEhLdG8yMTlkcDNFa3dFZTFlLUdZcUdyY3VMdUZYTUdZQlJlaDFubDNoU1FEeHdULXpkYkUxU3l5WVRrMDR5TlBoSEtITmhIQjJTb0x2dVF0VXhyQ01WUXVscHJvaktYUl92NTExRXYxeGlPUlRKdDkyTzZn?oc=5",
   "https://protecao.com.br/multimidia/elas-na-protecao-com-vitoria-bastos/",
-  "https://protecao.com.br/noticias/geral/animaseg-cria-comite-para-alinhar-certificacao-e-ensaios-de-epis/"
+  "https://protecao.com.br/noticias/geral/animaseg-cria-comite-para-alinhar-certificacao-e-ensaios-de-epis/",
+  "https://www.onsv.org.br/blog-do-observatorio/a-comunicacao-no-transito-sinais-nao-verbais-que-se-comunicam",
+  "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
-  "Revista Proteção: 10",
-  "ANAMT: erro fetch failed",
+  "Revista Proteção: erro 403",
+  "ANAMT: 10",
   "PRF: 25",
-  "Fundacentro: 14",
+  "Fundacentro: 12",
   "Ministério do Trabalho: 25",
-  "Notícias: 4"
+  "Notícias: 3"
  ],
- "atualizado": "2026-11-20T10:39:11.830Z"
+ "atualizado": "2026-11-21T10:28:46.967Z"
 }
