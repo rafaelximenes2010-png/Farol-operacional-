@@ -57,6 +57,62 @@
   [
    "Pare, pense e aja",
    "Antes de qualquer tarefa fora da rotina, pare um minuto e pense nos riscos. Se não estiver seguro, não faça: chame o líder. Ninguém é cobrado por parar uma atividade insegura."
+  ],
+  [
+   "Celular longe da mão",
+   "Mexer no celular dirigindo tira seus olhos da pista por segundos que parecem pouco, mas a 80 km/h o caminhão anda dezenas de metros às cegas. Deixe o aparelho no suporte e no silencioso. Precisa ligar ou responder? Pare em local seguro primeiro."
+  ],
+  [
+   "Distância de seguimento",
+   "Caminhão carregado precisa de muito mais espaço para parar do que um carro. Mantenha pelo menos 4 segundos de distância do veículo da frente e aumente esse tempo à noite ou com pista ruim. Quem anda colado não tem tempo de reagir."
+  ],
+  [
+   "Três pontos de apoio",
+   "Boa parte das lesões de motorista acontece subindo ou descendo da cabine. Use sempre três pontos de contato: duas mãos e um pé, ou dois pés e uma mão. Desça de frente para o caminhão e nunca pule do degrau."
+  ],
+  [
+   "Pneu é segurança",
+   "Pneu murcho esquenta, deforma e pode estourar na estrada. Confira calibragem, cortes, bolhas e desgaste antes de sair e nas paradas. Viu algo estranho no pneu? Comunique antes de seguir viagem."
+  ],
+  [
+   "Curva com carga a granel",
+   "Silo e tanque cheios elevam o centro de gravidade e aumentam o risco de tombamento. Reduza bem antes da curva, nunca freie no meio dela e evite manobras bruscas no volante. Rotatória e alça de acesso também são curva: respeite."
+  ],
+  [
+   "Em cima do tanque, só preso",
+   "Abrir escotilha ou inspecionar o silo é trabalho em altura. Só suba com cinto paraquedista ancorado, guarda-corpo ou plataforma liberada. Nunca suba com o caminhão em movimento, com chuva forte ou vento."
+  ],
+  [
+   "Descarga pneumática com atenção",
+   "Durante a descarga, o silo trabalha sob pressão. Confira mangueiras, engates e válvulas antes de pressurizar e nunca abra nada com o tanque pressurizado. Fique fora da linha da mangueira e acompanhe o manômetro o tempo todo."
+  ],
+  [
+   "Cimento queima a pele",
+   "O pó de cimento irrita os olhos, os pulmões e pode causar queimaduras na pele molhada. Na carga e na descarga, use máscara, óculos, luvas e roupa com manga comprida. Sujou a pele? Lave logo com bastante água."
+  ],
+  [
+   "Caminhão parado, caminhão travado",
+   "Toda vez que parar, puxe o freio de estacionamento e, em rampa ou área de carga, coloque os calços nas rodas. Nunca saia da cabine com o motor ligado e o caminhão destravado. Um veículo que anda sozinho não avisa."
+  ],
+  [
+   "Noite e neblina",
+   "À noite e na neblina, ver e ser visto é tudo. Use farol baixo na neblina, reduza a velocidade e guie-se pela faixa da direita. Mantenha faróis, lanternas e faixas refletivas limpos e funcionando."
+  ],
+  [
+   "Engate bem feito",
+   "Na hora de acoplar a carreta, confira se a quinta roda travou de verdade, puxando o cavalo para a frente com a carreta freada. Ligue mangueiras de ar e cabo elétrico e teste as luzes. Engate mal feito solta a carreta na estrada."
+  ],
+  [
+   "Quase acidente se conta",
+   "Todo quase acidente é um aviso de graça. Escorregou, quase bateu ou viu uma condição perigosa? Conte para o líder, sem medo. Relatar hoje é o que evita o acidente de amanhã."
+  ],
+  [
+   "Manutenção com motor desligado",
+   "Nunca mexa embaixo do caminhão, no motor ou na transmissão com ele ligado. Desligue, tire a chave, trave e sinalize que há gente trabalhando. Cabine basculada só com a trava de segurança acionada."
+  ],
+  [
+   "Saúde em dia",
+   "Pressão alta, diabetes sem controle e visão ruim aumentam o risco ao volante. Faça seus exames periódicos, tome os remédios do jeito certo e não dirija sentindo tontura ou mal-estar. Se não estiver bem, avise o líder antes de sair."
   ]
  ],
  "frases": [
@@ -139,6 +195,46 @@
   [
    "Liderança é ação, não posição.",
    "Donald H. McGannon"
+  ],
+  [
+   "Disciplina é a ponte entre metas e realizações.",
+   "Jim Rohn"
+  ],
+  [
+   "Eficiência é fazer as coisas direito; eficácia é fazer as coisas certas.",
+   "Peter Drucker"
+  ],
+  [
+   "Um sistema ruim vence uma boa pessoa todas as vezes.",
+   "W. Edwards Deming"
+  ],
+  [
+   "A transformação é trabalho de todos.",
+   "W. Edwards Deming"
+  ],
+  [
+   "A força do time está em cada membro. A força de cada membro está no time.",
+   "Phil Jackson"
+  ],
+  [
+   "Nunca confunda atividade com realização.",
+   "John Wooden"
+  ],
+  [
+   "Se você não tem tempo para fazer certo, quando terá tempo para refazer?",
+   "John Wooden"
+  ],
+  [
+   "Não existem equipes ruins, apenas líderes ruins.",
+   "Jocko Willink"
+  ],
+  [
+   "Disciplina é liberdade.",
+   "Jocko Willink"
+  ],
+  [
+   "O exemplo não é a principal forma de influenciar os outros. É a única.",
+   "Albert Schweitzer"
   ]
  ]
 }
