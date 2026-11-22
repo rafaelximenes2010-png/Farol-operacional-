@@ -1,5 +1,5 @@
 {
- "data": "2026-11-21",
+ "data": "2026-11-22",
  "horas": [
   7,
   11,
@@ -7,16 +7,10 @@
  ],
  "dicas": [
   {
-   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "A comunicação no trânsito - Sinais não verbais que se comunicam",
-   "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/blog-do-observatorio/a-comunicacao-no-transito-sinais-nao-verbais-que-se-comunicam"
-  },
-  {
-   "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
-   "titulo": "PRF inicia Operação Dia da Consciência Negra 2026 nas rodovias federais do Ceará",
-   "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5"
+   "dica": "EPI completo na operação: capacete, óculos, luva e bota.",
+   "titulo": "Fundacentro apresenta atualização de laboratórios a fabricantes de EPIs",
+   "fonte": "Revista Proteção",
+   "url": "https://protecao.com.br/noticias/geral/fundacentro-apresenta-atualizacao-de-laboratorios-a-fabricantes-de-epis/"
   }
  ],
  "fontes": [
@@ -58,16 +52,17 @@
   "https://protecao.com.br/multimidia/elas-na-protecao-com-vitoria-bastos/",
   "https://protecao.com.br/noticias/geral/animaseg-cria-comite-para-alinhar-certificacao-e-ensaios-de-epis/",
   "https://www.onsv.org.br/blog-do-observatorio/a-comunicacao-no-transito-sinais-nao-verbais-que-se-comunicam",
-  "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5"
+  "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5",
+  "https://protecao.com.br/noticias/geral/fundacentro-apresenta-atualizacao-de-laboratorios-a-fabricantes-de-epis/"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
-  "Revista Proteção: erro 403",
+  "Revista Proteção: 10",
   "ANAMT: 10",
   "PRF: 25",
-  "Fundacentro: 12",
+  "Fundacentro: 8",
   "Ministério do Trabalho: 25",
-  "Notícias: 3"
+  "Notícias: 2"
  ],
- "atualizado": "2026-11-21T10:28:46.967Z"
+ "atualizado": "2026-11-22T10:28:34.004Z"
 }
