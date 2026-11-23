@@ -1,6 +1,14 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-a",
+   "data": "23/11/2026",
+   "itens": [
+    "Sininho: mostra só as 4 notificações mais recentes",
+    "Apagar notificação: botão × em cada uma e “Apagar todas”"
+   ]
+  },
+  {
    "v": "2026.11.18-a",
    "data": "18/11/2026",
    "itens": [

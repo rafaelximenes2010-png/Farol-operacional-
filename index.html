@@ -95,7 +95,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .sheet{position:fixed;inset:0;background:rgba(5,12,30,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .sheet>div{background:var(--bg);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom))}
 .sh{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sh b{font-size:18px;flex:1}.sh button{border:0;background:var(--card);width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--ink);cursor:pointer}
-.al{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.al .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}
+.al{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.al .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}.al .alx{flex:none;width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--mut,#888);font-size:20px;line-height:1;cursor:pointer}.al .alx:hover{background:rgba(192,0,0,.1);color:#C00000}
 .al b{display:block;font-size:14px}.al small{color:var(--ink2);font-size:12px}
 .share{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:8;cursor:pointer}
 .q{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}
@@ -909,16 +909,23 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
 
-function alertsSheet(){const L=[];
- D.farol.filter(f=>f[1]<90).forEach(f=>L.push(["🔴","var(--rs)",f[0]+" no vermelho","Atingimento de "+pct(f[1])+" no D-1 ("+d1.data.slice(0,5)+")"]));
- D.reg.filter(r=>r[3]<100).forEach(r=>L.push(["🟡","var(--ys)",r[0]+" abaixo da meta proporcional",pct(r[3])+" no mês · devendo "+brl(-r[6])+" até o D-1"]));
- if(necDU>M.mediaDU) L.push(["⚠️","var(--ys)","Mês abaixo do ritmo necessário","Precisa de "+mi(necDU)+" por dia útil; a média é "+mi(M.mediaDU)]);
- (D.avisos||[]).forEach(t=>L.push(["⚠️","var(--ys)","Conferência dos dados",t]));
- L.push(["✅","var(--gs)","Dados do D-1 carregados",D.meta.fonte+" · "+D.meta.atualizado]);
+function alertsSheet(){const L=[],iso=isoOf(d1.data),dt=x=>{const m=String(x||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?Date.parse(`${m[3]}-${m[2]}-${m[1]}T12:00:00-03:00`):0;},tE=dt(D.meta&&D.meta.atualizado)||dt(d1.data);
+ const add=(id,ic,cor,tit,txt,ts)=>L.push({id,ic,cor,tit,txt,ts});
+ D.farol.filter(f=>f[1]<90).forEach(f=>add("far-"+iso+"-"+f[0],"🔴","var(--rs)",f[0]+" no vermelho","Atingimento de "+pct(f[1])+" no D-1 ("+d1.data.slice(0,5)+")",tE+3));
+ D.reg.filter(r=>r[3]<100).forEach(r=>add("reg-"+iso+"-"+r[0],"🟡","var(--ys)",r[0]+" abaixo da meta proporcional",pct(r[3])+" no mês · devendo "+brl(-r[6])+" até o D-1",tE+2));
+ if(necDU>M.mediaDU) add("ritmo-"+iso,"⚠️","var(--ys)","Mês abaixo do ritmo necessário","Precisa de "+mi(necDU)+" por dia útil; a média é "+mi(M.mediaDU),tE+2);
+ (D.avisos||[]).forEach((t,k)=>add("conf-"+iso+"-"+k,"⚠️","var(--ys)","Conferência dos dados",t,tE+1));
+ add("d1-"+iso,"✅","var(--gs)","Dados do D-1 carregados",D.meta.fonte+" · "+D.meta.atualizado,tE+4);
  const vis=LS.get("farolAlmVistos",[]),on=LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted";
- const mk=ALM.length?`<h2 style="margin:14px 4px 8px">Mercado <small>busca automática · fontes oficiais</small></h2>`+ALM.slice(0,8).map(a=>`<div class="card al"><div class="ic" style="background:${a.nivel==="importante"?"var(--ys)":"var(--bg)"}">${vis.includes(a.id)?"📈":"🆕"}</div><div><b>${a.titulo}</b><small>${a.texto} · ${a.data}</small></div></div>`).join(""):"";
+ ALM.forEach(a=>add("alm-"+a.id,vis.includes(a.id)?"📈":"🆕",a.nivel==="importante"?"var(--ys)":"var(--bg)",a.titulo,a.texto+" · "+a.data,Date.parse(a.em)||dt(a.data)));
+ const del=LS.get("farolAlDel",[]),V=L.filter(a=>!del.includes(a.id)).sort((a,b)=>b.ts-a.ts).slice(0,4);
  const nt=`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:12px"><div style="flex:1"><b>Notificações de mercado</b><br><small class="note">${on?"✓ Ativas neste aparelho":"Avise-me quando houver atualização importante (dólar, Selic, IPCA, ouro)"}</small></div><button class="btn sec2" id="nTs" style="width:auto;padding:9px 12px">Testar</button>${on?"":`<button class="btn" id="nOn" style="width:auto;padding:9px 16px;background:#22c55e;color:#fff">🔔 Ativar</button>`}</div>`;
- openSheet(`<div class="sh"><b>Alertas</b><button id="xS">×</button></div>${L.map(a=>`<div class="card al"><div class="ic" style="background:${a[1]}">${a[0]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`).join("")}${mk}${nt}`);if($("#nOn"))$("#nOn").onclick=ativarNotif;$("#nTs").onclick=()=>{document.querySelector(".sheet")?.remove();setTimeout(testeNotif,300);};almVistos();}
+ const lista=V.length?V.map(a=>`<div class="card al" data-id="${a.id.replace(/"/g,"&quot;")}"><div class="ic" style="background:${a.cor}">${a.ic}</div><div style="flex:1"><b>${a.tit}</b><small>${a.txt}</small></div><button class="alx" aria-label="Apagar notificação" title="Apagar">×</button></div>`).join("")+`<button class="btn sec2" id="alTodas" style="width:100%;margin-top:2px">Apagar todas</button>`:`<div class="card"><small class="note">Nenhuma notificação.</small></div>`;
+ openSheet(`<div class="sh"><b>Notificações <small class="note" style="font-weight:500">· últimas 4</small></b><button id="xS">×</button></div>${lista}${nt}`);
+ const apagar=ids=>{const d=LS.get("farolAlDel",[]);ids.forEach(x=>{if(!d.includes(x))d.unshift(x);});LS.set("farolAlDel",d.slice(0,300));document.querySelector(".sheet")?.remove();alertsSheet();};
+ document.querySelectorAll(".sheet .alx").forEach(b=>b.onclick=e=>{e.stopPropagation();apagar([b.closest(".al").dataset.id]);});
+ if($("#alTodas"))$("#alTodas").onclick=()=>apagar(L.map(a=>a.id));
+ if($("#nOn"))$("#nOn").onclick=ativarNotif;$("#nTs").onclick=()=>{document.querySelector(".sheet")?.remove();setTimeout(testeNotif,300);};almVistos();}
 function openSheet(h){const s=document.createElement("div");s.className="sheet";s.innerHTML=`<div>${h}</div>`;document.body.appendChild(s);
  s.addEventListener("click",e=>{if(e.target===s||e.target.id==="xS") s.remove();});}
 /* =SUPER= */
