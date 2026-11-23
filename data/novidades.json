@@ -1,6 +1,14 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-j",
+   "data": "23/11/2026",
+   "itens": [
+    "Meta: toque num mês do gráfico acumulado para abrir o detalhe (drill down) — no Geral mostra todas as regionais do mês",
+    "Seletor de regional com setinhas ‹ › e lista em rolo"
+   ]
+  },
+  {
    "v": "2026.11.23-i",
    "data": "23/11/2026",
    "itens": [
