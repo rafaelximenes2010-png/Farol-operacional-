@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-i",
+   "data": "23/11/2026",
+   "itens": [
+    "Meta: acumulado por regional no topo da aba, com acumulado geral mês a mês, ranking e mapa de atingimento acumulado por regional"
+   ]
+  },
+  {
    "v": "2026.11.23-h",
    "data": "23/11/2026",
    "itens": [
