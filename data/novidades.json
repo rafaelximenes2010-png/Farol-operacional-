@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-d",
+   "data": "23/11/2026",
+   "itens": [
+    "Mensagem do dia (editorial) todos os dias: quando a edição não traz editorial, o app escreve um com os números do dia"
+   ]
+  },
+  {
    "v": "2026.11.23-c",
    "data": "23/11/2026",
    "itens": [
