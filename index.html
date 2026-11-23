@@ -843,7 +843,38 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
  <div class="card"><div class="tw"><table><thead><tr><th>Mês</th><th>Meta orçada</th><th>Meta Power BI</th><th>Realizado</th><th>Ating. orç.</th><th>Ating. BI</th><th>Desvio orç.</th><th>AGRO</th><th>Real. s/ AGRO</th></tr></thead><tbody>
  ${F.map(x=>{const fin=x[3]!=null&&!x[5];return `<tr data-m="mesorc:${x[0]}" style="cursor:pointer"><td><b>${x[0]}/26</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2]?x[2].toLocaleString("pt-BR"):"—"}</td><td>${x[3]!=null?x[3].toLocaleString("pt-BR")+(x[5]?"*":""):"—"}</td><td>${fin?`<span class="pill ${cor(x[3]/x[1]*100)}">${pct(x[3]/x[1]*100,1)}</span>`:"—"}</td><td>${fin&&x[2]?pct(x[3]/x[2]*100,1):"—"}</td><td class="up">${fin?sg(x[3]-x[1]):"—"}</td><td>${x[4]!=null?x[4].toLocaleString("pt-BR"):"—"}</td><td>${x[4]!=null?(x[3]-x[4]).toLocaleString("pt-BR"):"—"}</td></tr>`}).join("")}
  <tr class="tot"><td>Meses fechados</td><td>${sO.toLocaleString("pt-BR")}</td><td></td><td>${sR.toLocaleString("pt-BR")}</td><td>${pct(sR/sO*100,1)}</td><td></td><td class="up">${sg(sR-sO)}</td><td></td><td></td></tr></tbody></table></div>
- <p class="note">* parcial do mês. Realizado até setembro: planilha de orçamento; a partir de outubro: Power BI. Filtros por centro de custo funcionam quando a planilha estiver ligada por API.</p></div>`;}
+ <p class="note">* parcial do mês. Realizado até setembro: planilha de orçamento; a partir de outubro: Power BI. Filtros por centro de custo funcionam quando a planilha estiver ligada por API.</p></div>
+ <h2>Regionais · mês a mês e acumulado <small>faturado × meta por regional</small></h2>
+ <div id="rmBox">${RM?rmHtml():'<div class="card"><small class="note">Carregando dados das regionais…</small></div>'}</div>`;}
+/* ===== Meta por regional: mês a mês e acumulado (data/regmes.enc, cifrado com a senha da equipe) ===== */
+let RM=null,RMsel="";
+async function rmCarregar(){if(RM)return RM;try{const t=await (await fetch("data/regmes.enc?t="+Date.now(),{cache:"no-store"})).text();RM=await decifrar(t,LS.get("farolSenha",""));}catch(e){RM=null;}
+ const b=$("#rmBox");if(b){b.innerHTML=RM?rmHtml():'<div class="card"><small class="note">Não consegui abrir os dados das regionais. Confira a senha da equipe.</small></div>';rmBind();}return RM;}
+const rmNome=n=>String(n).replace(/\s*\(estrutura anterior\)/i,"").toLowerCase().replace(/(^|[\s\/-])\S/g,c=>c.toUpperCase()).replace(/\bLos X\b/,"LOS X").replace(/\bAgro\b/,"AGRO").replace(/\bCer\b/,"CER").replace(/\bEmp\b/,"EMP").replace("Nao Alocada","não alocada").replace("Em Branco","Sem regional (em branco)");
+const rmSoma=a=>a.reduce((s,v)=>s+(v||0),0);
+function rmLinha(r){const F=rmSoma(r.fat),Mt=rmSoma(r.meta),Fm=rmSoma(r.fat.filter((v,i)=>r.meta[i]>0)),comMeta=r.meta.filter(v=>v>0).length,bateu=r.meta.filter((v,i)=>v>0&&r.fat[i]>=v).length;
+ return `<tr data-rm="${escH(r.nome)}" style="cursor:pointer"><td><b>${escH(rmNome(r.nome))}</b></td><td>${F.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${Mt?Mt.toLocaleString("pt-BR",{maximumFractionDigits:0}):"—"}</td><td>${Mt?`<span class="pill ${cor(Fm/Mt*100)}">${pct(Fm/Mt*100,1)}</span>`:"—"}</td><td class="${Fm-Mt>=0?"up":"dn"}">${Mt?sg(Fm-Mt):"—"}</td><td>${comMeta?bateu+" de "+comMeta:"—"}</td></tr>`;}
+function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.length-1]+"/26",R=RM.regionais,sel=R.find(r=>r.nome===RMsel);
+ const atuais=R.filter(r=>!r.anterior&&!/EM BRANCO|META NAO ALOCADA/.test(r.nome)),ant=R.filter(r=>r.anterior),sem=R.filter(r=>/EM BRANCO|META NAO ALOCADA/.test(r.nome));
+ const chips=`<div class="seg" id="rmSeg" style="flex-wrap:wrap">${[["","Todas"],...atuais.map(r=>[r.nome,rmNome(r.nome)])].map(([v,t])=>`<button data-v="${escH(v)}" class="${v===RMsel?"on":""}" style="flex:0 1 auto">${escH(t)}</button>`).join("")}</div>`;
+ if(!sel){const TF=rmSoma(RM.total.fat),TM=rmSoma(RM.total.meta);
+  return chips+`<div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Faturado acum.</th><th>Meta acum.</th><th>Ating. acum.</th><th>Gap acum.</th><th>Meses na meta</th></tr></thead><tbody>
+  ${atuais.map(rmLinha).join("")}
+  <tr><td colspan="6" class="note" style="padding-top:12px"><b>Estrutura anterior</b> (até set/26 — a partir de out as regionais seguem a nova estrutura)</td></tr>${ant.map(rmLinha).join("")}
+  <tr><td colspan="6" class="note" style="padding-top:12px"><b>Sem regional</b></td></tr>${sem.map(rmLinha).join("")}
+  <tr class="tot"><td>Total ${per}</td><td>${TF.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${TM.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${pct(TF/TM*100,1)}</td><td class="${TF-TM>=0?"up":"dn"}">${sg(TF-TM)}</td><td></td></tr></tbody></table></div>
+  <p class="note">Toque numa regional para ver mês a mês e o acumulado. Fonte: ${escH(RM.fonte)} (importado em ${escH(RM.importado)}). Atingimento e gap acumulados consideram só os meses com meta da regional, como na planilha. Os totais desta planilha diferem do orçamento do grupo acima em mar, abr e set (meta) e em out (faturado, Power BI).</p></div>`;}
+ let aF=0,aM=0,aFm=0;const rows=RM.meses.map((m,i)=>{const f=sel.fat[i]||0,mt=sel.meta[i]||0;aF+=f;aM+=mt;if(mt>0)aFm+=f;return {m,f,mt,aF,aM,aFm};});
+ const ult=rows[rows.length-1];
+ return chips+`<div class="kpis">
+  <div class="card kpi hero"><div class="l">Faturado acumulado · ${per}</div><div class="v">${mi(ult.aF)}</div><div class="s">meta acumulada ${ult.aM?mi(ult.aM):"—"}</div></div>
+  <div class="card kpi"><div class="l">Atingimento acumulado</div><div class="v" style="color:${ult.aM?C[cor(ult.aFm/ult.aM*100)]:"inherit"}">${ult.aM?pct(ult.aFm/ult.aM*100,1):"—"}</div><div class="s">${ult.aM?sg(ult.aFm-ult.aM)+" vs meta (meses com meta)":"sem meta no período"}</div></div></div>
+  <div class="card">${barsChart(rows.map(x=>({ghost:x.aM,v:x.aF,c:x.aM&&x.aFm<x.aM?"#C00000":"#1F4E78",l:x.m})),360,190)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado · cinza = meta acumulada.</p></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Mês</th><th>Faturado</th><th>Meta</th><th>Ating. mês</th><th>Fat. acum.</th><th>Meta acum.</th><th>Ating. acum.</th><th>Gap acum.</th></tr></thead><tbody>
+  ${rows.map(x=>`<tr><td><b>${x.m}/26</b></td><td>${x.f.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${x.mt?x.mt.toLocaleString("pt-BR",{maximumFractionDigits:0}):"—"}</td><td>${x.mt?`<span class="pill ${cor(x.f/x.mt*100)}">${pct(x.f/x.mt*100,1)}</span>`:"sem meta"}</td><td>${x.aF.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${x.aM?x.aM.toLocaleString("pt-BR",{maximumFractionDigits:0}):"—"}</td><td>${x.aM?pct(x.aFm/x.aM*100,1):"—"}</td><td class="${x.aFm-x.aM>=0?"up":"dn"}">${x.aM?sg(x.aFm-x.aM):"—"}</td></tr>`).join("")}
+  </tbody></table></div><p class="note">Fonte: ${escH(RM.fonte)}. Meses “sem meta” não entram no atingimento nem no gap acumulados (mesma regra da planilha).</p></div>`;}
+function rmBind(){const seg=$("#rmSeg");if(seg)seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;RMsel=b.dataset.v;$("#rmBox").innerHTML=rmHtml();rmBind();};
+ document.querySelectorAll("#rmBox tr[data-rm]").forEach(t=>t.onclick=e=>{e.stopPropagation();RMsel=t.dataset.rm;$("#rmBox").innerHTML=rmHtml();rmBind();$("#rmBox").scrollIntoView({behavior:"smooth",block:"start"});});}
 function regSheet(n){const r=regByName(n),f=D.farol.find(x=>x[0]===n);let h=`<div class="sh"><b>${n}</b><button id="xS">×</button></div>`;
  h+=`<div class="kpis">`;
  if(f) h+=`<div class="card kpi" style="grid-column:1/-1"><div class="l">Farol D-1</div><div class="v" style="color:${C[cor(f[1])]}">${pct(f[1])}</div><div class="s">${st(f[1])}</div></div>`;
@@ -1567,7 +1598,7 @@ window.addEventListener("appinstalled",()=>{document.documentElement.classList.a
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 let _bp=innerWidth>=1500?2:innerWidth>=1024?1:0;addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{const b=innerWidth>=1500?2:innerWidth>=1024?1:0;if(b!==_bp){_bp=b;if(typeof cur!=='undefined'&&D)show(cur);}},250);});
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc")setTimeout(simular,0);$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc"){setTimeout(simular,0);setTimeout(()=>{RM?rmBind():rmCarregar();},0);}$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}
