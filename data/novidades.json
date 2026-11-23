@@ -1,6 +1,14 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-e",
+   "data": "23/11/2026",
+   "itens": [
+    "Notificações com a tela bloqueada ligadas (iPhone com o app na tela de início e Android)",
+    "Sininho › Testar: manda um aviso real para a tela bloqueada"
+   ]
+  },
+  {
    "v": "2026.11.23-d",
    "data": "23/11/2026",
    "itens": [

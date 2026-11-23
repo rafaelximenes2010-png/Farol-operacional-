@@ -877,7 +877,7 @@ function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true,luz=null,onTap=nul
 async function testeDds(){if(!window.FarolSeg)return;const d=new Date();let s=FarolSeg.slotAtual(d);if(s<0)s=0;const a=FarolSeg.aviso(d,s,await segApi());
  notifBanner(a.titulo,a.texto,{sub:a.fonte?`<span><b>Fonte: ${escH(a.fonte)}</b> · ${escH(a.contexto||"")}</span>`:"",tag:"SEGURANÇA · TESTE",farol:false,luz:1,dur:15000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto+(a.fonte?"\nFonte: "+a.fonte+" · "+(a.contexto||""):""),icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"dds-teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("🦺 "+a.titulo,o):new Notification("🦺 "+a.titulo,o),2500);}catch(e){}}}
-async function testeNotif(){setTimeout(testeDds,4500);notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
+async function testeNotif(){setTimeout(testeDds,4500);setTimeout(pushTeste,6000);notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const fz=(D&&D.farol||[]).filter(f=>typeof f[1]==="number").map(f=>(f[1]>=100?"🟢":f[1]>=90?"🟡":"🔴")+" "+nbAbrev(f[0])+" "+Math.round(f[1])+"%").join("  ");const o={body:fz||"Assim chegam os avisos do Farol na tela do celular.",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("Farol · Teste de notificação",o):new Notification("Farol · Teste de notificação",o),1500);}catch(e){}}}
 
 /* ===== Alertas de mercado (busca diária automática) ===== */
@@ -912,6 +912,11 @@ async function pushInscrever(){try{if(!("PushManager" in window)||!("Notificatio
  const pf=LS.get("farolPerfil",{})||{};const j=JSON.stringify(sub);if(LS.get("farolPushEnv","")===j+W)return;
  const r=await fetch(W+"/inscrever",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sub:sub.toJSON(),nome:pf.nome||"",regional:pf.regional||""})});
  if(r.ok)LS.set("farolPushEnv",j+W);}catch(e){}}
+/* teste real de notificação com a tela bloqueada: o Worker manda um push para este aparelho depois de alguns segundos */
+async function pushTeste(){try{if(!("PushManager" in window)||Notification.permission!=="granted")return false;const cfg=await (await fetch("data/push.json?t="+Date.now(),{cache:"no-store"})).json();const W=(cfg&&cfg.worker||"").replace(/\/$/,"");if(!W)return false;
+ await pushInscrever();const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(!sub)return false;
+ toastMsg("Bloqueie a tela agora: em 10 segundos chega um teste.");await new Promise(r=>setTimeout(r,10000));
+ const r=await fetch(W+"/teste",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({endpoint:sub.endpoint})});return r.ok;}catch(e){return false;}}
 /* indicação no ícone do app (bolinha com número): o push acende; abrir o app apaga */
 function badgeLimpar(){try{navigator.clearAppBadge&&navigator.clearAppBadge();caches.open("farol-badge").then(c=>c.put("n",new Response("0"))).catch(()=>{});}catch(e){}}
 badgeLimpar();setTimeout(pushInscrever,4000);
