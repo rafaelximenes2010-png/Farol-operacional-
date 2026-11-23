@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-c",
+   "data": "23/11/2026",
+   "itens": [
+    "Sininho: o pontinho vermelho só aparece quando há notificação não lida e some ao ler"
+   ]
+  },
+  {
    "v": "2026.11.23-b",
    "data": "23/11/2026",
    "itens": [
