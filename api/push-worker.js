@@ -54,7 +54,7 @@ async function chaves(env) {
 async function jwtVapid(env, endpoint) {
   const v = await chaves(env), aud = new URL(endpoint).origin;
   const cab = b64u(txt(JSON.stringify({ typ: "JWT", alg: "ES256" })));
-  const corpo = b64u(txt(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: APP })));
+  const corpo = b64u(txt(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 3600, sub: APP })));
   const k = await crypto.subtle.importKey("jwk", v.priv, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
   const ass = await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, k, txt(cab + "." + corpo));
   return { jwt: cab + "." + corpo + "." + b64u(ass), pub: v.pub };
@@ -87,6 +87,8 @@ async function enviar(env, sub, dados) {
   return r.status;
 }
 
+/* só aceita endereços dos serviços de push dos navegadores (Google/Android/Chrome, Apple/iPhone, Mozilla, Microsoft) */
+const PUSH_OK = /^https:\/\/(fcm\.googleapis\.com|android\.googleapis\.com|[a-z0-9.-]*\.push\.apple\.com|web\.push\.apple\.com|updates\.push\.services\.mozilla\.com|[a-z0-9.-]*\.notify\.windows\.com)\//i;
 const idSub = async endpoint => b64u(await crypto.subtle.digest("SHA-256", txt(endpoint))).slice(0, 32);
 
 async function paraTodos(env, dados) {
@@ -137,7 +139,7 @@ export default {
       const b = await req.json();
       if (u.pathname === "/inscrever") {
         const s = b && b.sub;
-        if (!s || !/^https:\/\//.test(s.endpoint || "") || !s.keys || !s.keys.p256dh || !s.keys.auth) return J({ erro: "inscrição inválida" }, 400);
+        if (!s || !PUSH_OK.test(s.endpoint || "") || !s.keys || !s.keys.p256dh || !s.keys.auth) return J({ erro: "inscrição inválida" }, 400);
         await env.PUSH.put("sub:" + await idSub(s.endpoint), JSON.stringify({ sub: { endpoint: s.endpoint, keys: { p256dh: s.keys.p256dh, auth: s.keys.auth } }, nome: String(b.nome || "").slice(0, 60), regional: String(b.regional || "").slice(0, 40), em: new Date().toISOString() }));
         return J({ ok: true });
       }
