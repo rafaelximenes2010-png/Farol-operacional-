@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-k",
+   "data": "23/11/2026",
+   "itens": [
+    "Meta: no mapa de atingimento acumulado, a coluna das regionais fica travada ao arrastar os meses para o lado"
+   ]
+  },
+  {
    "v": "2026.11.23-j",
    "data": "23/11/2026",
    "itens": [
