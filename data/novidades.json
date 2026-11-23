@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-g",
+   "data": "23/11/2026",
+   "itens": [
+    "Detalhe de cada regional: gráfico da projeção do mês (realizado × projeção × meta) com leitura de quanto fecha acima ou abaixo"
+   ]
+  },
+  {
    "v": "2026.11.23-f",
    "data": "23/11/2026",
    "itens": [
