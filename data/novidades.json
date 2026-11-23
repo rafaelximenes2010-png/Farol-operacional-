@@ -1,6 +1,14 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-f",
+   "data": "23/11/2026",
+   "itens": [
+    "Regionais: card “Projeção do mês” em todas as regionais (meta do mês × atingimento parcial)",
+    "Regional que já bateu a meta mostra “Meta batida” em vez de valor negativo no necessário/dia útil"
+   ]
+  },
+  {
    "v": "2026.11.23-e",
    "data": "23/11/2026",
    "itens": [

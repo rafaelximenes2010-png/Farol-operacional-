@@ -846,14 +846,15 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
  <p class="note">* parcial do mês. Realizado até setembro: planilha de orçamento; a partir de outubro: Power BI. Filtros por centro de custo funcionam quando a planilha estiver ligada por API.</p></div>`;}
 function regSheet(n){const r=regByName(n),f=D.farol.find(x=>x[0]===n);let h=`<div class="sh"><b>${n}</b><button id="xS">×</button></div>`;
  h+=`<div class="kpis">`;
- if(f) h+=`<div class="card kpi"><div class="l">Farol D-1</div><div class="v" style="color:${C[cor(f[1])]}">${pct(f[1])}</div><div class="s">${st(f[1])}</div></div>`;
+ if(f) h+=`<div class="card kpi" style="grid-column:1/-1"><div class="l">Farol D-1</div><div class="v" style="color:${C[cor(f[1])]}">${pct(f[1])}</div><div class="s">${st(f[1])}</div></div>`;
  if(r){const fl=r[2]-r[1];h+=`<div class="card kpi"><div class="l">Ating. parcial mês</div><div class="v" style="color:${C[cor(r[3])]}">${pct(r[3])}</div><div class="s">total ${pct(r[1]/r[2]*100)} da meta do mês</div></div>
   <div class="card kpi"><div class="l">Faturamento mês</div><div class="v">${mi(r[1])}</div><div class="s">meta ${mi(r[2])}</div></div>
-  <div class="card kpi"><div class="l">Necessário/dia útil</div><div class="v">${mi(fl/M.duRest)}</div><div class="s">falta ${mi(fl)}</div></div></div>
+  ${fl>0?`<div class="card kpi"><div class="l">Necessário/dia útil</div><div class="v">${mi(fl/M.duRest)}</div><div class="s">falta ${mi(fl)} · ${M.duRest} dias úteis</div></div>`:`<div class="card kpi"><div class="l">Necessário/dia útil</div><div class="v up">Meta batida</div><div class="s">${mi(-fl)} acima da meta do mês</div></div>`}
+  <div class="card kpi"><div class="l">Projeção do mês <span class="est">projeção</span></div><div class="v" style="color:${C[cor(r[3])]}">${mi(r[2]*r[3]/100)}</div><div class="s">${pct(r[3])} da meta do mês · ${r[2]*r[3]/100>=r[2]?"+":"−"}${mi(Math.abs(r[2]*r[3]/100-r[2]))}</div></div></div>
   <div class="card" style="margin-top:10px"><div class="grid3" style="margin:0"><div><small>Desvio vs prop.</small><b class="${r[6]>=0?"up":"dn"}">${r[6]>=0?"+":"−"}${mi(Math.abs(r[6]))}</b></div><div><small>Mg. terceiros</small><b>${pct(r[4],2)}</b></div><div><small>Mg. agregados</small><b>${pct(r[5],2)}</b></div></div>
   <div class="note">Posição no ranking: ${[...D.reg].sort((a,b)=>b[3]-a[3]).findIndex(x=>x[0]===n)+1}º de ${D.reg.length} · Quadrante: <b>${r[7]}</b></div></div>`;}
  else h+=`</div><div class="warn">Sem dados de fechamento do mês para ${n} na edição recebida.</div>`;
- h+=`<div class="sec">Fontes</div><div style="display:flex;gap:6px;flex-wrap:wrap">${SRC.reg}${SRC.calc}</div><p class="note">Ating. parcial = faturamento do mês ÷ meta proporcional até o D-1. Necessário/dia útil = (meta do mês − faturamento) ÷ ${M.duRest} dias úteis.</p>`;
+ h+=`<div class="sec">Fontes</div><div style="display:flex;gap:6px;flex-wrap:wrap">${SRC.reg}${SRC.calc}</div><p class="note">Ating. parcial = faturamento do mês ÷ meta proporcional até o D-1. Necessário/dia útil = (meta do mês − faturamento) ÷ ${M.duRest} dias úteis. Projeção do mês = meta do mês × atingimento parcial (estimativa, não é realizado).</p>`;
  h+=`<p class="note">A evolução diária por regional entra quando a API do Power BI estiver ligada (o relatório atual traz só o consolidado por dia).</p>`;
  openSheet(h);}
 
