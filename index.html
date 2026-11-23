@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; media-src 'self' data: blob:; connect-src 'self' data: blob: https://api.github.com https://api.bcb.gov.br https://olinda.bcb.gov.br https://*.workers.dev https://*.grupolos.com.br; worker-src 'self' blob:; frame-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0f2350">
 <link rel="manifest" href="manifest.webmanifest">
@@ -95,7 +96,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .sheet{position:fixed;inset:0;background:rgba(5,12,30,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .sheet>div{background:var(--bg);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom))}
 .sh{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sh b{font-size:18px;flex:1}.sh button{border:0;background:var(--card);width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--ink);cursor:pointer}
-.al{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.al .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}.al .alx{flex:none;width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--mut,#888);font-size:20px;line-height:1;cursor:pointer}.al .alx:hover{background:rgba(192,0,0,.1);color:#C00000}
+.al{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.al .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:15px}.al.nova{border-left:3px solid #1F4E78}.alnova{margin-right:6px;font-size:10px;font-weight:700;color:#fff;background:#C00000;border-radius:6px;padding:1px 6px;vertical-align:2px;text-transform:uppercase}.al .alx{flex:none;width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--mut,#888);font-size:20px;line-height:1;cursor:pointer}.al .alx:hover{background:rgba(192,0,0,.1);color:#C00000}
 .al b{display:block;font-size:14px}.al small{color:var(--ink2);font-size:12px}
 .share{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;border:0;background:#25d366;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:8;cursor:pointer}
 .q{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}
@@ -536,7 +537,7 @@ function textosAtuais(){if(!d1)return;const iso=isoOf(d1.data),e=edicoes(),ka=Ob
 function editorialAtual(){textosAtuais();const e=D.editorial;if(!e||!e.texto||!d1||e.manual)return;const p=Math.round(atD1),m=e.texto.match(/Fechamos o D-1 com (\d+)%/);
  if(!((e.de&&e.de!==d1.data)||(m&&+m[1]!==p)))return;const n=(D.farol||[]).filter(x=>typeof x[1]==="number"&&x[1]>=100).length,ok=p>=100;
  D.editorial={autor:e.autor||"Rafael Ximenes",auto:true,texto:(ok?"RESULTADO FORTE, FOCO NA SUPERMETA! ":"HORA DE VIRAR O JOGO! ")+`Fechamos o D-1 com ${p}% de atingimento e ${n} ${n===1?"regional":"regionais"} acima da meta! `+(ok?"É hora de manter a tração, recuperar os desvios e acelerar cada operação. Temos força para ir além! ":"Cada regional abaixo da meta precisa de um plano de recuperação para hoje. ")+"Cada entrega conta, cada regional faz a diferença. Vamos juntos! PRA CIMA!"};}
-function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;editorialAtual();atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=falta/M.duRest;}
+function compute(){normRegs(D);M=D.mes;d1=D.d1;atD1=d1.fat/d1.meta*100;editorialAtual();atAcO=M.acum/M.metaAcOrc*100;atAcB=M.acum/M.metaAcBI*100;falta=M.metaOrc-M.acum;necDU=M.duRest>0?falta/M.duRest:0;setTimeout(()=>{try{atualizarSino();}catch(e){}},0);}
 /* ===== gráficos SVG ===== */
 function lineChart(series,w=360,h=200,opts={}){const pad={l:38,r:8,t:12,b:24};const xs=series[0].pts.length;
  const maxV=opts.max||Math.max(...series.flatMap(s=>s.pts.filter(v=>v!=null)))*1.08;const X=i=>pad.l+(w-pad.l-pad.r)*i/((opts.n||xs)-1);const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;
@@ -856,7 +857,7 @@ function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true,luz=null,onTap=nul
  const g=F.filter(f=>f[1]>=100).length,y=F.filter(f=>f[1]>=90&&f[1]<100).length,r=F.length-g-y;
  const chips=F.slice().sort((a,b)=>b[1]-a[1]).map(f=>`<span><i style="background:${nbCor(f[1])};box-shadow:0 0 5px ${nbCor(f[1])},0 0 12px ${nbCor(f[1])}"></i>${nbAbrev(f[0])} <em style="color:${nbCor(f[1])}">${Math.round(f[1])}%</em></span>`).join("");
  const b=document.createElement("div");b.className="nb";
- b.innerHTML=`<div class="nbTop"><div class="nbL"><i class="r"></i><i class="y"></i><i class="g"></i></div><div class="nbt"><div class="nbh"><b>FAROL · ${tag}</b><span>agora</span></div><div class="nbb"><b>${t}</b><p>${txt}</p></div></div></div>${sub?`<div class="nbS">${sub}</div>`:""}${F.length?`<div class="nbF">${chips}</div>`:""}`;
+ b.innerHTML=`<div class="nbTop"><div class="nbL"><i class="r"></i><i class="y"></i><i class="g"></i></div><div class="nbt"><div class="nbh"><b>FAROL · ${tag}</b><span>agora</span></div><div class="nbb"><b>${escH(t)}</b><p>${escH(txt)}</p></div></div></div>${sub?`<div class="nbS">${sub}</div>`:""}${F.length?`<div class="nbF">${chips}</div>`:""}`;
  st.prepend(b);requestAnimationFrame(()=>b.classList.add("in"));if(navigator.vibrate)try{navigator.vibrate([18,40,18]);}catch(e){}
  const L=[...b.querySelectorAll(".nbL i")];[0,1,2].forEach(k=>setTimeout(()=>{L.forEach(x=>x.classList.remove("on"));L[k].classList.add("on");},250+k*380));
  setTimeout(()=>{L.forEach(x=>x.classList.remove("on"));const dom=luz!=null?luz:F.length?(r>g&&r>=y?0:y>g?1:2):2;L[dom].classList.add("on");},250+3*380);
@@ -865,7 +866,7 @@ function notifBanner(t,txt,{tag="MERCADO",dur=9000,farol=true,luz=null,onTap=nul
  b.addEventListener("pointerdown",e=>{y0=e.clientY;});b.addEventListener("pointerup",e=>{if(y0!=null&&y0-e.clientY>25){fora();}else{fora();(onTap||alertsSheet)();}y0=null;});
  setTimeout(fora,dur);}
 async function testeDds(){if(!window.FarolSeg)return;const d=new Date();let s=FarolSeg.slotAtual(d);if(s<0)s=0;const a=FarolSeg.aviso(d,s,await segApi());
- notifBanner(a.titulo,a.texto,{sub:a.fonte?`<span><b>Fonte: ${a.fonte}</b> · ${a.contexto||""}</span>`:"",tag:"SEGURANÇA · TESTE",farol:false,luz:1,dur:15000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});
+ notifBanner(a.titulo,a.texto,{sub:a.fonte?`<span><b>Fonte: ${escH(a.fonte)}</b> · ${escH(a.contexto||"")}</span>`:"",tag:"SEGURANÇA · TESTE",farol:false,luz:1,dur:15000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto+(a.fonte?"\nFonte: "+a.fonte+" · "+(a.contexto||""):""),icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"dds-teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("🦺 "+a.titulo,o):new Notification("🦺 "+a.titulo,o),2500);}catch(e){}}}
 async function testeNotif(){setTimeout(testeDds,4500);notifBanner("Teste de notificação ✅","Assim você verá os avisos do Farol: dólar, Selic, IPCA, ouro e a nova edição do dia.",{tag:"TESTE"});
  if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const fz=(D&&D.farol||[]).filter(f=>typeof f[1]==="number").map(f=>(f[1]>=100?"🟢":f[1]>=90?"🟡":"🔴")+" "+nbAbrev(f[0])+" "+Math.round(f[1])+"%").join("  ");const o={body:fz||"Assim chegam os avisos do Farol na tela do celular.",icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"teste-"+Date.now()};setTimeout(()=>reg?reg.showNotification("Farol · Teste de notificação",o):new Notification("Farol · Teste de notificação",o),1500);}catch(e){}}}
@@ -874,18 +875,18 @@ async function testeNotif(){setTimeout(testeDds,4500);notifBanner("Teste de noti
 let ALM=[];
 async function alertasMercado(avisar=true){try{const r=await fetch("data/alertas-mercado.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;ALM=(await r.json()).alertas||[];}catch(e){return;}
  const vis=LS.get("farolAlmVistos",[]),novos=ALM.filter(a=>!vis.includes(a.id));
- const b=document.getElementById("bAl");if(b)b.classList.toggle("dotm",novos.length>0);
+ atualizarSino();
  if(!avisar||!novos.length)return;
  if(LS.get("farolAlmInit",0)){novos.slice(0,3).reverse().forEach((a,i)=>setTimeout(()=>notifBanner(a.titulo,a.texto),i*900));
   if(LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();novos.slice(0,3).forEach(x=>reg?reg.showNotification("Farol · Mercado",{body:x.titulo+" — "+x.texto,icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:x.id}):new Notification("Farol · Mercado",{body:x.titulo}));}catch(e){}}}
  else LS.set("farolAlmInit",1);}
-function almVistos(){LS.set("farolAlmVistos",ALM.map(a=>a.id).slice(0,80));document.getElementById("bAl")?.classList.remove("dotm");}
+function almVistos(){LS.set("farolAlmVistos",ALM.map(a=>a.id).slice(0,80));atualizarSino();}
 /* ===== DDS do dia: avisos de segurança às 7h, 11h e 15h ===== */
 async function segApi(){try{const r=await fetch("data/seguranca.json?t="+Date.now(),{cache:"no-store"});return r.ok?await r.json():null;}catch(e){return null;}}
 async function ddsVisto(k,marcar){try{const c=await caches.open("farol-dds");if(marcar){await c.put("visto",new Response(k));return true;}const r=await c.match("visto");return r?(await r.text())===k:false;}catch(e){const v=LS.get("farolDdsVisto","");if(marcar){LS.set("farolDdsVisto",k);return true;}return v===k;}}
 async function ddsTick(){if(!window.FarolSeg||!perfilValido())return;if(LS.get("farolDdsOff",false))return;const d=new Date(),s=FarolSeg.slotAtual(d);if(s<0)return;
  if(await ddsVisto(FarolSeg.aviso(d,s).chave))return;const a=FarolSeg.aviso(d,s,await segApi());await ddsVisto(a.chave,true);
- if(document.visibilityState==="visible"){notifBanner(a.titulo,a.texto,{sub:a.fonte?`<span><b>Fonte: ${a.fonte}</b> · ${a.contexto||""}</span>`:"",tag:"SEGURANÇA",farol:false,luz:1,dur:12000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});}
+ if(document.visibilityState==="visible"){notifBanner(a.titulo,a.texto,{sub:a.fonte?`<span><b>Fonte: ${escH(a.fonte)}</b> · ${escH(a.contexto||"")}</span>`:"",tag:"SEGURANÇA",farol:false,luz:1,dur:12000,onTap:()=>{if(typeof msgSheet==="function")msgSheet();}});}
  else if("Notification" in window&&Notification.permission==="granted"){try{const reg=await navigator.serviceWorker?.getRegistration();const o={body:a.texto+(a.fonte?"\nFonte: "+a.fonte+" · "+(a.contexto||""):""),icon:"icons/icon-192-v2.png",badge:"icons/icone-96.png",tag:"dds-"+a.chave};reg?reg.showNotification("🦺 "+a.titulo,o):new Notification("🦺 "+a.titulo,o);}catch(e){}}}
 setInterval(ddsTick,60000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")setTimeout(ddsTick,1500);});
 async function ativarNotif(){if(!("Notification" in window)){toastMsg("Este aparelho não suporta notificações. No iPhone, instale o app na tela de início.");return;}
@@ -909,23 +910,31 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 setInterval(()=>{if(document.visibilityState==="visible")alertasMercado();},600000);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")alertasMercado();});
 
-function alertsSheet(){const L=[],iso=isoOf(d1.data),dt=x=>{const m=String(x||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?Date.parse(`${m[3]}-${m[2]}-${m[1]}T12:00:00-03:00`):0;},tE=dt(D.meta&&D.meta.atualizado)||dt(d1.data);
+/* ===== NOTIFICAÇÕES (sininho): últimas 4, lidas/não lidas, apagar ===== */
+function notifItens(){if(typeof D==="undefined"||!D||!D.d1)return[];const L=[],iso=isoOf(d1.data),dt=x=>{const m=String(x||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?Date.parse(`${m[3]}-${m[2]}-${m[1]}T06:00:00-03:00`):0;},tE=dt(D.meta&&D.meta.atualizado)||dt(d1.data);
  const add=(id,ic,cor,tit,txt,ts)=>L.push({id,ic,cor,tit,txt,ts});
- D.farol.filter(f=>f[1]<90).forEach(f=>add("far-"+iso+"-"+f[0],"🔴","var(--rs)",f[0]+" no vermelho","Atingimento de "+pct(f[1])+" no D-1 ("+d1.data.slice(0,5)+")",tE+3));
- D.reg.filter(r=>r[3]<100).forEach(r=>add("reg-"+iso+"-"+r[0],"🟡","var(--ys)",r[0]+" abaixo da meta proporcional",pct(r[3])+" no mês · devendo "+brl(-r[6])+" até o D-1",tE+2));
+ (D.farol||[]).filter(f=>f[1]<90).forEach(f=>add("far-"+iso+"-"+f[0],"🔴","var(--rs)",f[0]+" no vermelho","Atingimento de "+pct(f[1])+" no D-1 ("+d1.data.slice(0,5)+")",tE+3));
+ (D.reg||[]).filter(r=>r[3]<100).forEach(r=>add("reg-"+iso+"-"+r[0],"🟡","var(--ys)",r[0]+" abaixo da meta proporcional",pct(r[3])+" no mês · devendo "+brl(-r[6])+" até o D-1",tE+2));
  if(necDU>M.mediaDU) add("ritmo-"+iso,"⚠️","var(--ys)","Mês abaixo do ritmo necessário","Precisa de "+mi(necDU)+" por dia útil; a média é "+mi(M.mediaDU),tE+2);
  (D.avisos||[]).forEach((t,k)=>add("conf-"+iso+"-"+k,"⚠️","var(--ys)","Conferência dos dados",t,tE+1));
- add("d1-"+iso,"✅","var(--gs)","Dados do D-1 carregados",D.meta.fonte+" · "+D.meta.atualizado,tE+4);
- const vis=LS.get("farolAlmVistos",[]),on=LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted";
- ALM.forEach(a=>add("alm-"+a.id,vis.includes(a.id)?"📈":"🆕",a.nivel==="importante"?"var(--ys)":"var(--bg)",a.titulo,a.texto+" · "+a.data,Date.parse(a.em)||dt(a.data)));
- const del=LS.get("farolAlDel",[]),V=L.filter(a=>!del.includes(a.id)).sort((a,b)=>b.ts-a.ts).slice(0,4);
+ add("d1-"+iso,"✅","var(--gs)","Dados do D-1 carregados",(D.meta&&D.meta.fonte||"")+" · "+(D.meta&&D.meta.atualizado||""),tE+4);
+ (typeof ALM!=="undefined"?ALM:[]).forEach(a=>add("alm-"+a.id,"📈",a.nivel==="importante"?"var(--ys)":"var(--bg)",a.titulo,a.texto+" · "+a.data,Date.parse(a.em)||dt(a.data)));
+ const del=LS.get("farolAlDel",[]);return L.filter(a=>!del.includes(a.id)).sort((a,b)=>b.ts-a.ts).slice(0,4);}
+function naoLidas(){const lid=LS.get("farolAlLidas",[]);return notifItens().filter(a=>!lid.includes(a.id));}
+function atualizarSino(){const b=document.getElementById("bAl");if(!b)return;const n=naoLidas().length;b.classList.toggle("dotm",n>0);b.setAttribute("aria-label",n?`Notificações: ${n} não lida${n>1?"s":""}`:"Notificações");}
+function marcarLidas(ids){const l=LS.get("farolAlLidas",[]);ids.forEach(x=>{if(!l.includes(x))l.unshift(x);});LS.set("farolAlLidas",l.slice(0,400));atualizarSino();}
+window.addEventListener("storage",e=>{if(e.key&&/^farol(AlLidas|AlDel|AlmVistos|Edicoes|Atual)$/.test(e.key))atualizarSino();});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")atualizarSino();});
+function alertsSheet(){const V=notifItens(),lid=LS.get("farolAlLidas",[]),on=LS.get("farolNotif",0)&&"Notification" in window&&Notification.permission==="granted";
  const nt=`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:12px"><div style="flex:1"><b>Notificações de mercado</b><br><small class="note">${on?"✓ Ativas neste aparelho":"Avise-me quando houver atualização importante (dólar, Selic, IPCA, ouro)"}</small></div><button class="btn sec2" id="nTs" style="width:auto;padding:9px 12px">Testar</button>${on?"":`<button class="btn" id="nOn" style="width:auto;padding:9px 16px;background:#22c55e;color:#fff">🔔 Ativar</button>`}</div>`;
- const lista=V.length?V.map(a=>`<div class="card al" data-id="${a.id.replace(/"/g,"&quot;")}"><div class="ic" style="background:${a.cor}">${a.ic}</div><div style="flex:1"><b>${a.tit}</b><small>${a.txt}</small></div><button class="alx" aria-label="Apagar notificação" title="Apagar">×</button></div>`).join("")+`<button class="btn sec2" id="alTodas" style="width:100%;margin-top:2px">Apagar todas</button>`:`<div class="card"><small class="note">Nenhuma notificação.</small></div>`;
+ const lista=V.length?V.map(a=>`<div class="card al${lid.includes(a.id)?"":" nova"}" data-id="${escH(a.id)}"><div class="ic" style="background:${a.cor}">${a.ic}</div><div style="flex:1"><b>${escH(a.tit)}</b>${lid.includes(a.id)?"":' <span class="alnova">nova</span>'}<small>${escH(a.txt)}</small></div><button class="alx" aria-label="Apagar notificação" title="Apagar">×</button></div>`).join("")+`<button class="btn sec2" id="alTodas" style="width:100%;margin-top:2px">Apagar todas</button>`:`<div class="card"><small class="note">Nenhuma notificação.</small></div>`;
  openSheet(`<div class="sh"><b>Notificações <small class="note" style="font-weight:500">· últimas 4</small></b><button id="xS">×</button></div>${lista}${nt}`);
- const apagar=ids=>{const d=LS.get("farolAlDel",[]);ids.forEach(x=>{if(!d.includes(x))d.unshift(x);});LS.set("farolAlDel",d.slice(0,300));document.querySelector(".sheet")?.remove();alertsSheet();};
+ marcarLidas(V.map(a=>a.id));
+ const apagar=ids=>{const d=LS.get("farolAlDel",[]);ids.forEach(x=>{if(!d.includes(x))d.unshift(x);});LS.set("farolAlDel",d.slice(0,400));document.querySelector(".sheet")?.remove();alertsSheet();};
  document.querySelectorAll(".sheet .alx").forEach(b=>b.onclick=e=>{e.stopPropagation();apagar([b.closest(".al").dataset.id]);});
- if($("#alTodas"))$("#alTodas").onclick=()=>apagar(L.map(a=>a.id));
+ if($("#alTodas"))$("#alTodas").onclick=()=>{notifTodas();document.querySelector(".sheet")?.remove();alertsSheet();};
  if($("#nOn"))$("#nOn").onclick=ativarNotif;$("#nTs").onclick=()=>{document.querySelector(".sheet")?.remove();setTimeout(testeNotif,300);};almVistos();}
+function notifTodas(){const del=LS.get("farolAlDel",[]);let g=0;while(g++<60){const v=notifItens();if(!v.length)break;v.forEach(a=>del.unshift(a.id));LS.set("farolAlDel",del.slice(0,400));}atualizarSino();}
 function openSheet(h){const s=document.createElement("div");s.className="sheet";s.innerHTML=`<div>${h}</div>`;document.body.appendChild(s);
  s.addEventListener("click",e=>{if(e.target===s||e.target.id==="xS") s.remove();});}
 /* =SUPER= */
@@ -1097,7 +1106,12 @@ function mSheet(id){const m=metric(id);if(!m)return;
  ${m.note?`<p class="note">${m.note}</p>`:""}
  <p class="note">Edição de ${d1.data} · fonte: ${D.meta.fonte}.</p>`);}
 /* ===== FONTES DE DADOS: API (futuro) · PDF (agora) · edição publicada para a equipe ===== */
-const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){const j=JSON.stringify(v);try{localStorage.setItem(k,j);return true;}catch(e){}
+ /* armazenamento cheio: libera espaço tirando edições antigas do cache local (continuam no servidor); se nem assim couber, devolve tudo como estava */
+ let orig=null;try{orig=localStorage.getItem("farolEdicoes");}catch(e){}if(!orig||k==="farolEdicoes")return false;
+ try{const ed=JSON.parse(orig),ks=Object.keys(ed).sort();for(let i=0;i<ks.length-3;i++){delete ed[ks[i]];localStorage.setItem("farolEdicoes",JSON.stringify(ed));try{localStorage.setItem(k,j);return true;}catch(x){}}}catch(e){}
+ try{localStorage.setItem("farolEdicoes",orig);}catch(e){}return false;}};
+const escH=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const API={get base(){return LS.get("farolApi","")},set base(v){LS.set("farolApi",v)}};
 const isoOf=data=>data.split("/").reverse().join("-");
 function edicoes(){return LS.get("farolEdicoes",{});}
@@ -1320,13 +1334,54 @@ function menu(){const u=perfil();openSheet(`<div class="sh"><b>Menu</b><button i
  <div class="card mi" id="mAtu"><span class="ic">🔄</span><div><b>Central de atualizações</b><small>Edições publicadas e novidades do app</small></div></div>
  <div class="card mi" id="mUso"><span class="ic">📜</span><div><b>Política de uso</b><small>Regras de acesso e sigilo · aceite registrado</small></div></div>
  <div class="card mi" id="mPol"><span class="ic">🔒</span><div><b>Política de dados e segurança</b><small>Confidencialidade e proteção das informações</small></div></div>
+ <div class="card mi" id="mBk"><span class="ic">🗄️</span><div><b>Backup e restauração</b><small>Cópia cifrada automática · exportar e restaurar</small></div></div>
  <div class="card mi" id="mWa"><span class="ic">💬</span><div><b>Instalar e convidar</b><small>Instalar neste aparelho · WhatsApp · QR code</small></div></div>
  
  <div class="card mi" id="mOut"><span class="ic">🚪</span><div><b>Sair e apagar dados deste aparelho</b><small>Remove cadastro, senha e edições salvas</small></div></div></div>`);
  const go=f=>()=>{document.querySelector(".sheet").remove();f();};
  $("#mPerf").onclick=go(()=>cadastro(true).then(()=>show(cur)));if($("#mCen"))$("#mCen").onclick=go(central);if($("#mAdm"))$("#mAdm").onclick=go(adminSheet);$("#mPol").onclick=go(politica);$("#mAtu").onclick=go(centralAtualizacoes);$("#mUso").onclick=go(politicaUso);if($("#mIns"))$("#mIns").onclick=()=>{location.href="instalar.html";};$("#mWa").onclick=()=>{document.querySelector(".sheet")?.remove();convidarSheet();};
- $("#mOut").onclick=()=>{["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};}
+ $("#mBk").onclick=go(backupSheet);
+ $("#mOut").onclick=go(()=>{openSheet(`<div class="sh"><b>Sair e apagar dados?</b><button id="xS">×</button></div><div class="card"><small class="note">Remove cadastro, senha e edições salvas neste aparelho. Antes, o Farol guarda uma cópia cifrada para você poder recuperar.</small></div><div style="display:flex;gap:8px"><button class="btn" id="oSim" style="flex:1;background:#C00000">Sair e apagar</button><button class="btn sec2" id="oNao" style="flex:1">Cancelar</button></div>`);
+  $("#oNao").onclick=()=>document.querySelector(".sheet")?.remove();$("#oSim").onclick=async()=>{try{await bkCriar("antes de sair");}catch(e){}["farolPerfil","farolSenha","farolEdicoes","farolAtual","farolVisitas","farolLog","farolGh"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});location.reload();};});}
 
+/* ===== BACKUP DO APARELHO (automático, cifrado, com restauração) =====
+   Guarda uma cópia cifrada (AES-GCM, chave da senha da equipe) de tudo que o Farol salva neste aparelho:
+   perfil, ajustes, notificações lidas/apagadas, histórico de edições. Automático a cada 6 h com o app aberto
+   (e ao abrir, se a última cópia tiver mais de 6 h). Mantém as 7 mais recentes + cópias de segurança antes de restaurar/sair. */
+const BK={db:null,MAX:7,INTERVALO:6*3600e3};
+function bkDb(){if(BK.db)return Promise.resolve(BK.db);return new Promise((ok,err)=>{const r=indexedDB.open("farol-backup",1);r.onupgradeneeded=()=>r.result.createObjectStore("snap");r.onsuccess=()=>{BK.db=r.result;ok(BK.db);};r.onerror=()=>err(r.error);});}
+async function bkOp(modo,f){const db=await bkDb();return new Promise((ok,err)=>{const t=db.transaction("snap",modo),st=t.objectStore("snap");let res;Promise.resolve(f(st,v=>res=v)).catch(err);t.oncomplete=()=>ok(res);t.onerror=()=>err(t.error);});}
+async function bkLista(){return bkOp("readonly",(st,set)=>{const q=st.getAll(),k=st.getAllKeys();let a,b;q.onsuccess=()=>{a=q.result;if(b)set(a.map((x,i)=>Object.assign({chave:b[i]},x.info)));};k.onsuccess=()=>{b=k.result;if(a)set(a.map((x,i)=>Object.assign({chave:b[i]},x.info)));};}).then(l=>(l||[]).sort((x,y)=>y.em-x.em));}
+function bkDados(){const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith("farol")&&k!=="farolSenha")o[k]=localStorage.getItem(k);}return o;}
+async function bkCriar(motivo="automático"){const senha=LS.get("farolSenha","");if(!senha)return null;const dados=bkDados();if(!Object.keys(dados).length)return null;
+ const c=await cifrar(dados,senha),info={em:Date.now(),motivo,chaves:Object.keys(dados).length,tam:c.length,versao:(typeof APP_V!=="undefined"?APP_V:"")};const chave="bk-"+info.em;
+ await bkOp("readwrite",st=>{st.put({info,c},chave);});
+ const l=await bkLista(),auto=l.filter(x=>x.motivo==="automático"),extra=l.filter(x=>x.motivo!=="automático");
+ const fora=[...auto.slice(BK.MAX),...extra.slice(3)];if(fora.length)await bkOp("readwrite",st=>{fora.forEach(x=>st.delete(x.chave));});
+ LS.set("farolBkUlt",info.em);return info;}
+async function bkLer(chave){return bkOp("readonly",(st,set)=>{const q=st.get(chave);q.onsuccess=()=>set(q.result||null);});}
+async function bkAplicar(dados){/* restaura sem apagar a senha; chaves que não existiam no backup ficam como estão */Object.entries(dados).forEach(([k,v])=>{if(k.startsWith("farol")&&k!=="farolSenha"&&typeof v==="string"){try{localStorage.setItem(k,v);}catch(e){}}});}
+async function bkRestaurar(c,senha){const dados=await decifrar(c,senha);if(!dados||typeof dados!=="object")throw new Error("Backup inválido.");try{await bkCriar("antes da restauração");}catch(e){}await bkAplicar(dados);if(senha&&!LS.get("farolSenha",""))LS.set("farolSenha",senha);return Object.keys(dados).length;}
+async function bkAuto(){try{if(Date.now()-LS.get("farolBkUlt",0)>=BK.INTERVALO)await bkCriar("automático");}catch(e){}}
+setTimeout(bkAuto,8000);setInterval(bkAuto,30*60*1000);
+async function bkExportar(){const senha=LS.get("farolSenha","");if(!senha){toastMsg("Entre com a senha da equipe para gerar o backup.");return;}
+ const c=await cifrar(bkDados(),senha),arq=JSON.stringify({app:"farol-operacional",tipo:"backup",v:1,em:new Date().toISOString(),c});
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([arq],{type:"application/json"}));a.download="Farol_backup_"+new Date().toISOString().slice(0,10)+".farolbak";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toastMsg("Backup cifrado salvo no aparelho.");}
+async function bkImportar(file){try{const j=JSON.parse(await file.text());if(j.app!=="farol-operacional"||!j.c)throw new Error("Este arquivo não é um backup do Farol.");
+ let senha=LS.get("farolSenha","");for(let t=0;t<3;t++){if(!senha)senha=await pedirSenha(t>0);if(!senha)return;try{const n=await bkRestaurar(j.c,senha);toastMsg(n+" itens restaurados. Recarregando…");setTimeout(()=>location.reload(),1200);return;}catch(e){senha="";}}toastMsg("Senha não abre este backup.");}catch(e){toastMsg(e.message||"Não consegui ler o arquivo.");}}
+async function backupSheet(){let l=[];try{l=await bkLista();}catch(e){}const q=d=>new Date(d).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+ openSheet(`<div class="sh"><b>Backup e restauração</b><button id="xS">×</button></div>
+ <div class="card"><small class="note">Cópia cifrada de tudo que o Farol guarda neste aparelho (perfil, ajustes, notificações e histórico). Automática a cada 6 horas com o app aberto; ficam as 7 mais recentes. A senha da equipe não entra na cópia.</small></div>
+ ${l.length?l.map(x=>`<div class="card al"><div class="ic" style="background:var(--bg)">🗄️</div><div style="flex:1"><b>${q(x.em)}</b><small>${escH(x.motivo)} · ${x.chaves} itens · ${Math.round(x.tam/1024)} KB</small></div><button class="btn sec2 bkR" data-k="${escH(x.chave)}" style="width:auto;padding:8px 12px">Restaurar</button></div>`).join(""):`<div class="card"><small class="note">Ainda não há cópia neste aparelho.</small></div>`}
+ <div style="display:flex;gap:8px;margin-top:6px"><button class="btn" id="bkAgora" style="flex:1">Fazer backup agora</button><button class="btn sec2" id="bkExp" style="flex:1">Exportar arquivo</button></div>
+ <button class="btn sec2" id="bkImp" style="width:100%;margin-top:8px">Restaurar de um arquivo (.farolbak)</button><input type="file" id="bkFile" accept=".farolbak,application/json" hidden>`);
+ $("#bkAgora").onclick=async()=>{const r=await bkCriar("manual").catch(()=>null);document.querySelector(".sheet")?.remove();toastMsg(r?"Backup feito.":"Entre com a senha da equipe para fazer o backup.");backupSheet();};
+ $("#bkExp").onclick=bkExportar;$("#bkImp").onclick=()=>$("#bkFile").click();$("#bkFile").onchange=e=>{const f=e.target.files[0];if(f){document.querySelector(".sheet")?.remove();bkImportar(f);}};
+ document.querySelectorAll(".bkR").forEach(b=>b.onclick=async()=>{const x=await bkLer(b.dataset.k);if(!x)return;let senha=LS.get("farolSenha","");for(let t=0;t<3;t++){if(!senha)senha=await pedirSenha(t>0);if(!senha)return;try{const n=await bkRestaurar(x.c,senha);document.querySelector(".sheet")?.remove();toastMsg(n+" itens restaurados. Recarregando…");setTimeout(()=>location.reload(),1200);return;}catch(e){senha="";}}});}
+/* aparelho perdeu os dados (limpeza do navegador, reinstalação): oferece a cópia guardada antes do cadastro */
+async function oferecerRestauracao(){let l=[];try{l=await bkLista();}catch(e){return false;}if(!l.length)return false;const x=await bkLer(l[0].chave);if(!x)return false;
+ const ok=await new Promise(res=>{openSheet(`<div class="sh"><b>Recuperar dados do Farol</b></div><div class="card"><small class="note">Encontrei uma cópia cifrada dos seus dados neste aparelho, de ${new Date(l[0].em).toLocaleString("pt-BR")}. Para restaurar, informe a senha da equipe.</small></div><div style="display:flex;gap:8px"><button class="btn" id="rcSim" style="flex:1">Restaurar</button><button class="btn sec2" id="rcNao" style="flex:1">Agora não</button></div>`);$("#rcSim").onclick=()=>{document.querySelector(".sheet")?.remove();res(true);};$("#rcNao").onclick=()=>{document.querySelector(".sheet")?.remove();res(false);};});
+ if(!ok)return false;for(let t=0;t<3;t++){const senha=await pedirSenha(t>0);if(!senha)return false;try{await bkRestaurar(x.c,senha);return true;}catch(e){}}return false;}
 /* ===== NAVEGAÇÃO COM VOLTAR ===== */
 const pilha=[];
 
@@ -1543,7 +1598,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();setTimeout(sincronizarHistorico,3000);setTimeout(checarAviso,6000);try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()&&await oferecerRestauracao()){location.reload();return;}if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();setTimeout(sincronizarHistorico,3000);setTimeout(checarAviso,6000);try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 
 /* ===== BUSCA NO APP (farolzinho no topo) ===== */
 const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();

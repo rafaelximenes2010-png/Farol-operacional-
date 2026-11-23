@@ -1,0 +1,51 @@
+name: Integridade e backup dos dados
+# A cada push que mexe em data/: confere todos os arquivos e restaura qualquer edição apagada ou corrompida.
+# Todo dia às 03h07 (Brasília): confere e guarda um backup completo de data/ (edições já cifradas) por 90 dias.
+on:
+  push:
+    branches: [main]
+    paths: ["data/**"]
+  schedule:
+    - cron: "7 6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: integridade-dados
+  cancel-in-progress: false
+jobs:
+  integridade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Conferir e restaurar
+        id: chk
+        env:
+          ANTES: ${{ github.event_name == 'push' && github.event.before || '' }}
+        run: |
+          REF=""
+          if [ -n "$ANTES" ] && git cat-file -e "$ANTES" 2>/dev/null; then REF="$ANTES"; fi
+          node scripts/integridade.mjs $REF
+      - name: Publicar restauração
+        if: steps.chk.outputs.restaurados != '0' && steps.chk.outputs.restaurados != ''
+        run: |
+          git config user.name "Farol Operacional (automático)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git commit -m "Integridade: restauração automática de dados apagados/corrompidos"
+          for t in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0; sleep 5; done; exit 1
+      - name: Montar backup
+        if: github.event_name != 'push'
+        run: |
+          mkdir -p bkp && tar -czf "bkp/farol-dados-$(date -u +%F).tar.gz" data
+          (cd bkp && sha256sum *.tar.gz > SHA256SUMS.txt && cat SHA256SUMS.txt)
+      - name: Guardar backup (90 dias)
+        if: github.event_name != 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: farol-backup-${{ github.run_id }}
+          path: bkp/
+          retention-days: 90

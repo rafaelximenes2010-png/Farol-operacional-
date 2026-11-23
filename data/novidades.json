@@ -1,6 +1,18 @@
 {
  "versoes": [
   {
+   "v": "2026.11.23-b",
+   "data": "23/11/2026",
+   "itens": [
+    "Sininho: o ponto some assim que as notificações são lidas, na hora, sem recarregar (inclusive em outra aba)",
+    "Backup automático cifrado do aparelho a cada 6 h, com restauração e exportação de arquivo (Menu › Backup e restauração)",
+    "Se o aparelho perder os dados, o app oferece recuperar a última cópia",
+    "Atualizações do app não apagam mais avisos vistos, DDS e contador do ícone",
+    "Sair e apagar dados agora pede confirmação e guarda uma cópia antes",
+    "Proteção extra contra textos maliciosos vindos de fontes externas"
+   ]
+  },
+  {
    "v": "2026.11.23-a",
    "data": "23/11/2026",
    "itens": [

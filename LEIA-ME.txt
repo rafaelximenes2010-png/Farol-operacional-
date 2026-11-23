@@ -63,3 +63,13 @@ NOTIFICAÇÃO COM A TELA BLOQUEADA + INDICAÇÃO NO ÍCONE
 - No app, cada pessoa toca no sino › Ativar notificações (uma vez). iPhone: só com o app
   instalado na tela de início (iOS 16.4 ou mais novo).
 - Cada notificação acende a bolinha com número no ícone do app; abrir o app apaga.
+
+INTEGRIDADE E BACKUP (23/11/2026)
+- Aparelho: Menu › Backup e restauração. Cópia cifrada (senha da equipe) automática a cada 6 h com o app aberto,
+  7 mais recentes + cópias antes de restaurar/sair. "Exportar arquivo" gera um .farolbak para guardar fora do aparelho.
+- Repositório: workflow "Integridade e backup dos dados" (.github/workflows/integridade.yml).
+  A cada push em data/ confere todos os arquivos e restaura edições apagadas ou corrompidas (scripts/integridade.mjs).
+  Todo dia às 03h07 guarda um backup completo de data/ por 90 dias (aba Actions › artefatos).
+  Para apagar uma edição de propósito: desative o workflow antes, senão ela volta.
+- Teste local: node scripts/integridade.mjs            (só confere)
+               node scripts/integridade.mjs <commit>   (confere e restaura a partir do commit indicado)
