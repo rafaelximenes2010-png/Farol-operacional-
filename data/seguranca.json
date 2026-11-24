@@ -1,5 +1,5 @@
 {
- "data": "2026-11-23",
+ "data": "2026-11-24",
  "horas": [
   7,
   11,
@@ -7,10 +7,16 @@
  ],
  "dicas": [
   {
-   "dica": "Respeite a velocidade da via. Com carga a granel, curva sempre devagar.",
-   "titulo": "Operação Freio Seguro: PRF flagra caminhões com freios isolados e excesso de peso na BR-040, em Nova Lima (MG)",
+   "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
+   "titulo": "16ª turma de Observadores Certificados é celebrada durante evento em São Paulo",
+   "fonte": "Observatório Nacional de Segurança Viária",
+   "url": "https://www.onsv.org.br/comunicacao/materias/16a-turma-de-observadores-certificados-e-celebrada-durante-evento-em-sao-paulo"
+  },
+  {
+   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
+   "titulo": "Passageiro de carro é resgatado de helicóptero após colidir atrás de caminhão na BR 101",
    "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxPSVZjVEhyWUx6Z1ZlZW41dG13Vl9hb2lFRmU5cFozNXdUeHhJdVFPZVVpR2pidll0NXJjRFk1MlNQWlhoLThiVWNyLWtMc2R0d2VXRnp4NGFVZ04xMjhqNnljUlc2OFlrUkxaU1NVQlExVmVLT2NpeGRyaUdDaVVTaHRpUWR3X0xyTGxENUZmSUhpbmtXX0YzVTdIYVdIZ1RldG82MF9EZGRVTU9EMDA0U3gtV082ejBTOTB6eXBHVXVFZmdRa2VUeVJZVE9NLWFlbXJWOXBIV0dXbTRmb0t0X3dYUi1mSDMyTTRyMW1RWjdZNktXN0pmOHBXR2xBUUUwbElIY05NWFBqQVdnVEE?oc=5"
+   "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOZE5wbmpDUmo1QlU2R2VVM2VzSWViX2NKdlNUdWMyajlvMTdZXzZlSkZfWUpQbF9CSVowMWlVZTR4Wkh6X0VsSVpndjZpTk9USVpfanU5MW9KU3JVWUw1Vzk4VDhfczVjM1ZJQmx1cHR1bjdKNW50OFdIR0djNkp4X1h3ZE9ub1F6YjdxQlFDc2lqeVZUQ3FPNWJSMTg1VF9ibzJLRU9ZV2Q0MHpWQ2FrUk1mbExtN25pdXlLTXRvakw5cDU3akVhcHZXdjBLUEozbEZzUU5zbmI2TEM3aVVpYnhtM0lEajF6SE1WaTFSWDV6UC1n?oc=5"
   }
  ],
  "fontes": [
@@ -54,7 +60,9 @@
   "https://www.onsv.org.br/blog-do-observatorio/a-comunicacao-no-transito-sinais-nao-verbais-que-se-comunicam",
   "https://news.google.com/rss/articles/CBMizwFBVV95cUxQOG5rOHRrR1lCbkJrWWk3dUV2RVpGdXpZR18xRXZhU2NxRzhJV3Z2Tm00bGlhenRnek1fZFUxLW9LeVB2Yk9NVGxMX3pBX21zYTYzMWk0RXBpSEJWX0RWX3BzeDA5bWZUU1lyYk1TcW5ucUpVVGFlWG53dHdGR0J0T0J5bVlLdkRqR19IQWVDS1htdEtoNzd0RHBacjdCZ1d5RWZRQjNNQjBkcEdTaHRHM0ZXTzNPd2xWVFJVb0poVWxTUmI3ZGlZVkpLRm5QbVk?oc=5",
   "https://protecao.com.br/noticias/geral/fundacentro-apresenta-atualizacao-de-laboratorios-a-fabricantes-de-epis/",
-  "https://news.google.com/rss/articles/CBMijgJBVV95cUxPSVZjVEhyWUx6Z1ZlZW41dG13Vl9hb2lFRmU5cFozNXdUeHhJdVFPZVVpR2pidll0NXJjRFk1MlNQWlhoLThiVWNyLWtMc2R0d2VXRnp4NGFVZ04xMjhqNnljUlc2OFlrUkxaU1NVQlExVmVLT2NpeGRyaUdDaVVTaHRpUWR3X0xyTGxENUZmSUhpbmtXX0YzVTdIYVdIZ1RldG82MF9EZGRVTU9EMDA0U3gtV082ejBTOTB6eXBHVXVFZmdRa2VUeVJZVE9NLWFlbXJWOXBIV0dXbTRmb0t0X3dYUi1mSDMyTTRyMW1RWjdZNktXN0pmOHBXR2xBUUUwbElIY05NWFBqQVdnVEE?oc=5"
+  "https://news.google.com/rss/articles/CBMijgJBVV95cUxPSVZjVEhyWUx6Z1ZlZW41dG13Vl9hb2lFRmU5cFozNXdUeHhJdVFPZVVpR2pidll0NXJjRFk1MlNQWlhoLThiVWNyLWtMc2R0d2VXRnp4NGFVZ04xMjhqNnljUlc2OFlrUkxaU1NVQlExVmVLT2NpeGRyaUdDaVVTaHRpUWR3X0xyTGxENUZmSUhpbmtXX0YzVTdIYVdIZ1RldG82MF9EZGRVTU9EMDA0U3gtV082ejBTOTB6eXBHVXVFZmdRa2VUeVJZVE9NLWFlbXJWOXBIV0dXbTRmb0t0X3dYUi1mSDMyTTRyMW1RWjdZNktXN0pmOHBXR2xBUUUwbElIY05NWFBqQVdnVEE?oc=5",
+  "https://www.onsv.org.br/comunicacao/materias/16a-turma-de-observadores-certificados-e-celebrada-durante-evento-em-sao-paulo",
+  "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOZE5wbmpDUmo1QlU2R2VVM2VzSWViX2NKdlNUdWMyajlvMTdZXzZlSkZfWUpQbF9CSVowMWlVZTR4Wkh6X0VsSVpndjZpTk9USVpfanU5MW9KU3JVWUw1Vzk4VDhfczVjM1ZJQmx1cHR1bjdKNW50OFdIR0djNkp4X1h3ZE9ub1F6YjdxQlFDc2lqeVZUQ3FPNWJSMTg1VF9ibzJLRU9ZV2Q0MHpWQ2FrUk1mbExtN25pdXlLTXRvakw5cDU3akVhcHZXdjBLUEozbEZzUU5zbmI2TEM3aVVpYnhtM0lEajF6SE1WaTFSWDV6UC1n?oc=5"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
@@ -65,5 +73,5 @@
   "Ministério do Trabalho: 25",
   "Notícias: 2"
  ],
- "atualizado": "2026-11-23T10:43:11.284Z"
+ "atualizado": "2026-11-24T10:36:14.132Z"
 }
