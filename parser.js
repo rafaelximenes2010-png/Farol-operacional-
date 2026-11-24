@@ -64,7 +64,8 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       return out.length ? { linhas: out, autor } : null; };
     const ddsB = bloco(/(?:D D S D O D I A|S E G U R A N Ç A E M P R I M E I R O L U G A R · [^\n]*)\s*(?:🦺)?\s*\n/), edB = bloco(/Mensagem\s*\n?do dia\s*\n/);
     const ddsM = ddsB && ddsB.linhas.length > 1 ? [null, ddsB.linhas[0].trim(), ddsB.linhas.slice(1).join("\n"), ddsB.autor] : all.match(/D D S D O D I A\s*\n\s*(.+?)\s*(?:🦺)?\s*\n([\s\S]+?)\n\s*—\s*([^\n]+)/);
-    const edM = edB ? [null, edB.linhas.join("\n"), edB.autor] : all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
+    const capitular = L => { L = L.slice(); if (L.length > 1 && /^[A-ZÀ-Ú]$/.test(L[0].trim())) { L[1] = L[0].trim() + L[1].trim(); L.shift(); } return L; }; // letra capitular separada ("B" + "om dia")
+    const edM = edB ? [null, capitular(edB.linhas).join("\n"), edB.autor] : all.match(/Mensagem\s*\n?do dia\s*\n\s*([\s\S]+?)\n\s*—\s*([^\n]+)/);
     const frM = all.match(/“([\s\S]+?)\s*\n?\s*—\s*([^”]{1,80}?)\s*”/);
     const limpa = s => s.replace(/\*\*/g, "").replace(/-\n/g, "").replace(/\s*\n\s*/g, " ").replace(/^E\s+stamos/, "Estamos").replace(/^(\w)\s+(\w)/, "$1$2").trim();
     const D = {

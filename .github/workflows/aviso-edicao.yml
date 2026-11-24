@@ -1,0 +1,43 @@
+name: Aviso de nova edição
+# Toda edição publicada (pelo app do administrador, no celular ou no computador, ou pelo script
+# scripts/publicar-revista.mjs) grava data/ultimo.enc. Este robô então escreve data/aviso.json com
+# um id novo; o Worker farol-push lê esse arquivo a cada 5 minutos e manda a notificação para todos
+# os aparelhos inscritos, mesmo com a tela bloqueada. Sem isso, o aviso ficava preso na edição anterior.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/ultimo.enc"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: aviso-edicao
+  cancel-in-progress: false
+jobs:
+  aviso:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Escrever aviso da edição publicada
+        run: |
+          set -e
+          git config user.name "Farol Operacional (automático)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for t in 1 2 3; do
+            git pull --rebase -q origin main
+            # edição mais recente publicada (nome do arquivo = data do D-1, AAAA-MM-DD)
+            ISO=$(ls data/edicoes/*.enc | sed 's#.*/##; s#\.enc$##' | sort | tail -1)
+            [ -n "$ISO" ] || { echo "Nenhuma edição encontrada."; exit 0; }
+            ID="edicao-$ISO"
+            if grep -q "\"id\": *\"$ID\"" data/aviso.json 2>/dev/null; then echo "Aviso $ID já existe."; exit 0; fi
+            BR=$(date -d "$ISO" +%d/%m/%Y)
+            ATE=$(TZ=America/Sao_Paulo date -d "tomorrow 23:59" +%Y-%m-%dT%H:%M:00-03:00)
+            printf '{\n "id": "%s",\n "titulo": "Flash Atualizado!",\n "texto": "Os números de %s já estão no Farol. Abra o app para ver o resultado do dia.",\n "ate": "%s"\n}\n' "$ID" "$BR" "$ATE" > data/aviso.json
+            git add data/aviso.json
+            git commit -q -m "Aviso: edição de $BR publicada"
+            git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
