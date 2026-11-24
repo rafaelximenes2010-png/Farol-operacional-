@@ -817,10 +817,7 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  <div class="card rank">${[...D.proj3.map(p=>[p[0],p[1],"#7c3aed"]),["Meta orçada",M.metaOrc/1e6,"#0f2350"],["Meta Power BI",M.metaBI/1e6,"#94a3b8"]].map((p,i)=>`<div class="rk" data-m="${i<D.proj3.length?"proj":"metas"}" style="grid-template-columns:130px 1fr 70px;cursor:pointer"><span>${p[0]} ›</span><div class="bar"><span style="width:${p[1]/mxp*100}%;background:${p[2]}"></span></div><span>${p[1].toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} mi</span></div>`).join("")}</div>
  <h2>Ritmo por dia útil <small>toque para detalhar</small></h2>
  <div class="card drl" data-m="necDU">${barsChart([{v:M.mediaDU,c:"#1b3a7a",t:mi(M.mediaDU),l:"Realizado"},{v:M.metaMediaRest,c:"#0f2350",t:mi(M.metaMediaRest),l:"Meta média restante"},{v:necDU,c:"#7c3aed",t:mi(necDU),l:"Necessário p/ meta"} ],360,180)}</div>
- <h2>Projeção por regional <small>meta do mês × ating. parcial</small></h2>
- <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Desvio vs prop.</th><th>Projeção</th><th>Falta p/ meta</th><th>Necessário/dia útil</th><th>Quadrante</th></tr></thead><tbody>
- ${D.reg.map(x=>{const fl=x[2]-x[1];const q=x[7];return `<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td class="${x[6]>=0?"up":"dn"}">${x[6]>=0?"+":"−"}${mi(Math.abs(x[6])).replace("R$ ","R$ ")}</td><td>${mi(x[2]*x[3]/100)}</td><td>${mi(fl)}</td><td>${brl(fl/M.duRest)}</td><td>${q==="—"?"—":`<span class="q ${q==="Crítico"?"c":q==="Proteger margem"?"p":"a"}">${q}</span>`}</td></tr>`}).join("")}
- </tbody></table></div></div>
+ <h2>Projeção do mês por regional <small>Power BI · fechamento projetado</small></h2><div id="pjBox">${pjHtml()}</div>
  <h2>Super meta do ano · quanto falta <small>mesma base do acumulado (${pct(Y.pc,1)}) e da projeção (${pct(pcA,1)})</small></h2>
  <div class="card fx2" data-m="superano">${FAIXAS.map(f=>{const v=metaA*(1+f[1]/100),ok=A.tot>=v,falt=Math.max(0,v-Y.real),mr=Math.max(1,D.orc.length-A.nFech);return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(Y.real/v*100,1)} · projeção ${ok?"✓ atinge":pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${falt?"faltam "+mi(falt)+" · "+mi(falt/mr)+"/mês":"✓ atingida"}</small></div>`;}).join("")}
  <p class="note" style="margin:4px 2px 0">Acumulado do ano = ${A.nFech} meses fechados (${mi(A.real)}) + ${D.orc[A.mI]?D.orc[A.mI][0]:"mês"} até o D-1 (${mi(M.acum)}). Projeção do ano = meses fechados + projeção do mês (${mi(M.proj)}) + orçado dos meses seguintes (${mi(A.fut)}). "Por mês" = o que falta dividido pelos ${Math.max(1,D.orc.length-A.nFech)} meses restantes, incluindo o atual.</p></div>`;}
@@ -831,7 +828,7 @@ function anoAcum(){const A=anoProj(M.proj),fech=D.orc.filter(x=>x[3]!=null&&!x[5
  const real=A.real+M.acum,meta=mo+M.metaAcOrc,ano=(d1.data||"").slice(6)||String(new Date().getFullYear());
  return {real,meta,pc:real/meta*100,fechReal:A.real,fechMeta:mo,ano,de:(D.orc[0]||["Jan"])[0],ate:(d1.data||"").slice(0,5)};}
 function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);const sO=closed.reduce((s,x)=>s+x[1],0),sR=closed.reduce((s,x)=>s+x[3],0);
- return `<h2>Projeção do mês por regional <small>Power BI · fechamento projetado</small></h2><div id="pjBox">${PJ!==undefined?pjHtml():'<div class="card"><small class="note">Carregando a projeção das regionais…</small></div>'}</div><h2 class="rmh">Acumulado por regional <small>faturado × meta · mês a mês</small></h2><div id="rmBox">${RM?rmHtml():'<div class="card"><small class="note">Carregando dados das regionais…</small></div>'}</div>`+vSuper()+`<h2>Grupo · meta orçada</h2><div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
+ return `<h2 class="rmh">Acumulado por regional <small>faturado × meta · mês a mês</small></h2><div id="rmBox">${RM?rmHtml():'<div class="card"><small class="note">Carregando dados das regionais…</small></div>'}</div>`+vSuper()+`<h2>Grupo · meta orçada</h2><div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
  <div class="kpis">
   <div class="card kpi hero" data-m="ano"><div class="l">Realizado no ano</div><div class="v">${mi(sR)}</div><div class="s">10 meses fechados</div></div>
   <div class="card kpi lit" data-m="ano"><div class="l">Ating. orçada (ano)</div><div class="v up">${pct(sR/sO*100,1)}</div><div class="s">${sg(sR-sO)}</div></div>
@@ -845,15 +842,20 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
  <tr class="tot"><td>Meses fechados</td><td>${sO.toLocaleString("pt-BR")}</td><td></td><td>${sR.toLocaleString("pt-BR")}</td><td>${pct(sR/sO*100,1)}</td><td></td><td class="up">${sg(sR-sO)}</td><td></td><td></td></tr></tbody></table></div>
  <p class="note">* parcial do mês. Realizado até setembro: planilha de orçamento; a partir de outubro: Power BI. Filtros por centro de custo funcionam quando a planilha estiver ligada por API.</p></div>`;}
 /* ===== Projeção do mês por regional (data/projreg.enc, cifrado com a senha da equipe) =====
-   Vem do PDF "Projeção de cada regional" do Power BI, carregado pelo administrador (app ou script).
+   Vem do PDF "Projeção de cada regional" do Power BI, carregado pelo administrador (app ou script). Aparece na aba Projeção.
    Os valores de meta, atingimento, projeção e volume são exatamente os do BI; só "Proj. ÷ meta" e "Desvio" são calculados. */
 let PJ;
+/* estimativa simples por regional (meta do mês × ating. parcial), usada só enquanto não há a projeção do Power BI do mês */
+function pjEstimativa(){return `<p class="note" style="margin:0 2px 6px">Estimativa simples (meta do mês × atingimento parcial). A projeção oficial do Power BI aparece aqui quando o administrador carregar o PDF <b>Projeção de cada regional</b>.</p>
+ <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Desvio vs prop.</th><th>Projeção</th><th>Falta p/ meta</th><th>Necessário/dia útil</th><th>Quadrante</th></tr></thead><tbody>
+ ${D.reg.map(x=>{const fl=x[2]-x[1];const q=x[7];return `<tr data-reg="${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b></td><td class="${x[6]>=0?"up":"dn"}">${x[6]>=0?"+":"−"}${mi(Math.abs(x[6])).replace("R$ ","R$ ")}</td><td>${mi(x[2]*x[3]/100)}</td><td>${mi(fl)}</td><td>${brl(fl/M.duRest)}</td><td>${q==="—"?"—":`<span class="q ${q==="Crítico"?"c":q==="Proteger margem"?"p":"a"}">${q}</span>`}</td></tr>`}).join("")}
+ </tbody></table></div></div>`;}
 async function pjCarregar(){let P=null;try{const r=await fetch("data/projreg.enc?t="+Date.now(),{cache:"no-store"});if(r.ok)P=await decifrar(await r.text(),LS.get("farolSenha",""));}catch(e){P=null;}
  const loc=LS.get("farolProjLocal",null);if(loc&&loc.mes&&(!P||!P.meses||!P.meses[loc.mes]||(P.meses[loc.mes].exportadoIso||"")<(loc.exportadoIso||"")))P=pjJuntar(P,loc);
  PJ=P;const b=$("#pjBox");if(b)b.innerHTML=pjHtml();return PJ;}
 function pjJuntar(P,x){P=P&&P.meses?JSON.parse(JSON.stringify(P)):{meses:{}};P.meses[x.mes]=x;return P;}
-function pjHtml(){if(!PJ||!PJ.meses||!Object.keys(PJ.meses).length)return '<div class="card"><small class="note">Ainda não há projeção por regional publicada. O administrador carrega o PDF <b>Projeção de cada regional</b> do Power BI pelo app (Carregar PDF) ou envia no chat.</small></div>';
- const ks=Object.keys(PJ.meses).sort(),atual=d1&&d1.data?d1.data.slice(6)+"-"+d1.data.slice(3,5):"",k=ks.includes(atual)?atual:ks[ks.length-1],P=PJ.meses[k],T=P.total;
+function pjHtml(){const atual=d1&&d1.data?d1.data.slice(6)+"-"+d1.data.slice(3,5):"";if(!PJ||!PJ.meses||!PJ.meses[atual])return pjEstimativa();
+ const k=atual,P=PJ.meses[k],T=P.total;
  const L=P.regs.map(r=>({...r,pm:r.meta?r.proj/r.meta*100:null,dv:r.meta?r.proj-r.meta:null})).sort((a,b)=>(b.pm??-1)-(a.pm??-1));
  const ok=L.filter(r=>r.pm!=null&&r.pm>=100).length,tpm=T.meta?T.proj/T.meta*100:null,mx=Math.max(110,...L.map(r=>r.pm||0)),f0=v=>v==null?"—":v.toLocaleString("pt-BR",{maximumFractionDigits:0});
  return `<div class="kpis">
@@ -1261,7 +1263,7 @@ async function carregarArquivos(files){let revista=null,projTxt=null;
  return {falta:pendBI.dia?"o PDF de REGIONAIS (indicadores_flash … D-1 REGIONAIS)":"o PDF diário (indicadores_flash … com a tabela por dia)"};}
 $("#pdfIn").addEventListener("change",async e=>{const fs=[...e.target.files];e.target.value="";if(!fs.length)return;toastMsg("Lendo "+fs.length+" arquivo(s)…");
  try{const r=await carregarArquivos(fs);
-  if(r.soProj){if(D)show("orc");return;}
+  if(r.soProj){if(D)show("proj");return;}
   if(r.falta){openSheet(`<div class="sh"><b>Falta 1 arquivo</b><button id="xS">×</button></div><div class="card">Recebi um dos PDFs do Power BI. Agora envie ${r.falta}.</div><button class="btn" data-pdf style="width:100%;margin-top:10px">Escolher o outro PDF</button>`);return;}
   const Dx=r.Dx;Dx.meta=Object.assign(Dx.meta||{},{modo:"pdf"});guardar(Dx);logEv("carregado");if(r.orig)pdfSalvar(isoOf(Dx.d1.data),r.orig);D=Dx;compute();paintHead();show("hoje");toastMsg(r.textos?"DDS, mensagem e frase atualizados pela revista.":"Edição de "+Dx.d1.data+" atualizada.");
   const gh=LS.get("farolGh",null);if(gh&&gh.token&&LS.get("farolAutoPub",1)){await publicar();}pubOffer();}
@@ -1296,7 +1298,7 @@ async function projCarregado(P){const e=(P.exportado||"").match(/(\d{2})\/(\d{2}
  const cfg=LS.get("farolGh",null);if(!cfg||!cfg.repo||!cfg.token||!cfg.senha){toastMsg("Projeção de "+P.rotulo+" carregada neste aparelho. Para a equipe ver, configure o token do GitHub em ⚙ Configurações.");return;}
  toastMsg("Publicando a projeção por regional…");try{const pf=cfg.pasta||"";let atual=null;try{const r=await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${pf}data/projreg.enc?ref=${cfg.branch||"main"}`,{headers:{Authorization:"Bearer "+cfg.token,Accept:"application/vnd.github.raw"},cache:"no-store"});if(r.ok)atual=await decifrar(await r.text(),cfg.senha);}catch(e){atual=null;}
   const novo=pjJuntar(atual,P);await ghPut(cfg,pf+"data/projreg.enc",await cifrar(novo,cfg.senha),"Farol: projeção por regional "+P.rotulo+" ("+P.exportado+")");PJ=novo;
-  toastMsg("Projeção de "+P.rotulo+" publicada. A equipe já vê na aba Meta.");}catch(e){toastMsg("Projeção carregada aqui, mas não publicou: "+e.message);}}
+  toastMsg("Projeção de "+P.rotulo+" publicada. A equipe já vê na aba Projeção.");}catch(e){toastMsg("Projeção carregada aqui, mas não publicou: "+e.message);}}
 function pubOffer(){const gh=LS.get("farolGh",null);openSheet(`<div class="sh"><b>Edição de ${d1.data} pronta</b><button id="xS">×</button></div><div class="card">O PDF foi lido. O que fazer agora?</div>
  <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a">📰 Gerar revista (PDF)</button>
  <button class="btn" data-pacote style="background:#25d366">📲 Gerar pacote do WhatsApp (revista + cartão + texto)</button>
@@ -1671,7 +1673,7 @@ window.addEventListener("appinstalled",()=>{document.documentElement.classList.a
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 let _bp=innerWidth>=1500?2:innerWidth>=1024?1:0;addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{const b=innerWidth>=1500?2:innerWidth>=1024?1:0;if(b!==_bp){_bp=b;if(typeof cur!=='undefined'&&D)show(cur);}},250);});
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc"){setTimeout(simular,0);setTimeout(()=>{RM?rmBind():rmCarregar();},0);if(PJ===undefined)setTimeout(pjCarregar,0);}$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="proj"&&PJ===undefined)setTimeout(pjCarregar,0);if(t==="orc"){setTimeout(simular,0);setTimeout(()=>{RM?rmBind():rmCarregar();},0);}$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}

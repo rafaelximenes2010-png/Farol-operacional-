@@ -1,4 +1,4 @@
-// Publica a projeção do mês por regional (PDF "Projeção de cada regional" do Power BI) na aba Meta do Farol,
+// Publica a projeção do mês por regional (PDF "Projeção de cada regional" do Power BI) na aba Projeção do Farol,
 // igual ao "Carregar PDF" do app do administrador. Grava data/projreg.enc (cifrado com a senha da equipe),
 // mantendo os meses anteriores. Os valores são exatamente os do BI.
 // Uso: FAROL_SENHA=... node scripts/publicar-projecao.mjs caminho/projecao.pdf [--seco]
