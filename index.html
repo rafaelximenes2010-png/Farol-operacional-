@@ -831,7 +831,7 @@ function anoAcum(){const A=anoProj(M.proj),fech=D.orc.filter(x=>x[3]!=null&&!x[5
  const real=A.real+M.acum,meta=mo+M.metaAcOrc,ano=(d1.data||"").slice(6)||String(new Date().getFullYear());
  return {real,meta,pc:real/meta*100,fechReal:A.real,fechMeta:mo,ano,de:(D.orc[0]||["Jan"])[0],ate:(d1.data||"").slice(0,5)};}
 function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);const sO=closed.reduce((s,x)=>s+x[1],0),sR=closed.reduce((s,x)=>s+x[3],0);
- return `<h2 class="rmh">Acumulado por regional <small>faturado × meta · mês a mês</small></h2><div id="rmBox">${RM?rmHtml():'<div class="card"><small class="note">Carregando dados das regionais…</small></div>'}</div>`+vSuper()+`<h2>Grupo · meta orçada</h2><div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
+ return `<h2>Projeção do mês por regional <small>Power BI · fechamento projetado</small></h2><div id="pjBox">${PJ!==undefined?pjHtml():'<div class="card"><small class="note">Carregando a projeção das regionais…</small></div>'}</div><h2 class="rmh">Acumulado por regional <small>faturado × meta · mês a mês</small></h2><div id="rmBox">${RM?rmHtml():'<div class="card"><small class="note">Carregando dados das regionais…</small></div>'}</div>`+vSuper()+`<h2>Grupo · meta orçada</h2><div class="seg" id="ccSeg">${["Tudo","Regionais","Op. Dedicadas","Apoio Operacional","Corporativo","Sem CC"].map((t,i)=>`<button class="${i?"":"on"}">${t}</button>`).join("")}</div>
  <div class="kpis">
   <div class="card kpi hero" data-m="ano"><div class="l">Realizado no ano</div><div class="v">${mi(sR)}</div><div class="s">10 meses fechados</div></div>
   <div class="card kpi lit" data-m="ano"><div class="l">Ating. orçada (ano)</div><div class="v up">${pct(sR/sO*100,1)}</div><div class="s">${sg(sR-sO)}</div></div>
@@ -844,6 +844,30 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
  ${F.map(x=>{const fin=x[3]!=null&&!x[5];return `<tr data-m="mesorc:${x[0]}" style="cursor:pointer"><td><b>${x[0]}/26</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2]?x[2].toLocaleString("pt-BR"):"—"}</td><td>${x[3]!=null?x[3].toLocaleString("pt-BR")+(x[5]?"*":""):"—"}</td><td>${fin?`<span class="pill ${cor(x[3]/x[1]*100)}">${pct(x[3]/x[1]*100,1)}</span>`:"—"}</td><td>${fin&&x[2]?pct(x[3]/x[2]*100,1):"—"}</td><td class="up">${fin?sg(x[3]-x[1]):"—"}</td><td>${x[4]!=null?x[4].toLocaleString("pt-BR"):"—"}</td><td>${x[4]!=null?(x[3]-x[4]).toLocaleString("pt-BR"):"—"}</td></tr>`}).join("")}
  <tr class="tot"><td>Meses fechados</td><td>${sO.toLocaleString("pt-BR")}</td><td></td><td>${sR.toLocaleString("pt-BR")}</td><td>${pct(sR/sO*100,1)}</td><td></td><td class="up">${sg(sR-sO)}</td><td></td><td></td></tr></tbody></table></div>
  <p class="note">* parcial do mês. Realizado até setembro: planilha de orçamento; a partir de outubro: Power BI. Filtros por centro de custo funcionam quando a planilha estiver ligada por API.</p></div>`;}
+/* ===== Projeção do mês por regional (data/projreg.enc, cifrado com a senha da equipe) =====
+   Vem do PDF "Projeção de cada regional" do Power BI, carregado pelo administrador (app ou script).
+   Os valores de meta, atingimento, projeção e volume são exatamente os do BI; só "Proj. ÷ meta" e "Desvio" são calculados. */
+let PJ;
+async function pjCarregar(){let P=null;try{const r=await fetch("data/projreg.enc?t="+Date.now(),{cache:"no-store"});if(r.ok)P=await decifrar(await r.text(),LS.get("farolSenha",""));}catch(e){P=null;}
+ const loc=LS.get("farolProjLocal",null);if(loc&&loc.mes&&(!P||!P.meses||!P.meses[loc.mes]||(P.meses[loc.mes].exportadoIso||"")<(loc.exportadoIso||"")))P=pjJuntar(P,loc);
+ PJ=P;const b=$("#pjBox");if(b)b.innerHTML=pjHtml();return PJ;}
+function pjJuntar(P,x){P=P&&P.meses?JSON.parse(JSON.stringify(P)):{meses:{}};P.meses[x.mes]=x;return P;}
+function pjHtml(){if(!PJ||!PJ.meses||!Object.keys(PJ.meses).length)return '<div class="card"><small class="note">Ainda não há projeção por regional publicada. O administrador carrega o PDF <b>Projeção de cada regional</b> do Power BI pelo app (Carregar PDF) ou envia no chat.</small></div>';
+ const ks=Object.keys(PJ.meses).sort(),atual=d1&&d1.data?d1.data.slice(6)+"-"+d1.data.slice(3,5):"",k=ks.includes(atual)?atual:ks[ks.length-1],P=PJ.meses[k],T=P.total;
+ const L=P.regs.map(r=>({...r,pm:r.meta?r.proj/r.meta*100:null,dv:r.meta?r.proj-r.meta:null})).sort((a,b)=>(b.pm??-1)-(a.pm??-1));
+ const ok=L.filter(r=>r.pm!=null&&r.pm>=100).length,tpm=T.meta?T.proj/T.meta*100:null,mx=Math.max(110,...L.map(r=>r.pm||0)),f0=v=>v==null?"—":v.toLocaleString("pt-BR",{maximumFractionDigits:0});
+ return `<div class="kpis">
+  <div class="card kpi hero"><div class="l">Projeção do grupo · ${escH(P.rotulo)}</div><div class="v">${mi(T.proj)}</div><div class="s">meta do mês ${mi(T.meta)}</div></div>
+  <div class="card kpi"><div class="l">Projeção ÷ meta</div><div class="v" style="color:${tpm==null?"inherit":C[cor(tpm)]}">${pct(tpm,1)}</div><div class="s">${T.meta?sg(T.proj-T.meta)+" vs meta":"—"}</div></div>
+  <div class="card kpi"><div class="l">Regionais que fecham na meta</div><div class="v">${ok} de ${L.length}</div><div class="s">pela projeção do BI</div></div>
+  <div class="card kpi"><div class="l">Volume projetado</div><div class="v" style="font-size:20px">${f0(T.vol)} t</div><div class="s">total do mês</div></div></div>
+ <div class="sec">Projeção ÷ meta do mês <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
+ <div class="card rank">${L.map(r=>`<div class="rk"><span>${escH(r.nome)}</span><div class="bar"><span style="width:${(r.pm||0)/mx*100}%;background:${r.pm==null?"#94a3b8":C[cor(r.pm)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${r.pm==null?"inherit":C[cor(r.pm)]}">${pct(r.pm)}</span></div>`).join("")}</div>
+ <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Projeção (BI)</th><th>Meta do mês</th><th>Proj. ÷ meta</th><th>Desvio projetado</th><th>Ating. parcial</th><th>Ating. total</th><th>Volume (t)</th></tr></thead><tbody>
+ ${L.map(r=>`<tr><td><b>${escH(r.nome)}</b></td><td><b>${f0(r.proj)}</b></td><td>${f0(r.meta)}</td><td>${r.pm==null?"—":`<span class="pill ${cor(r.pm)}">${pct(r.pm,1)}</span>`}</td><td class="${(r.dv||0)>=0?"up":"dn"}">${r.dv==null?"—":sg(r.dv)}</td><td>${r.atParc==null?"—":`<span class="pill ${cor(r.atParc)}">${pct(r.atParc)}</span>`}</td><td>${pct(r.atTot)}</td><td>${f0(r.vol)}</td></tr>`).join("")}
+ ${P.sem?`<tr><td><i>Sem regional</i></td><td>${f0(P.sem.proj)}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>${f0(P.sem.vol)}</td></tr>`:""}
+ <tr class="tot"><td>Total</td><td>${f0(T.proj)}</td><td>${f0(T.meta)}</td><td>${pct(tpm,1)}</td><td class="${T.proj-T.meta>=0?"up":"dn"}">${T.meta?sg(T.proj-T.meta):"—"}</td><td>${pct(T.atParc)}</td><td>${pct(T.atTot)}</td><td>${f0(T.vol)}</td></tr></tbody></table></div>
+ <p class="note">Fonte: Power BI indicadores_flash · Fechamento por regional (${escH(P.rotulo)}), exportado em ${escH(P.exportado)}. Meta, atingimentos, projeção e volume exatamente como no BI; “Proj. ÷ meta” e “Desvio projetado” = projeção do BI comparada à meta do mês. Projeção é estimativa, não é resultado realizado.</p></div>`;}
 /* ===== Meta por regional: mês a mês e acumulado (data/regmes.enc, cifrado com a senha da equipe) ===== */
 let RM=null,RMsel="";
 async function rmCarregar(){if(RM)return RM;try{const t=await (await fetch("data/regmes.enc?t="+Date.now(),{cache:"no-store"})).text();RM=await decifrar(t,LS.get("farolSenha",""));}catch(e){RM=null;}
@@ -1220,10 +1244,12 @@ async function textoPDF(file){const lib=await pdfjs();const doc=await lib.getDoc
  return pages;}
 async function lerPDF(file){return FarolPDF.parse(await textoPDF(file));}
 const pendBI={};
-async function carregarArquivos(files){let revista=null;
+async function carregarArquivos(files){let revista=null,projTxt=null;
  for(const f of files){const pages=await textoPDF(f),txt=pages.join("\n"),t=FarolPDF.tipo(txt);
+  if(t==="proj"){projTxt=txt;continue;}
   if(t) pendBI[t]=txt; else if(/MORNING|OPERATIONAL NEWS|Performance por dia/i.test(txt)) revista={f,pages};
-  else throw new Error("“"+f.name+"” não é um dos PDFs do Power BI (indicadores_flash ou D-1 Regionais).");}
+  else throw new Error("“"+f.name+"” não é um dos PDFs do Power BI (indicadores_flash, D-1 Regionais ou Projeção de cada regional).");}
+ let proj=null;if(projTxt){proj=FarolPDF.parseProj(projTxt);await projCarregado(proj);if(!revista&&!pendBI.dia&&!pendBI.reg)return {soProj:proj};}
  if(revista&&!(pendBI.dia&&pendBI.reg)){const R=FarolPDF.parse(revista.pages);
   if(D&&D.meta&&/Power BI/.test(D.meta.fonte||"")&&isoOf(D.d1.data)>=isoOf(R.d1.data)){const Dx=JSON.parse(JSON.stringify(D));Dx.dds=R.dds||Dx.dds;Dx.editorial=R.editorial||Dx.editorial;Dx.frase=R.frase||Dx.frase;if(isoOf(D.d1.data)===isoOf(R.d1.data))mergeFarol(Dx,R);return {Dx,orig:revista.f,textos:true};}
   return {Dx:R,orig:revista.f};}
@@ -1235,10 +1261,11 @@ async function carregarArquivos(files){let revista=null;
  return {falta:pendBI.dia?"o PDF de REGIONAIS (indicadores_flash … D-1 REGIONAIS)":"o PDF diário (indicadores_flash … com a tabela por dia)"};}
 $("#pdfIn").addEventListener("change",async e=>{const fs=[...e.target.files];e.target.value="";if(!fs.length)return;toastMsg("Lendo "+fs.length+" arquivo(s)…");
  try{const r=await carregarArquivos(fs);
+  if(r.soProj){if(D)show("orc");return;}
   if(r.falta){openSheet(`<div class="sh"><b>Falta 1 arquivo</b><button id="xS">×</button></div><div class="card">Recebi um dos PDFs do Power BI. Agora envie ${r.falta}.</div><button class="btn" data-pdf style="width:100%;margin-top:10px">Escolher o outro PDF</button>`);return;}
   const Dx=r.Dx;Dx.meta=Object.assign(Dx.meta||{},{modo:"pdf"});guardar(Dx);logEv("carregado");if(r.orig)pdfSalvar(isoOf(Dx.d1.data),r.orig);D=Dx;compute();paintHead();show("hoje");toastMsg(r.textos?"DDS, mensagem e frase atualizados pela revista.":"Edição de "+Dx.d1.data+" atualizada.");
   const gh=LS.get("farolGh",null);if(gh&&gh.token&&LS.get("farolAutoPub",1)){await publicar();}pubOffer();}
- catch(err){openSheet(`<div class="sh"><b>Não consegui ler</b><button id="xS">×</button></div><div class="card">${err.message}</div><p class="note">Envie os 2 PDFs padrão do Power BI: <b>indicadores_flash</b> (tabela por dia) e <b>indicadores_flash … D-1 REGIONAIS</b>. Pode selecionar os dois de uma vez.</p>`);}});
+ catch(err){openSheet(`<div class="sh"><b>Não consegui ler</b><button id="xS">×</button></div><div class="card">${err.message}</div><p class="note">Envie os 2 PDFs padrão do Power BI: <b>indicadores_flash</b> (tabela por dia) e <b>indicadores_flash … D-1 REGIONAIS</b>. Pode selecionar os dois de uma vez. A <b>Projeção de cada regional</b> (com as colunas Projeção e Volume) também pode ir junto ou sozinha.</p>`);}});
 /* --- publicar para a equipe no GitHub (criptografado com a senha da equipe) --- */
 const enc=new TextEncoder(),dec=new TextDecoder();const b64=u=>btoa(String.fromCharCode(...u)),ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function chave(senha,salt){const k=await crypto.subtle.importKey("raw",enc.encode(senha),"PBKDF2",false,["deriveKey"]);
@@ -1262,6 +1289,14 @@ async function publicar(){const cfg=LS.get("farolGh",null);if(!cfg||!cfg.repo||!
  toastMsg("Publicando para a equipe…");try{const c=await cifrar(D,cfg.senha);const iso=isoOf(d1.data);
   const pf=cfg.pasta||"";await ghPut(cfg,pf+"data/edicoes/"+iso+".enc",c,"Farol: edição "+d1.data);const orig=await pdfLer(iso);if(orig)await ghPut(cfg,pf+"data/revistas/"+iso+".enc",await cifrarBytes(new Uint8Array(await orig.arrayBuffer()),cfg.senha),"Farol: revista "+d1.data);await ghPut(cfg,pf+"data/ultimo.enc",c,"Farol: última edição "+d1.data);
   logEv("publicado");toastMsg("Publicado! A equipe já vê a edição de "+d1.data+".");}catch(e){toastMsg("Falhou: "+e.message);}}
+/* projeção por regional: guarda no aparelho, mostra na aba Meta e publica para a equipe (data/projreg.enc) */
+async function projCarregado(P){const e=(P.exportado||"").match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}:\d{2})/);P.exportadoIso=e?`${e[3]}-${e[2]}-${e[1]}T${e[4]}`:"";
+ if(!P.mes)throw new Error("O PDF de projeção não mostra o período (01/MM/AAAA – fim do mês).");
+ LS.set("farolProjLocal",P);PJ=pjJuntar(PJ,P);const b=$("#pjBox");if(b)b.innerHTML=pjHtml();
+ const cfg=LS.get("farolGh",null);if(!cfg||!cfg.repo||!cfg.token||!cfg.senha){toastMsg("Projeção de "+P.rotulo+" carregada neste aparelho. Para a equipe ver, configure o token do GitHub em ⚙ Configurações.");return;}
+ toastMsg("Publicando a projeção por regional…");try{const pf=cfg.pasta||"";let atual=null;try{const r=await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${pf}data/projreg.enc?ref=${cfg.branch||"main"}`,{headers:{Authorization:"Bearer "+cfg.token,Accept:"application/vnd.github.raw"},cache:"no-store"});if(r.ok)atual=await decifrar(await r.text(),cfg.senha);}catch(e){atual=null;}
+  const novo=pjJuntar(atual,P);await ghPut(cfg,pf+"data/projreg.enc",await cifrar(novo,cfg.senha),"Farol: projeção por regional "+P.rotulo+" ("+P.exportado+")");PJ=novo;
+  toastMsg("Projeção de "+P.rotulo+" publicada. A equipe já vê na aba Meta.");}catch(e){toastMsg("Projeção carregada aqui, mas não publicou: "+e.message);}}
 function pubOffer(){const gh=LS.get("farolGh",null);openSheet(`<div class="sh"><b>Edição de ${d1.data} pronta</b><button id="xS">×</button></div><div class="card">O PDF foi lido. O que fazer agora?</div>
  <div style="display:grid;gap:8px;margin-top:10px"><button class="btn" data-revista style="background:#b0263a">📰 Gerar revista (PDF)</button>
  <button class="btn" data-pacote style="background:#25d366">📲 Gerar pacote do WhatsApp (revista + cartão + texto)</button>
@@ -1636,7 +1671,7 @@ window.addEventListener("appinstalled",()=>{document.documentElement.classList.a
 /* ===== navegação ===== */
 const V={hoje:vHoje,mes:vMes,reg:vReg,proj:vProj,orc:vOrc};let cur="hoje";
 let _bp=innerWidth>=1500?2:innerWidth>=1024?1:0;addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{const b=innerWidth>=1500?2:innerWidth>=1024?1:0;if(b!==_bp){_bp=b;if(typeof cur!=='undefined'&&D)show(cur);}},250);});
-function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc"){setTimeout(simular,0);setTimeout(()=>{RM?rmBind():rmCarregar();},0);}$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
+function show(t){cur=t;selSair();$("#main").innerHTML=D?V[t]()+xtraHtml(t):vazio();if(D)blocar();pintaMercado();if(t==="orc"){setTimeout(simular,0);setTimeout(()=>{RM?rmBind():rmCarregar();},0);if(PJ===undefined)setTimeout(pjCarregar,0);}$("#bBack").style.display=t==="hoje"?"none":"inline-block";document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#main").scrollTo(0,0);
  const seg=$("#ccSeg");if(seg) seg.onclick=e=>{const b=e.target.closest("button");if(!b)return;seg.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));};}
 function paintAvatar(){const u=perfil();const e=$("#avIni");if(e)e.textContent=u&&u.nome?u.nome.trim().split(/\s+/).map(w=>w[0]).filter((c,i,a)=>i===0||i===a.length-1).join("").toUpperCase():"?";}
 function paintHead(){paintAvatar();if(!D){$("#updT").textContent="Nenhuma edição carregada";$("#dSel").innerHTML="";return;}

@@ -11,7 +11,7 @@ const git = (...a) => execFileSync("git", a, { cwd: RAIZ, encoding: "utf8", stdi
 const envOk = t => { try { const j = JSON.parse(t); return j && j.v === 1 && [j.salt, j.iv, j.ct].every(x => typeof x === "string" && /^[A-Za-z0-9+/=]+$/.test(x) && x.length >= 16); } catch (e) { return false; } };
 const jsonOk = t => { try { JSON.parse(t); return true; } catch (e) { return false; } };
 const lista = d => fs.existsSync(path.join(RAIZ, d)) ? fs.readdirSync(path.join(RAIZ, d)).map(f => d + "/" + f) : [];
-const atuais = ["data/ultimo.enc", ...(fs.existsSync(path.join(RAIZ, "data/regmes.enc")) ? ["data/regmes.enc"] : []), ...lista("data/edicoes"), ...lista("data/revistas")].filter(f => f.endsWith(".enc"));
+const atuais = ["data/ultimo.enc", ...["data/regmes.enc", "data/projreg.enc"].filter(f => fs.existsSync(path.join(RAIZ, f))), ...lista("data/edicoes"), ...lista("data/revistas")].filter(f => f.endsWith(".enc"));
 const jsons = lista("data").filter(f => f.endsWith(".json"));
 const erros = [], restaurados = [];
 const okArq = (f, t) => f.endsWith(".enc") ? envOk(t) : jsonOk(t);
@@ -24,7 +24,7 @@ const restaurar = (f, motivo) => {
 for (const f of atuais) { const t = fs.readFileSync(path.join(RAIZ, f), "utf8"); if (!envOk(t)) restaurar(f, "envelope cifrado inválido"); }
 for (const f of jsons) { const t = fs.readFileSync(path.join(RAIZ, f), "utf8"); if (!jsonOk(t)) restaurar(f, "JSON inválido"); }
 if (ref) { // arquivos que existiam antes e sumiram
-  let antes = []; try { antes = git("ls-tree", "-r", "--name-only", ref, "--", "data/edicoes", "data/revistas", "data/ultimo.enc", "data/regmes.enc").split("\n").filter(Boolean); } catch (e) {}
+  let antes = []; try { antes = git("ls-tree", "-r", "--name-only", ref, "--", "data/edicoes", "data/revistas", "data/ultimo.enc", "data/regmes.enc", "data/projreg.enc").split("\n").filter(Boolean); } catch (e) {}
   for (const f of antes) if (!fs.existsSync(path.join(RAIZ, f))) restaurar(f, "apagado");
 }
 const edicoes = lista("data/edicoes").filter(f => f.endsWith(".enc")).length;

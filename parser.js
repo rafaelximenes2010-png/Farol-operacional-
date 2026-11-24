@@ -99,7 +99,36 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
   const SEM = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"], AB = ["dom","seg","ter","qua","qui","sex","sáb"];
   const FER = ["01-01","04-03","04-21","05-01","09-07","10-12","11-02","11-15","11-20","12-25"];
   const util = d => { const w = d.getUTCDay(), md = d.toISOString().slice(5, 10); return w > 0 && w < 6 && !FER.includes(md); };
-  const tipo = txt => /MORNING\s*OPERATIONAL\s*NEWS/i.test(txt) ? null : /Fechamento por regional/i.test(txt) ? "reg" : /Faturamento do dia/i.test(txt) ? "dia" : null;
+  const tipo = txt => /MORNING\s*OPERATIONAL\s*NEWS/i.test(txt) ? null : /Fechamento por regional/i.test(txt) && /Proje[çc][ãa]o\s*Volume/i.test(txt) ? "proj" : /Fechamento por regional/i.test(txt) ? "reg" : /Faturamento do dia/i.test(txt) ? "dia" : null;
+  /* PDF "Projeção de cada regional" do Power BI (Fechamento por regional com colunas Projeção e Volume).
+     Guarda os valores exatamente como o BI mostra; nada é recalculado. */
+  function parseProj(txt) {
+    const n = s => s == null || s === "" ? null : Number(String(s).replace(/%$/, "").replace(/\./g, "").replace(",", "."));
+    const ini = txt.search(/Fechamento por regional/i); if (ini < 0) throw new Error("PDF de projeção sem a tabela “Fechamento por regional”.");
+    const L = txt.slice(ini).split("\n").map(l => l.trim()).filter(Boolean);
+    const regs = []; let sem = null, total = null;
+    for (const l of L.slice(1)) {
+      if (/^Regional\b/i.test(l)) continue;
+      const m = l.match(/^(Total|[A-ZÀ-Ú][A-ZÀ-Ú0-9 /.-]*?)?\s*((?:[\d.]+\s+)?(?:\d+%\s+){0,2}(?:[\d.,]+%\s+){0,2})([\d.]+)\s+([\d.]+)$/);
+      if (!m) { if (/^Total\b/i.test(l) || regs.length) break; continue; }
+      const nome = (m[1] || "").trim(), mid = m[2].trim().split(/\s+/).filter(Boolean);
+      const meta = mid.length && /^[\d.]+$/.test(mid[0]) ? n(mid.shift()) : null;
+      const pcs = mid.filter(x => /^\d+%$/.test(x)).map(x => n(x)), mgs = mid.filter(x => /,\d+%$/.test(x)).map(x => n(x));
+      const r = { nome, meta, atTot: pcs[0] ?? null, atParc: pcs[1] ?? null, mgT: mgs[0] ?? null, mgA: mgs[1] ?? null, proj: n(m[3]), vol: n(m[4]) };
+      if (/^Total$/i.test(nome)) { total = r; break; } else if (!nome) sem = r; else regs.push(r);
+    }
+    if (!regs.length || !total) throw new Error("Não consegui ler a projeção por regional deste PDF.");
+    // a linha Total do PDF corta o 1º dígito da meta ("42.076.389"); usa o cartão do topo (meta total do BI), conferido pela soma das regionais
+    const somaMeta = regs.reduce((a, r) => a + (r.meta || 0), 0);
+    const kpi = (txt.match(/\d{1,3}(?:\.\d{3}){2,}/g) || []).map(n).find(v => Math.abs(v - somaMeta) <= 10);
+    total.meta = kpi != null ? kpi : Math.abs((total.meta || 0) - somaMeta) <= 10 ? total.meta : somaMeta;
+    const per = txt.match(/(\d{2})\/(\d{2})\/(\d{4})[^\d\n]{1,8}(\d{2})\/\d{2}\/\d{4}/), exp = txt.match(/(\d{2})\/(\d{2})\/(\d{4}),\s*(\d{2}:\d{2})/);
+    const MES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const mes = per ? per[3] + "-" + per[2] : null;
+    const soma = regs.reduce((a, r) => a + r.proj, 0) + (sem ? sem.proj : 0);
+    return { mes, rotulo: per ? MES[+per[2] - 1] + "/" + per[3].slice(2) : "", exportado: exp ? `${exp[1]}/${exp[2]}/${exp[3]} ${exp[4]}` : "", regs, sem, total,
+      conferencia: { somaProj: soma, difProj: total.proj - soma } };
+  }
   function parseBI(dia, reg, prev) {
     const av = [];
     // ---------- arquivo 1: performance diária
@@ -161,6 +190,6 @@ function nReg(n){n=String(n||"").trim().toUpperCase().replace(/\s+/g," ");return
       dds: prev && prev.dds ? Object.assign({}, prev.dds, { de: prev.dds.de || prev.d1.data }) : null, editorial: prev && prev.editorial ? Object.assign({}, prev.editorial, { de: prev.editorial.de || prev.d1.data }) : null, frase: prev && prev.frase ? Object.assign({}, prev.frase, { de: prev.frase.de || prev.d1.data }) : null, avisos: av
     };
   }
-  root.FarolPDF = Object.assign(root.FarolPDF || {}, { parseBI, tipo });
-  if (typeof module !== "undefined") module.exports = Object.assign(module.exports || {}, { parseBI, tipo });
+  root.FarolPDF = Object.assign(root.FarolPDF || {}, { parseBI, tipo, parseProj });
+  if (typeof module !== "undefined") module.exports = Object.assign(module.exports || {}, { parseBI, tipo, parseProj });
 })(typeof window !== "undefined" ? window : globalThis);
