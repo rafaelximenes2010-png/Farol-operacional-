@@ -331,7 +331,7 @@ html,body{height:100dvh}
  main>.blk.wide td,main>.blk.wide th{white-space:nowrap}
 }
 @media (min-width:1500px){main[data-c="3"]>.blk{grid-column:span 4!important}main[data-c]>.blk.wide{grid-column:1/-1!important}main[data-c="3"]>.blk.s6{grid-column:span 6!important}}
-@media (min-width:1024px){main>.blk.s12{grid-column:1/-1!important}main>.blk.s12 svg.chart,main>.blk.wide svg.chart{max-height:360px}main>.blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}main>.blk .kpis .kpi .v{font-size:clamp(20px,1.7vw,28px);word-break:break-word}}
+@media (min-width:1024px){main>.blk.s12{grid-column:1/-1!important}main>.blk.s12 svg.chart,main>.blk.wide svg.chart{max-height:360px}main>.blk .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important}main .mas .blk .kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))!important}#rmBox{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px;align-items:start}#rmBox>*{grid-column:1/-1;margin:0}#rmBox>.rmg{grid-column:auto}#rmBox .rmg>.card{margin:6px 0 0}#rmBox svg.chart{max-height:300px}#pjBox{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 20px;align-items:stretch}#pjBox>*{grid-column:1/-1;margin:0}#pjBox>.pjg{grid-column:1;grid-row:1}#pjBox>.kpis{grid-column:2;grid-row:1;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:stretch}#pjBox>.pjg>.card{margin:6px 0 0}main>.blk .kpis .kpi .v{font-size:clamp(20px,1.7vw,28px);word-break:break-word}}
 
 /* ===== Mercado (SNIC, celulose, diesel, dólar) ===== */
 .mkt .mr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 4px;border-bottom:1px solid var(--line);cursor:pointer;align-items:baseline}
@@ -560,11 +560,11 @@ function lineChart(series,w=360,h=200,opts={}){const pad={l:38,r:8,t:12,b:24};co
  return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
 function barsChart(items,w=360,h=190){const pad={l:24,r:4,t:18,b:22};const maxV=Math.max(...items.flatMap(i=>[i.v||0,i.m||0,i.ghost||0]))*1.12||1;const bw=(w-pad.l-pad.r)/items.length;
  const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;let g="";for(let k=0;k<=3;k++){const v=maxV*k/3;g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${pad.l-5}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="var(--ink2)">${Math.round(v/1e6)}</text>`;}
- items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.18,bwi=bw*.64;if(it.k!=null)g+=`<g class="dd" data-rmm="${it.k}" style="cursor:pointer"><rect x="${pad.l+i*bw}" y="${pad.t}" width="${bw}" height="${h-pad.t}" fill="transparent"/>`;if(it.ghost!=null) g+=`<rect x="${x-bw*.1}" y="${Y(it.ghost)}" width="${bwi}" height="${Y(0)-Y(it.ghost)}" rx="3" fill="var(--line)"/>`;
+ items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.18,bwi=bw*.64;const gr=it.k!=null||it.dm;if(it.k!=null)g+=`<g class="dd" data-rmm="${it.k}" style="cursor:pointer"><rect x="${pad.l+i*bw}" y="${pad.t}" width="${bw}" height="${h-pad.t}" fill="transparent"/>`;else if(it.dm)g+=`<g class="dd" data-m="${it.dm}" style="cursor:pointer"><rect x="${pad.l+i*bw}" y="${pad.t}" width="${bw}" height="${h-pad.t}" fill="transparent"/>`;if(it.ghost!=null) g+=`<rect x="${x-bw*.1}" y="${Y(it.ghost)}" width="${bwi}" height="${Y(0)-Y(it.ghost)}" rx="3" fill="var(--line)"/>`;
   if(it.v!=null) g+=`<rect x="${it.ghost!=null?x+bw*.1:x}" y="${Y(it.v)}" width="${bwi}" height="${Y(0)-Y(it.v)}" rx="3" fill="${it.c}"/>`;
   if(it.m!=null) g+=`<line x1="${x-3}" x2="${x+bwi+3}" y1="${Y(it.m)}" y2="${Y(it.m)}" stroke="var(--ink)" stroke-width="2"/>`;
   if(it.t) g+=`<text x="${x+bwi/2}" y="${Y(Math.max(it.v||0,it.m||0))-5}" font-size="8.5" font-weight="700" text-anchor="middle" fill="${it.c}">${it.t}</text>`;
-  g+=`<text x="${x+bwi/2}" y="${h-8}" font-size="10" text-anchor="middle" fill="var(--ink2)">${it.l}</text>`;if(it.k!=null)g+=`</g>`;});
+  g+=`<text x="${x+bwi/2}" y="${h-8}" font-size="10" text-anchor="middle" fill="var(--ink2)">${it.l}</text>`;if(gr)g+=`</g>`;});
  return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
 const C={g:"#1e8e4e",y:"#d08a0e",r:"#c62828"};
 /* ===== telas ===== */
@@ -782,7 +782,7 @@ function vMes(){const ac=[],am=[];let a=0,b=0;D.dias.forEach(x=>{a+=x[2];b+=x[3]
   <div class="card kpi" data-m="mediaDU"><div class="l">Média por dia útil</div><div class="v">${mi(M.mediaDU)}</div><div class="s">margens ${pct(M.mgT,2)} terc. · ${pct(M.mgA,2)} agr.</div></div></div>
 
  <h2>Faturamento diário × meta <small>cor = farol · traço = meta</small></h2>
- <div class="card">${barsChart(D.dias.map(x=>{const p=x[2]/x[3]*100;return{v:x[2],m:x[3],c:C[cor(p)],t:pct(p),l:x[0].slice(0,2)}}))}</div>
+ <div class="card">${barsChart(D.dias.map(x=>{const p=x[2]/x[3]*100;return{v:x[2],m:x[3],c:C[cor(p)],t:pct(p),l:x[0].slice(0,2),dm:"dia:"+x[0]}}))}<p class="note" style="margin:6px 0 0"><b>Toque num dia</b> para o detalhe.</p></div>
  <h2>Dia a dia</h2>
  <div class="card"><div class="tw"><table><thead><tr><th>Data</th><th>Faturamento</th><th>Meta</th><th>Ating.</th><th>Desvio</th><th>Acumulado</th><th>Ating. acum.</th><th>Mg. terc.</th><th>Mg. agr.</th></tr></thead><tbody>
  ${D.dias.map(x=>{acc+=x[2];accm+=x[3];const p=x[2]/x[3]*100;return `<tr data-m="dia:${x[0]}" style="cursor:pointer"><td><b>${x[0]}</b> ${x[1]}</td><td>${x[2].toLocaleString("pt-BR")}</td><td>${x[3].toLocaleString("pt-BR")}</td><td><span class="pill ${cor(p)}">${pct(p)}</span></td><td class="${p>=100?"up":"dn"}">${sg(x[2]-x[3])}</td><td><b>${acc.toLocaleString("pt-BR")}</b></td><td>${pct(acc/accm*100)}</td><td>${pct(x[4],2)}</td><td>${pct(x[5],2)}</td></tr>`}).join("")}
@@ -835,7 +835,7 @@ function vOrc(){let F=[...D.orc];const closed=F.filter(x=>x[3]!=null&&!x[5]);con
   <div class="card kpi" data-m="metas"><div class="l">Novembro até D-1</div><div class="v">${pct(M.acum/M.metaOrc*100,1)}</div><div class="s">da meta orçada do mês</div></div>
   <div class="card kpi" data-m="metas"><div class="l">Meta orçada do ano</div><div class="v">${mi(D.metaAno)}</div><div class="s">compromisso</div></div></div>
  <h2>Meta orçada × realizado <small>cinza = meta · traço = meta Power BI</small></h2>
- <div class="card">${barsChart(F.map(x=>({ghost:x[1],v:x[3],m:x[2],c:x[5]?"#93c5fd":(x[3]>=x[1]?"#1e8e4e":"#c62828"),l:x[0]})),360,200)}</div>
+ <div class="card">${barsChart(F.map(x=>({ghost:x[1],v:x[3],m:x[2],c:x[5]?"#93c5fd":(x[3]>=x[1]?"#1e8e4e":"#c62828"),l:x[0],dm:"mesorc:"+x[0]})),360,200)}<p class="note" style="margin:6px 0 0"><b>Toque num mês</b> para o detalhe.</p></div>
  <h2>Mês a mês</h2>
  <div class="card"><div class="tw"><table><thead><tr><th>Mês</th><th>Meta orçada</th><th>Meta Power BI</th><th>Realizado</th><th>Ating. orç.</th><th>Ating. BI</th><th>Desvio orç.</th><th>AGRO</th><th>Real. s/ AGRO</th></tr></thead><tbody>
  ${F.map(x=>{const fin=x[3]!=null&&!x[5];return `<tr data-m="mesorc:${x[0]}" style="cursor:pointer"><td><b>${x[0]}/26</b></td><td>${x[1].toLocaleString("pt-BR")}</td><td>${x[2]?x[2].toLocaleString("pt-BR"):"—"}</td><td>${x[3]!=null?x[3].toLocaleString("pt-BR")+(x[5]?"*":""):"—"}</td><td>${fin?`<span class="pill ${cor(x[3]/x[1]*100)}">${pct(x[3]/x[1]*100,1)}</span>`:"—"}</td><td>${fin&&x[2]?pct(x[3]/x[2]*100,1):"—"}</td><td class="up">${fin?sg(x[3]-x[1]):"—"}</td><td>${x[4]!=null?x[4].toLocaleString("pt-BR"):"—"}</td><td>${x[4]!=null?(x[3]-x[4]).toLocaleString("pt-BR"):"—"}</td></tr>`}).join("")}
@@ -854,21 +854,22 @@ async function pjCarregar(){let P=null;try{const r=await fetch("data/projreg.enc
  const loc=LS.get("farolProjLocal",null);if(loc&&loc.mes&&(!P||!P.meses||!P.meses[loc.mes]||(P.meses[loc.mes].exportadoIso||"")<(loc.exportadoIso||"")))P=pjJuntar(P,loc);
  PJ=P;const b=$("#pjBox");if(b)b.innerHTML=pjHtml();return PJ;}
 function pjJuntar(P,x){P=P&&P.meses?JSON.parse(JSON.stringify(P)):{meses:{}};P.meses[x.mes]=x;return P;}
-function pjHtml(){const atual=d1&&d1.data?d1.data.slice(6)+"-"+d1.data.slice(3,5):"";if(!PJ||!PJ.meses||!PJ.meses[atual])return pjEstimativa();
- const k=atual,P=PJ.meses[k],T=P.total;
+function pjAtual(){const atual=d1&&d1.data?d1.data.slice(6)+"-"+d1.data.slice(3,5):"";return PJ&&PJ.meses&&PJ.meses[atual]||null;}
+function pjHtml(){const P=pjAtual();if(!P)return pjEstimativa();
+ const T=P.total;
  const L=P.regs.map(r=>({...r,pm:r.meta?r.proj/r.meta*100:null,dv:r.meta?r.proj-r.meta:null})).sort((a,b)=>(b.pm??-1)-(a.pm??-1));
  const ok=L.filter(r=>r.pm!=null&&r.pm>=100).length,tpm=T.meta?T.proj/T.meta*100:null,mx=Math.max(110,...L.map(r=>r.pm||0)),f0=v=>v==null?"—":v.toLocaleString("pt-BR",{maximumFractionDigits:0});
  return `<div class="kpis">
-  <div class="card kpi hero"><div class="l">Projeção do grupo · ${escH(P.rotulo)}</div><div class="v">${mi(T.proj)}</div><div class="s">meta do mês ${mi(T.meta)}</div></div>
-  <div class="card kpi"><div class="l">Projeção ÷ meta</div><div class="v" style="color:${tpm==null?"inherit":C[cor(tpm)]}">${pct(tpm,1)}</div><div class="s">${T.meta?sg(T.proj-T.meta)+" vs meta":"—"}</div></div>
-  <div class="card kpi"><div class="l">Regionais que fecham na meta</div><div class="v">${ok} de ${L.length}</div><div class="s">pela projeção do BI</div></div>
-  <div class="card kpi"><div class="l">Volume projetado</div><div class="v" style="font-size:20px">${f0(T.vol)} t</div><div class="s">total do mês</div></div></div>
- <div class="sec">Projeção ÷ meta do mês <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
- <div class="card rank">${L.map(r=>`<div class="rk"><span>${escH(r.nome)}</span><div class="bar"><span style="width:${(r.pm||0)/mx*100}%;background:${r.pm==null?"#94a3b8":C[cor(r.pm)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${r.pm==null?"inherit":C[cor(r.pm)]}">${pct(r.pm)}</span></div>`).join("")}</div>
+  <div class="card kpi hero" data-m="pjtot"><div class="l">Projeção do grupo · ${escH(P.rotulo)}</div><div class="v">${mi(T.proj)}</div><div class="s">meta do mês ${mi(T.meta)}</div></div>
+  <div class="card kpi" data-m="pjtot"><div class="l">Projeção ÷ meta</div><div class="v" style="color:${tpm==null?"inherit":C[cor(tpm)]}">${pct(tpm,1)}</div><div class="s">${T.meta?sg(T.proj-T.meta)+" vs meta":"—"}</div></div>
+  <div class="card kpi" data-m="pjok"><div class="l">Regionais que fecham na meta</div><div class="v">${ok} de ${L.length}</div><div class="s">pela projeção do BI</div></div>
+  <div class="card kpi" data-m="pjvol"><div class="l">Volume projetado</div><div class="v" style="font-size:20px">${f0(T.vol)} t</div><div class="s">total do mês</div></div></div>
+ <div class="pjg"><div class="sec">Projeção ÷ meta do mês <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100% · toque para detalhar</small></div>
+ <div class="card rank">${L.map(r=>`<div class="rk" data-m="pjreg:${escH(r.nome)}"><span>${escH(r.nome)}</span><div class="bar"><span style="width:${(r.pm||0)/mx*100}%;background:${r.pm==null?"#94a3b8":C[cor(r.pm)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${r.pm==null?"inherit":C[cor(r.pm)]}">${pct(r.pm)}</span></div>`).join("")}</div></div>
  <div class="card"><div class="tw"><table><thead><tr><th>Regional</th><th>Projeção (BI)</th><th>Meta do mês</th><th>Proj. ÷ meta</th><th>Desvio projetado</th><th>Ating. parcial</th><th>Ating. total</th><th>Volume (t)</th></tr></thead><tbody>
- ${L.map(r=>`<tr><td><b>${escH(r.nome)}</b></td><td><b>${f0(r.proj)}</b></td><td>${f0(r.meta)}</td><td>${r.pm==null?"—":`<span class="pill ${cor(r.pm)}">${pct(r.pm,1)}</span>`}</td><td class="${(r.dv||0)>=0?"up":"dn"}">${r.dv==null?"—":sg(r.dv)}</td><td>${r.atParc==null?"—":`<span class="pill ${cor(r.atParc)}">${pct(r.atParc)}</span>`}</td><td>${pct(r.atTot)}</td><td>${f0(r.vol)}</td></tr>`).join("")}
- ${P.sem?`<tr><td><i>Sem regional</i></td><td>${f0(P.sem.proj)}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>${f0(P.sem.vol)}</td></tr>`:""}
- <tr class="tot"><td>Total</td><td>${f0(T.proj)}</td><td>${f0(T.meta)}</td><td>${pct(tpm,1)}</td><td class="${T.proj-T.meta>=0?"up":"dn"}">${T.meta?sg(T.proj-T.meta):"—"}</td><td>${pct(T.atParc)}</td><td>${pct(T.atTot)}</td><td>${f0(T.vol)}</td></tr></tbody></table></div>
+ ${L.map(r=>`<tr data-m="pjreg:${escH(r.nome)}" style="cursor:pointer"><td><b>${escH(r.nome)}</b></td><td><b>${f0(r.proj)}</b></td><td>${f0(r.meta)}</td><td>${r.pm==null?"—":`<span class="pill ${cor(r.pm)}">${pct(r.pm,1)}</span>`}</td><td class="${(r.dv||0)>=0?"up":"dn"}">${r.dv==null?"—":sg(r.dv)}</td><td>${r.atParc==null?"—":`<span class="pill ${cor(r.atParc)}">${pct(r.atParc)}</span>`}</td><td>${pct(r.atTot)}</td><td>${f0(r.vol)}</td></tr>`).join("")}
+ ${P.sem?`<tr data-m="pjsem" style="cursor:pointer"><td><i>Sem regional</i></td><td>${f0(P.sem.proj)}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>${f0(P.sem.vol)}</td></tr>`:""}
+ <tr class="tot" data-m="pjtot" style="cursor:pointer"><td>Total</td><td>${f0(T.proj)}</td><td>${f0(T.meta)}</td><td>${pct(tpm,1)}</td><td class="${T.proj-T.meta>=0?"up":"dn"}">${T.meta?sg(T.proj-T.meta):"—"}</td><td>${pct(T.atParc)}</td><td>${pct(T.atTot)}</td><td>${f0(T.vol)}</td></tr></tbody></table></div>
  <p class="note">Fonte: Power BI indicadores_flash · Fechamento por regional (${escH(P.rotulo)}), exportado em ${escH(P.exportado)}. Meta, atingimentos, projeção e volume exatamente como no BI; “Proj. ÷ meta” e “Desvio projetado” = projeção do BI comparada à meta do mês. Projeção é estimativa, não é resultado realizado.</p></div>`;}
 /* ===== Meta por regional: mês a mês e acumulado (data/regmes.enc, cifrado com a senha da equipe) ===== */
 let RM=null,RMsel="";
@@ -892,10 +893,10 @@ function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.
    <div class="card kpi"><div class="l">Atingimento acumulado</div><div class="v" style="color:${C[cor(gpc)]}">${pct(gpc,1)}</div><div class="s">${sg(g.aF-g.aM)} vs meta</div></div>
    <div class="card kpi"><div class="l">Regionais na meta</div><div class="v">${nOk} de ${lst.length}</div><div class="s">no acumulado do ano</div></div>
    <div class="card kpi"><div class="l">Melhor · pior</div><div class="v" style="font-size:20px">${escH(rmNome(lst[0].r.nome))}</div><div class="s">${pct(lst[0].u.pc,1)} · pior: ${escH(rmNome(lst[lst.length-1].r.nome))} ${pct(lst[lst.length-1].u.pc,1)}</div></div></div>
-  <div class="sec">Acumulado geral · mês a mês</div>
-  <div class="card">${barsChart(G.map((x,i)=>({ghost:x.aM,v:x.aF,c:x.aF<x.aM?"#C00000":"#1F4E78",l:x.m,k:i})),360,190)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado do grupo · cinza = meta acumulada. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div>
-  <div class="sec">Ranking do acumulado · ${per} <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
-  <div class="card rank">${lst.map(x=>`<div class="rk" data-rm="${escH(x.r.nome)}"><span>${escH(rmNome(x.r.nome))}</span><div class="bar"><span style="width:${x.u.pc/mx*100}%;background:${C[cor(x.u.pc)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x.u.pc)]}">${pct(x.u.pc,1)}</span></div>`).join("")}</div>
+  <div class="rmg"><div class="sec">Acumulado geral · mês a mês</div>
+  <div class="card">${barsChart(G.map((x,i)=>({ghost:x.aM,v:x.aF,c:x.aF<x.aM?"#C00000":"#1F4E78",l:x.m,k:i})),360,190)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado do grupo · cinza = meta acumulada. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div></div>
+  <div class="rmg"><div class="sec">Ranking do acumulado · ${per} <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
+  <div class="card rank">${lst.map(x=>`<div class="rk" data-rm="${escH(x.r.nome)}"><span>${escH(rmNome(x.r.nome))}</span><div class="bar"><span style="width:${x.u.pc/mx*100}%;background:${C[cor(x.u.pc)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x.u.pc)]}">${pct(x.u.pc,1)}</span></div>`).join("")}</div></div>
   <div class="sec">Atingimento acumulado · mês a mês</div>
   <div class="card"><div class="rmfix"><table class="rmhm rmnm"><thead><tr><th>Regional</th></tr></thead><tbody>
   ${lst.map(x=>`<tr data-rm="${escH(x.r.nome)}" style="cursor:pointer"><td><b>${escH(rmNome(x.r.nome))}</b></td></tr>`).join("")}<tr class="tot"><td>Geral</td></tr></tbody></table>
@@ -1197,6 +1198,25 @@ function metric(id){const diasUteis=D.dias.filter(x=>!["sáb","dom"].includes(x[
   return{t:x[0]+"/26",v:x[3]!=null?brl(x[3]):"—",src:x[5]?SRC.bi:SRC.orc,what:fin?"Mês fechado: realizado contra as metas.":x[5]?"Mês em andamento (parcial até o D-1).":"Mês futuro: só a meta orçada.",
    cmp:cmp("meta Power BI",x[2]?mi(x[2]):"—","meta orçada",mi(x[1])),
    rows:[["Atingimento orçada",fin?pct(x[3]/x[1]*100,1):"—"],["Desvio vs orçada",fin?sg(x[3]-x[1]):"—"],["AGRO",x[4]!=null?brl(x[4]):"—"],["Realizado sem AGRO",x[4]!=null?brl(x[3]-x[4]):"—"]]};}
+ {const P=pjAtual();if(P){const T0=P.total,f0=v=>v==null?"—":v.toLocaleString("pt-BR",{maximumFractionDigits:0}),fonte=`Power BI · Fechamento por regional (${P.rotulo}), exportado em ${P.exportado}.`;
+  const lista=P.regs.map(r=>({...r,pm:r.meta?r.proj/r.meta*100:null})).sort((a,b)=>(b.pm??-1)-(a.pm??-1));
+  if(id.startsWith("pjreg:")){const r=P.regs.find(x=>x.nome===id.slice(6));if(r){const pm=r.meta?r.proj/r.meta*100:null,pos=lista.findIndex(x=>x.nome===r.nome)+1,part=r.proj/T0.proj*100;
+   return{t:r.nome+" · projeção "+P.rotulo,v:brl(r.proj),src:SRC.bi,what:"Fechamento projetado do mês para a regional, exatamente como o Power BI mostra. "+fonte,
+    fx:r.meta?`Projeção ÷ meta = ${brl(r.proj)} ÷ ${brl(r.meta)} = ${pct(pm,1)}
+Desvio projetado = ${brl(r.proj)} − ${brl(r.meta)} = ${sg(r.proj-r.meta)}`:"",
+    rows:[["Meta do mês",brl(r.meta)],["Atingimento parcial (BI)",pct(r.atParc)],["Atingimento total (BI)",pct(r.atTot)],["Margem terceiros (BI)",r.mgT==null?"—":pct(r.mgT,2)],["Margem agregados (BI)",r.mgA==null?"—":pct(r.mgA,2)],["Volume projetado",f0(r.vol)+" t"],["Participação na projeção do grupo",pct(part,1)],["Posição no ranking",pos+"º de "+lista.length]],
+    note:"Projeção é estimativa do Power BI, não é resultado realizado."};}}
+  if(id==="pjsem"&&P.sem)return{t:"Sem regional · projeção "+P.rotulo,v:brl(P.sem.proj),src:SRC.bi,what:"Faturamento projetado que o Power BI não atribui a nenhuma regional (linha sem nome no relatório). Entra no total do grupo. "+fonte,rows:[["Margem terceiros (BI)",P.sem.mgT==null?"—":pct(P.sem.mgT,2)],["Volume projetado",f0(P.sem.vol)+" t"]]};
+  T.pjtot={t:"Projeção do grupo · "+P.rotulo,v:brl(T0.proj),src:SRC.bi,what:"Soma das projeções de todas as regionais no Power BI, incluindo a linha sem regional. "+fonte,
+   fx:`Projeção ÷ meta = ${brl(T0.proj)} ÷ ${brl(T0.meta)} = ${pct(T0.proj/T0.meta*100,1)}
+Desvio projetado = ${sg(T0.proj-T0.meta)}
+Conferência: soma das linhas = ${brl(P.conferencia?P.conferencia.somaProj:T0.proj)}`,
+   rows:lista.map(r=>[r.nome,mi(r.proj)+" · "+pct(r.pm,1)]).concat(P.sem?[["Sem regional",mi(P.sem.proj)]]:[])};
+  const ok=lista.filter(r=>r.pm!=null&&r.pm>=100),nok=lista.filter(r=>r.pm!=null&&r.pm<100);
+  T.pjok={t:"Regionais que fecham na meta",v:ok.length+" de "+lista.length,src:SRC.bi,what:"Regionais cuja projeção do Power BI fica igual ou acima da meta do mês. "+fonte,
+   rows:ok.map(r=>["✓ "+r.nome,pct(r.pm,1)+" · "+sg(r.proj-r.meta)]).concat(nok.map(r=>["✗ "+r.nome,pct(r.pm,1)+" · "+sg(r.proj-r.meta)]))};
+  T.pjvol={t:"Volume projetado · "+P.rotulo,v:f0(T0.vol)+" t",src:SRC.bi,what:"Toneladas projetadas para o mês, por regional, como no Power BI. "+fonte,
+   rows:[...P.regs].sort((a,b)=>b.vol-a.vol).map(r=>[r.nome,f0(r.vol)+" t · "+pct(r.vol/T0.vol*100,1)]).concat(P.sem?[["Sem regional",f0(P.sem.vol)+" t"]]:[])};}}
  T.supermes={t:"Super meta do mês",v:mi(M.metaOrc*1.1),src:SRC.orc,what:"Faixas de superação sobre a meta orçada do mês: +5%, +7% e +10%. A ponte mostra quanto cada faixa acrescenta e onde a projeção termina.",
    rows:FAIXAS.map(f=>[f[0]==="Meta"?"Meta 100%":"Super meta "+f[0],mi(M.metaOrc*(1+f[1]/100))]).concat([["Realizado até o D-1",mi(M.acum)],["Projeção conservadora",mi(Math.min(...D.proj3.map(x=>x[1]))*1e6)]]),
    note:"Regra da remuneração variável: faixas cumulativas sobre a meta (Etapa 1), ajustadas pelo EBITDA (Etapa 2)."};
@@ -1523,7 +1543,7 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
   mv.forEach(x=>b.appendChild(x));b.dataset.title=(h.childNodes[0].textContent||"").trim();
   const bt=document.createElement("button");bt.className="bsh";bt.type="button";bt.textContent="↗ Enviar";bt.setAttribute("data-bsh","");h.appendChild(bt);
   const ck=document.createElement("span");ck.className="ck";ck.textContent="✓";b.prepend(ck);});
- {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{const xh=b.querySelector("h2.xtra");b.classList.toggle("xt",!!xh);b.classList.toggle("xm",!!(xh&&xh.classList.contains("xmob")));b.classList.toggle("wide",!!b.querySelector("table"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
+ {const bl=[...m.querySelectorAll(":scope>.blk")];bl.forEach(b=>{const xh=b.querySelector("h2.xtra");b.classList.toggle("xt",!!xh);b.classList.toggle("xm",!!(xh&&xh.classList.contains("xmob")));b.classList.toggle("wide",!!b.querySelector("table,#rmBox,#pjBox"));b.classList.toggle("tall",!!b.querySelector(".gerl"));b.classList.toggle("big",!!b.querySelector(".tk"));b.classList.toggle("f4",!!b.querySelector(".fl"));});
   const n=bl.filter(b=>!b.classList.contains("wide")).length+bl.filter(b=>b.classList.contains("tall")||b.classList.contains("big")).length;const c3=(n%3===0||n>=7);m.dataset.c=c3?"3":"2";
   const xs=bl.filter(b=>b.classList.contains("xt"));const nw=bl.filter(b=>!b.classList.contains("xt")&&!b.classList.contains("wide")&&!b.classList.contains("big")&&!b.classList.contains("f4")&&!b.querySelector(".mktc")),k=c3?3:2,r=nw.length%k;nw.forEach(b=>b.classList.remove("s12","s6"));
   if(innerWidth>=1024&&nw.length>1){const k=(c3&&innerWidth>=1500)?3:2,mas=document.createElement("div");mas.className="mas";mas.style.setProperty("--k",k);nw[0].before(mas);
@@ -1532,12 +1552,16 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
    /* preenche os vãos: cada análise extra vai para a coluna mais curta enquanto houver espaço */
    xs.forEach(b=>cols[0].appendChild(b));
    const arrumar=()=>{const G=20,hb=new Map();nw.concat(xs).forEach(b=>hb.set(b,b.offsetHeight));const H=cols.map(()=>0),put=(b,i)=>{cols[i].appendChild(b);H[i]+=(H[i]?G:0)+hb.get(b);};
-    nw.forEach(b=>put(b,H.indexOf(Math.min(...H))));const resto=[];
+    {/* 2 colunas: escolhe a divisão (mantendo a ordem dentro de cada coluna) que deixa as colunas com a menor diferença de altura */
+     let pl=null;if(k===2&&nw.length<=14){let best=1e12;const hs=nw.map(b=>hb.get(b));for(let mk=0;mk<(1<<nw.length);mk++){if(mk&1)continue;let a=0,c=0;hs.forEach((h,i)=>{if(mk>>i&1)c+=(c?G:0)+h;else a+=(a?G:0)+h;});const v=Math.max(a,c);if(v<best-1){best=v;pl=mk;}}}
+     nw.forEach((b,i)=>put(b,pl!=null?(pl>>i&1):H.indexOf(Math.min(...H))));}const resto=[];
     xs.forEach(b=>{const mx=Math.max(...H),i=H.indexOf(Math.min(...H)),nh=H[i]+G+hb.get(b),over=nh-mx;if(over>60&&over>(mx-H[i])*0.8)resto.push(b);else put(b,i);});
     m.querySelectorAll(":scope>.mas.tail").forEach(x=>x.remove());
     if(resto.length){const t2=document.createElement("div");t2.className="mas tail";t2.style.setProperty("--k",k);m.appendChild(t2);const c2=[...Array(k)].map(()=>{const c=document.createElement("div");c.className="col";t2.appendChild(c);return c;}),H2=c2.map(()=>0);
      resto.forEach(b=>{const i=H2.indexOf(Math.min(...H2));c2[i].appendChild(b);H2[i]+=hb.get(b)+G;});const mo=m.querySelector(":scope>.motto");if(mo)m.appendChild(mo);}};
-   arrumar();requestAnimationFrame(()=>requestAnimationFrame(arrumar));}
+   arrumar();requestAnimationFrame(()=>requestAnimationFrame(arrumar));
+   /* conteúdo que chega depois (gráficos, dados cifrados, mercado) muda a altura dos blocos: reequilibra as colunas */
+   if(window.ResizeObserver){if(m._ro)m._ro.disconnect();let tm=0;const ro=new ResizeObserver(()=>{clearTimeout(tm);tm=setTimeout(arrumar,120);});nw.concat(xs).forEach(b=>ro.observe(b));m._ro=ro;}}
   else if(innerWidth<1024){xs.forEach(b=>{if(!b.classList.contains("xm"))b.remove();});}
   else{if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
