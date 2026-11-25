@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-a",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta: removidos os botões Tudo / Regionais / Op. Dedicadas / Apoio Operacional / Corporativo / Sem CC, que não filtravam nada (ainda não há dados por centro de custo). Os números mostrados são do grupo inteiro."
+   ]
+  },
+  {
    "v": "2026.11.23-k",
    "data": "23/11/2026",
    "itens": [
