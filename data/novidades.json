@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-i",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta: novo gráfico Meta orçada × realizado — barra colorida pelo atingimento (verde ≥100%, amarelo 90–99%, vermelho <90%), traço sólido = meta orçada, tracejado = meta Power BI, % de atingimento sobre cada mês; mês atual com realizado até o D-1 + projeção do mês; meses futuros com a meta em contorno; legenda completa"
+   ]
+  },
+  {
    "v": "2026.11.25-h",
    "data": "25/11/2026",
    "itens": [
