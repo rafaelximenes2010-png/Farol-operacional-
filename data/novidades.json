@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-n",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta › Acumulado por regional: o geral (KPIs, gráfico Acumulado geral e linha Geral do mapa) passa a usar o orçamento do grupo — meta orçada e realizado Power BI. Jan–out: 107,0% (antes 109,6%, porque a planilha das regionais tem meta de março R$ 20 mi menor, abril R$ 10,7 mi menor, setembro R$ 2,6 mi maior e faturado de outubro R$ 6 mi acima do Power BI). Regionais, ranking e mapa continuam pela planilha, com a diferença explicada na nota."
+   ]
+  },
+  {
    "v": "2026.11.25-m",
    "data": "25/11/2026",
    "itens": [
