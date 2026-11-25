@@ -1,6 +1,6 @@
 // Farol Operacional — service worker
 // Rede primeiro para o app (recebe as atualizações na hora) e cópia guardada para abrir sem internet.
-const CACHE="farol-v118"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","revista.js","pacote.js","seguranca.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/marca-los.png","icons/simbolo-los-t.png","icons/simbolo-los.png","icons/icone-96.png"];
+const CACHE="farol-v119"; const APP=["./","index.html","instalar.html","icons/qr-instalar.svg","icons/convite-instalar.png","parser.js","revista.js","pacote.js","seguranca.js","vendor/jspdf.umd.min.js","vendor/html2canvas.min.js","vendor/pdf.min.mjs","vendor/pdf.worker.min.mjs","manifest.webmanifest","icons/icon-192-v2.png","icons/icon-512-v2.png","icons/apple-touch-v2.png","icons/logo-los.png","icons/marca-los.png","icons/simbolo-los-t.png","icons/simbolo-los.png","icons/icone-96.png"];
 // instalação busca tudo direto do servidor (ignora cópias antigas do navegador) e assume na hora
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP.map(u=>new Request(u,{cache:"reload"})))));self.skipWaiting();});
 // ao atualizar, apaga só as cópias antigas do próprio app (farol-vN); estados do usuário (avisos vistos, DDS, contador do ícone) ficam
