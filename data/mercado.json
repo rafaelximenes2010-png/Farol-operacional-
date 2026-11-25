@@ -232,5 +232,406 @@
    "of": false
   }
  ],
- "buscaAuto": "2026-11-25T16:43:19.739Z"
+ "buscaAuto": "2026-11-25T16:43:19.739Z",
+ "snicDet": [
+  {
+   "t": "Outubro: −6,1% sobre out/25",
+   "kpis": [
+    [
+     "Vendas out/26",
+     "5,9 Mt",
+     "−6,1% a/a",
+     -1
+    ],
+    [
+     "Por dia útil",
+     "251,1 mil t",
+     "−0,1% a/a",
+     -1
+    ],
+    [
+     "Única região em alta",
+     "Norte",
+     "+2,2%",
+     1
+    ]
+   ],
+   "grafs": [
+    {
+     "tipo": "hbar",
+     "t": "Outubro por região · volume e variação a/a",
+     "it": [
+      [
+       "Sudeste",
+       2.55,
+       "2,55 Mt",
+       "−9,8%",
+       -1
+      ],
+      [
+       "Nordeste",
+       1.38,
+       "1,38 Mt",
+       "−1,2%",
+       -1
+      ],
+      [
+       "Sul",
+       0.938,
+       "938 mil t",
+       "−4,9%",
+       -1
+      ],
+      [
+       "Centro-Oeste",
+       0.708,
+       "708 mil t",
+       "−6,5%",
+       -1
+      ],
+      [
+       "Norte",
+       0.325,
+       "325 mil t",
+       "+2,2%",
+       1
+      ]
+     ]
+    }
+   ],
+   "pontos": [
+    "Por dia útil a venda ficou praticamente igual a out/25 (−0,1%): a queda do mês vem do calendário e do clima, não de perda de demanda.",
+    "Menos dias úteis — efeito que o setor já esperava.",
+    "Chuvas constantes atrasaram o andamento das obras.",
+    "Sudeste respondeu por 2,55 das 5,9 Mt e teve a maior queda (−9,8%)."
+   ],
+   "fontes": [
+    [
+     "SNIC · resultado de outubro",
+     "https://snic.org.br/numeros-resultados-preliminares-ver.php?id=126"
+    ],
+    [
+     "CNN Brasil · dados regionais de outubro",
+     "https://www.cnnbrasil.com.br/economia/money/macroeconomia/venda-de-cimento-cai-61-em-outubro-e-zera-crescimento-no-ano-diz-snic/"
+    ]
+   ]
+  },
+  {
+   "t": "Ano (jan–out): 56,7 Mt, +0,1%",
+   "kpis": [
+    [
+     "Jan–out",
+     "56,7 Mt",
+     "+0,1%",
+     1
+    ],
+    [
+     "Jan–set",
+     "50,8 Mt",
+     "+0,9%",
+     1
+    ],
+    [
+     "1º semestre",
+     "32,9 Mt",
+     "+2,3%",
+     1
+    ]
+   ],
+   "grafs": [
+    {
+     "tipo": "col",
+     "t": "Vendas mês a mês em 2026 · Mt e variação a/a",
+     "it": [
+      [
+       "jan",
+       5.3,
+       "5,3",
+       "+1,1%",
+       1
+      ],
+      [
+       "fev",
+       4.9,
+       "4,9",
+       "−5,1%",
+       -1
+      ],
+      [
+       "mar",
+       5.8,
+       "5,8",
+       "+9,1%",
+       1
+      ],
+      [
+       "abr",
+       5.4,
+       "5,4",
+       "+2,2%",
+       1
+      ],
+      [
+       "mai",
+       5.7,
+       "5,7",
+       "−1,0%",
+       -1
+      ],
+      [
+       "jun",
+       5.8,
+       "5,8",
+       "+7,7%",
+       1
+      ],
+      [
+       "jul",
+       6.2,
+       "6,2",
+       "+2,5%",
+       1
+      ],
+      [
+       "ago",
+       6.1,
+       "6,1",
+       "+1,9%",
+       1
+      ],
+      [
+       "set",
+       5.7,
+       "5,7",
+       "−5,7%",
+       -1
+      ],
+      [
+       "out",
+       5.9,
+       "5,9",
+       "−6,1%",
+       -1
+      ]
+     ]
+    },
+    {
+     "tipo": "div",
+     "t": "Acumulado do ano · variação a/a",
+     "it": [
+      [
+       "jan–fev",
+       -1.9,
+       "−1,9%"
+      ],
+      [
+       "jan–mar",
+       1.8,
+       "+1,8%"
+      ],
+      [
+       "jan–abr",
+       1.9,
+       "+1,9%"
+      ],
+      [
+       "jan–mai",
+       1.2,
+       "+1,2%"
+      ],
+      [
+       "jan–jun",
+       2.3,
+       "+2,3%"
+      ],
+      [
+       "jan–jul",
+       2.3,
+       "+2,3%"
+      ],
+      [
+       "jan–ago",
+       1.8,
+       "+1,8%"
+      ],
+      [
+       "jan–set",
+       0.9,
+       "+0,9%"
+      ],
+      [
+       "jan–out",
+       0.1,
+       "+0,1%"
+      ]
+     ]
+    }
+   ],
+   "pontos": [
+    "O crescimento acumulado caiu de +2,3% (jan–jul) para +0,1% em três meses, puxado por setembro (−5,7%) e outubro (−6,1%).",
+    "Por dia útil o ritmo segue firme: 249,3 mil t em julho, 261 mil t em agosto e 251,1 mil t em outubro.",
+    "Março foi recorde para o mês (5,8 Mt, +9,1%)."
+   ],
+   "fontes": [
+    [
+     "SNIC · resultados preliminares (abr a out)",
+     "https://snic.org.br/numeros-resultados-preliminares.php"
+    ],
+    [
+     "Agência iNFRA · janeiro",
+     "https://agenciainfra.com/blog/vendas-de-cimento-crescem-11-em-janeiro-e-somam-53-milhoes-de-t/"
+    ],
+    [
+     "IstoÉ Dinheiro · fevereiro",
+     "https://istoedinheiro.com.br/vendas-de-cimento-em-fevereiro-caem-51-ante-mesmo-mes-de-2025-2"
+    ],
+    [
+     "Brasil Mineral · 1º trimestre",
+     "https://brasil61.com/n/vendas-crescem-1-8-e-atingem-15-9-milhoes-t-no-trimestre-mine261013"
+    ],
+    [
+     "Agência iNFRA · agosto",
+     "https://agenciainfra.com/blog/vendas-de-cimento-crescem-19-em-agosto-aponta-snic/"
+    ]
+   ]
+  },
+  {
+   "t": "Regiões no ano",
+   "kpis": [
+    [
+     "Nordeste",
+     "+6,5%",
+     "jan–out",
+     1
+    ],
+    [
+     "Norte",
+     "+5,9%",
+     "jan–out",
+     1
+    ],
+    [
+     "Sudeste",
+     "−3,2%",
+     "jan–out",
+     -1
+    ]
+   ],
+   "grafs": [
+    {
+     "tipo": "div",
+     "t": "Acumulado jan–out · variação a/a por região",
+     "it": [
+      [
+       "Nordeste",
+       6.5,
+       "+6,5%"
+      ],
+      [
+       "Norte",
+       5.9,
+       "+5,9%"
+      ],
+      [
+       "Sul",
+       0,
+       "estável"
+      ],
+      [
+       "Centro-Oeste",
+       0,
+       "estável"
+      ],
+      [
+       "Sudeste",
+       -3.2,
+       "−3,2%"
+      ]
+     ]
+    }
+   ],
+   "pontos": [
+    "1º trimestre: Nordeste 3,66 Mt (+10%), melhor desempenho do país; Sudeste 7 Mt (−2,8%), única região em queda.",
+    "Março: Nordeste 1,28 Mt (+16,4%), puxado por lançamentos do Minha Casa, Minha Vida.",
+    "Julho: Norte e Nordeste com crescimento expressivo; Sul em queda pelas chuvas.",
+    "Outubro: Norte foi a única região em alta (+2,2%); Nordeste −1,2%, Sudeste −9,8%."
+   ],
+   "obs": "O SNIC divulgou só as variações do acumulado jan–out por região, sem os volumes. Sul e Centro-Oeste foram informados como estáveis, sem percentual.",
+   "fontes": [
+    [
+     "CNN Brasil · acumulado e outubro por região",
+     "https://www.cnnbrasil.com.br/economia/money/macroeconomia/venda-de-cimento-cai-61-em-outubro-e-zera-crescimento-no-ano-diz-snic/"
+    ],
+    [
+     "CNN Brasil · março e 1º trimestre por região",
+     "https://www.cnnbrasil.com.br/economia/macroeconomia/venda-de-cimento-bate-recorde-e-cresce-9-em-marco/"
+    ],
+    [
+     "SNIC · resultado de julho",
+     "https://snic.org.br/numeros-resultados-preliminares-ver.php?id=123"
+    ]
+   ]
+  },
+  {
+   "t": "O que sustenta e o que freia a demanda",
+   "kpis": [
+    [
+     "MCMV nos lançamentos",
+     "50%",
+     "1º tri/26",
+     1
+    ],
+    [
+     "Financiamento SBPE construção",
+     "+96,2%",
+     "jan–set",
+     1
+    ],
+    [
+     "Potencial da meta MCMV",
+     "+5 Mt",
+     "de consumo",
+     1
+    ]
+   ],
+   "grupos": [
+    [
+     "Sustenta",
+     1,
+     [
+      "Minha Casa, Minha Vida: 50% dos lançamentos imobiliários no 1º trimestre, com vendas do programa +10%; entrada da Faixa 4.",
+      "Meta de 3 milhões de moradias até o fim de 2026 pode gerar incremento de cerca de 5 Mt no consumo de cimento (SNIC).",
+      "Infraestrutura: na confiança da construção, o segmento está mais otimista, com expectativa de mais demanda e contratações.",
+      "Pavimento de concreto (whitetopping) citado pelo SNIC como vetor das obras rodoviárias — sem volume divulgado.",
+      "Mercado de trabalho: desemprego de 5,2% em setembro, menor para o mês desde 2012; 103,6 milhões de ocupados (recorde)."
+     ]
+    ],
+    [
+     "Freia",
+     -1,
+     [
+      "Selic em 13,75% a.a. encarece o financiamento habitacional.",
+      "Comprometimento da renda das famílias com dívidas em 50,11% (agosto), recorde da série.",
+      "84,2 milhões de inadimplentes em setembro, com R$ 597,4 bilhões em dívidas.",
+      "Edificações residenciais mais pessimistas no indicador de confiança.",
+      "Pressão de custos: diesel, coque de petróleo, commodities e frete marítimo."
+     ]
+    ]
+   ],
+   "fontes": [
+    [
+     "SNIC · resultado de outubro",
+     "https://snic.org.br/numeros-resultados-preliminares-ver.php?id=126"
+    ],
+    [
+     "SNIC · resultado de setembro",
+     "https://snic.org.br/numeros-resultados-preliminares-ver.php?id=125"
+    ],
+    [
+     "SNIC · 1º semestre (MCMV e meta de moradias)",
+     "https://snic.org.br/numeros-resultados-preliminares-ver.php?id=122"
+    ]
+   ]
+  }
+ ]
 }
