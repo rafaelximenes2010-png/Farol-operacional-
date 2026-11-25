@@ -1431,7 +1431,8 @@ async function doInstall(){if(!deferredInstall){const h=$("#instHow");if(h){LS.s
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
  const swTinha=!!navigator.serviceWorker.controller;let swPend=false;
  const swLivre=()=>!document.querySelector(".sheet")&&!document.getElementById("rvPrint")&&!(document.activeElement&&/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
- const swRecarregar=()=>{if(!swPend)return;if(document.hidden||swLivre()){swPend=false;try{sessionStorage.setItem("farolAtualizado","1");}catch(e){}location.reload();}};
+ let swUlt=Date.now();["pointerdown","keydown","wheel","touchstart","scroll"].forEach(ev=>addEventListener(ev,()=>{swUlt=Date.now();},{passive:true,capture:true}));
+ const swRecarregar=()=>{if(!swPend)return;if(document.hidden||(swLivre()&&Date.now()-swUlt>180000)){swPend=false;try{sessionStorage.setItem("farolAtualizado","1");sessionStorage.setItem("farolVolta",JSON.stringify({t:typeof cur!=="undefined"?cur:"hoje",y:scrollY}));}catch(e){}location.reload();}};
  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{const chk=()=>{if(!document.hidden&&navigator.onLine!==false)reg.update().catch(()=>{});};
   setInterval(chk,5*60*1000);document.addEventListener("visibilitychange",chk);window.addEventListener("online",chk);}).catch(()=>{});
  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!swTinha)return;swPend=true;swRecarregar();});
@@ -1718,8 +1719,8 @@ function adminSheet(){const g=LS.get("farolGh",{repo:"rafaelximenes2010-png/Faro
    $("#aMsg").innerHTML="✅ Token válido. A partir de agora, cada revista que você carregar é publicada para toda a equipe.";}catch(e){$("#aMsg").textContent="❌ Sem conexão com o GitHub agora: "+e.message;}};}
 /* ===== ATUALIZAÇÃO AUTOMÁTICA NOS APARELHOS ===== */
 async function checarNovaEdicao(){if(!D||document.hidden)return;try{const r=await fetch("data/ultimo.enc?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const txt=await r.text();
- const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
-  Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);D=Dx;compute();paintHead();show(cur);toastMsg("Edição atualizada: "+Dx.d1.data);}}catch(e){}}
+ const senha=LS.get("farolSenha","");if(!senha)return;const Dx=await decifrar(txt,senha);normRegs(Dx);if(isoOf(Dx.d1.data)>isoOf(d1.data)||(isoOf(Dx.d1.data)===isoOf(d1.data)&&JSON.stringify(Dx)!==JSON.stringify(Object.assign({},D,{meta:Dx.meta})))){
+  Dx.meta=Object.assign(Dx.meta||{},{modo:"equipe"});guardar(Dx);D=Dx;compute();paintHead();const y=scrollY;show(cur);scrollTo(0,y);toastMsg("Edição atualizada: "+Dx.d1.data);}}catch(e){}}
 /* AVISO PARA TODOS (data/aviso.json, publicado pelo administrador): banner no app + notificação do aparelho, uma vez por aviso.
    Texto público (o repositório é público): nunca colocar números no aviso. */
 async function checarAviso(){try{const a=await (await fetch("data/aviso.json?t="+Date.now(),{cache:"no-store"})).json();
@@ -1805,7 +1806,7 @@ function iosHint(){(()=>{const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),
   d.innerHTML='<b>Instale o Farol no iPhone</b><br>Toque em Compartilhar ⬆︎ e depois em "Adicionar à Tela de Início". <a href="instalar.html" style="color:#9fd0ff">Ver passo a passo</a> <button style="float:right;background:none;border:0;color:#fff;font-size:18px">×</button>';
   d.querySelector("button").onclick=()=>{d.remove();LS.set("farolIosHint",1);};document.body.appendChild(d);}})();}
 if(matchMedia("(display-mode: standalone)").matches||navigator.standalone){document.documentElement.classList.add("pwa");}
-(async()=>{await splash();if(!perfilValido()&&await oferecerRestauracao()){location.reload();return;}if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");show(V[v0]?v0:"hoje");}boasVindas();setTimeout(sincronizarHistorico,3000);setTimeout(checarAviso,6000);try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
+(async()=>{await splash();if(!perfilValido()&&await oferecerRestauracao()){location.reload();return;}if(!perfilValido()) await cadastro(false);D=await loadData();if(D)compute();paintHead();{const v0=new URLSearchParams(location.search).get("v");let vt=null;try{vt=JSON.parse(sessionStorage.getItem("farolVolta")||"null");sessionStorage.removeItem("farolVolta");}catch(e){}const t0=V[v0]?v0:(vt&&V[vt.t]&&D?vt.t:"hoje");show(t0);document.querySelectorAll("nav.tabs [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t0));if(vt&&vt.y)setTimeout(()=>scrollTo(0,vt.y),400);}boasVindas();setTimeout(sincronizarHistorico,3000);setTimeout(checarAviso,6000);try{if(sessionStorage.getItem("farolAtualizado")){sessionStorage.removeItem("farolAtualizado");setTimeout(()=>toastMsg("App atualizado para a versão mais recente."),1200);}}catch(e){}carregaMercado();alertasMercado();setTimeout(ddsTick,4000);if(new URLSearchParams(location.search).get("teste")==="dds")setTimeout(testeDds,2500);setTimeout(convite,6000);})();
 
 /* ===== BUSCA NO APP (farolzinho no topo) ===== */
 const semAc=t=>String(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
