@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-c",
+   "data": "25/11/2026",
+   "itens": [
+    "Mês: gráfico Faturamento diário × meta redimensionado — ocupa toda a largura do cartão no computador, com números maiores e sem sobreposição; no celular os percentuais ficam na vertical sobre cada barra"
+   ]
+  },
+  {
    "v": "2026.11.25-b",
    "data": "25/11/2026",
    "itens": [
