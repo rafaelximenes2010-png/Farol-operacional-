@@ -936,25 +936,28 @@ function rmLinha(r){const F=rmSoma(r.fat),Mt=rmSoma(r.meta),Fm=rmSoma(r.fat.filt
  return `<tr data-rm="${escH(r.nome)}" style="cursor:pointer"><td><b>${escH(rmNome(r.nome))}</b></td><td>${F.toLocaleString("pt-BR",{maximumFractionDigits:0})}</td><td>${Mt?Mt.toLocaleString("pt-BR",{maximumFractionDigits:0}):"—"}</td><td>${Mt?`<span class="pill ${cor(Fm/Mt*100)}">${pct(Fm/Mt*100,1)}</span>`:"—"}</td><td class="${Fm-Mt>=0?"up":"dn"}">${Mt?sg(Fm-Mt):"—"}</td><td>${comMeta?bateu+" de "+comMeta:"—"}</td></tr>`;}
 const rmBi=v=>Math.abs(v)>=1e9?"R$ "+(v/1e9).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+" bi":mi(v);
 function rmAcum(r){let aF=0,aM=0,aFm=0;return RM.meses.map((m,i)=>{const f=r.fat[i]||0,mt=r.meta[i]||0;aF+=f;aM+=mt;if(mt>0)aFm+=f;return {m,f,mt,aF,aM,aFm,pc:aM?aFm/aM*100:null};});}
+/* acumulado do grupo pelo orçamento oficial (D.orc: meta orçada e realizado Power BI), nos mesmos meses da planilha das regionais */
+function rmAcumOrc(){let aF=0,aM=0;return RM.meses.map((m,i)=>{const o=(D.orc||[]).find(x=>x[0]===m),f=o&&o[3]!=null?o[3]:(RM.total.fat[i]||0),mt=o&&o[1]?o[1]:(RM.total.meta[i]||0);aF+=f;aM+=mt;return {m,f,mt,aF,aM,aFm:aF,pc:aM?aF/aM*100:null};});}
 function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.length-1]+"/26",R=RM.regionais,sel=R.find(r=>r.nome===RMsel);
  const atuais=R.filter(r=>!r.anterior&&!/EM BRANCO|META NAO ALOCADA/.test(r.nome)),ant=R.filter(r=>r.anterior),sem=R.filter(r=>/EM BRANCO|META NAO ALOCADA/.test(r.nome));
  const OPS=[["","Geral (todas as regionais)"],...atuais.map(r=>[r.nome,rmNome(r.nome)])];const chips=`<div class="rmpick" id="rmPick"><button type="button" id="rmPrev" aria-label="Regional anterior">‹</button><label class="rmsel"><span>Regional</span><select id="rmSel" aria-label="Escolher regional">${OPS.map(([v,t])=>`<option value="${escH(v)}"${v===RMsel?" selected":""}>${escH(t)}</option>`).join("")}</select><i aria-hidden="true">▾</i></label><button type="button" id="rmNext" aria-label="Próxima regional">›</button></div>`;
  const fmt=v=>v.toLocaleString("pt-BR",{maximumFractionDigits:0});
- if(!sel){const G=rmAcum(RM.total),g=G[G.length-1],gpc=g.aF/g.aM*100;
+ if(!sel){const P=rmAcum(RM.total),pT=P[P.length-1],G=rmAcumOrc(),g=G[G.length-1],gpc=g.aF/g.aM*100,pgc=pT.aF/pT.aM*100;
+  const dif=RM.meses.map((m,i)=>{const o=(D.orc||[]).find(x=>x[0]===m);if(!o)return"";const dm=(RM.total.meta[i]||0)-(o[1]||0),df=(RM.total.fat[i]||0)-(o[3]||0),t=[];if(Math.abs(dm)>=5e5)t.push(`meta ${dm>0?"+":"−"}${mi(Math.abs(dm))}`);if(Math.abs(df)>=5e5)t.push(`faturado ${df>0?"+":"−"}${mi(Math.abs(df))}`);return t.length?`${m.toLowerCase()} (${t.join(", ")})`:"";}).filter(Boolean);
   const lst=atuais.map(r=>{const a=rmAcum(r),u=a[a.length-1];return {r,a,u};}).filter(x=>x.u.aM>0).sort((x,y)=>y.u.pc-x.u.pc);
   const nOk=lst.filter(x=>x.u.pc>=100).length,mx=Math.max(...lst.map(x=>x.u.pc),110);
   return chips+`<div class="kpis">
-   <div class="card kpi hero"><div class="l">Faturado acumulado · ${per}</div><div class="v">${rmBi(g.aF)}</div><div class="s">meta acumulada ${rmBi(g.aM)}</div></div>
-   <div class="card kpi"><div class="l">Atingimento acumulado</div><div class="v" style="color:${C[cor(gpc)]}">${pct(gpc,1)}</div><div class="s">${sg(g.aF-g.aM)} vs meta</div></div>
+   <div class="card kpi hero"><div class="l">Faturado acumulado · ${per}</div><div class="v">${rmBi(g.aF)}</div><div class="s">meta orçada acumulada ${rmBi(g.aM)} · orçamento do grupo</div></div>
+   <div class="card kpi"><div class="l">Atingimento acumulado</div><div class="v" style="color:${C[cor(gpc)]}">${pct(gpc,1)}</div><div class="s">${sg(g.aF-g.aM)} vs meta orçada</div></div>
    <div class="card kpi"><div class="l">Regionais na meta</div><div class="v">${nOk} de ${lst.length}</div><div class="s">no acumulado do ano</div></div>
    <div class="card kpi"><div class="l">Melhor · pior</div><div class="v" style="font-size:20px">${escH(rmNome(lst[0].r.nome))}</div><div class="s">${pct(lst[0].u.pc,1)} · pior: ${escH(rmNome(lst[lst.length-1].r.nome))} ${pct(lst[lst.length-1].u.pc,1)}</div></div></div>
   <div class="rmg"><div class="sec">Acumulado geral · mês a mês</div>
-  <div class="card">${barsChart(G.map((x,i)=>{const p=x.aM?x.aF/x.aM*100:0;return {m:x.aM||null,v:x.aF,c:!x.aM?"#3b82f6":p>=100?"#22c55e":p>=90?"#f5b400":"#ef4444",t:x.aM?Math.round(p)+"%":"",l:x.m,k:i};}),360,210)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado do grupo (cor = atingimento) · traço = meta acumulada · % = faturado ÷ meta. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div></div>
+  <div class="card">${barsChart(G.map((x,i)=>{const p=x.aM?x.aF/x.aM*100:0;return {m:x.aM||null,v:x.aF,c:!x.aM?"#3b82f6":p>=100?"#22c55e":p>=90?"#f5b400":"#ef4444",t:x.aM?Math.round(p)+"%":"",l:x.m,k:i};}),360,210)}<p class="note" style="margin:6px 0 0">Orçamento do grupo: barras = faturado acumulado (cor = atingimento) · traço = meta orçada acumulada · % = faturado ÷ meta. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div></div>
   <div class="rmg"><div class="sec">Ranking do acumulado · ${per} <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
   <div class="card rank">${lst.map(x=>`<div class="rk" data-rm="${escH(x.r.nome)}"><span>${escH(rmNome(x.r.nome))}</span><div class="bar"><span style="width:${x.u.pc/mx*100}%;background:${C[cor(x.u.pc)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x.u.pc)]}">${pct(x.u.pc,1)}</span></div>`).join("")}</div></div>
   <div class="sec">Atingimento acumulado · mês a mês</div>
   <div class="card"><div class="rmfix"><table class="rmhm rmnm"><thead><tr><th>Regional</th></tr></thead><tbody>
-  ${lst.map(x=>`<tr data-rm="${escH(x.r.nome)}" style="cursor:pointer"><td><b>${escH(rmNome(x.r.nome))}</b></td></tr>`).join("")}<tr class="tot"><td>Geral</td></tr></tbody></table>
+  ${lst.map(x=>`<tr data-rm="${escH(x.r.nome)}" style="cursor:pointer"><td><b>${escH(rmNome(x.r.nome))}</b></td></tr>`).join("")}<tr class="tot"><td>Geral (orçamento)</td></tr></tbody></table>
   <div class="rmsc"><table class="rmhm"><thead><tr>${RM.meses.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>
   ${lst.map(x=>`<tr data-rm="${escH(x.r.nome)}" style="cursor:pointer">${x.a.map(c=>c.pc==null?`<td class="hm0">—</td>`:`<td class="hm ${cor(c.pc)}">${Math.round(c.pc)}%</td>`).join("")}</tr>`).join("")}
   <tr class="tot">${G.map(c=>`<td class="hm ${cor(c.pc)}">${Math.round(c.pc)}%</td>`).join("")}</tr></tbody></table></div></div>
@@ -963,8 +966,8 @@ function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.
   ${atuais.map(rmLinha).join("")}
   <tr><td colspan="6" class="note" style="padding-top:12px"><b>Estrutura anterior</b> (até set/26 — a partir de out as regionais seguem a nova estrutura)</td></tr>${ant.map(rmLinha).join("")}
   <tr><td colspan="6" class="note" style="padding-top:12px"><b>Sem regional</b></td></tr>${sem.map(rmLinha).join("")}
-  <tr class="tot"><td>Total ${per}</td><td>${fmt(g.aF)}</td><td>${fmt(g.aM)}</td><td>${pct(gpc,1)}</td><td class="${g.aF-g.aM>=0?"up":"dn"}">${sg(g.aF-g.aM)}</td><td></td></tr></tbody></table></div></details>
-  <p class="note">Fonte: ${escH(RM.fonte)} (importado em ${escH(RM.importado)}). Os totais desta planilha diferem do orçamento do grupo mais abaixo em mar, abr e set (meta) e em out (faturado, Power BI).</p>`;}
+  <tr class="tot"><td>Total da planilha ${per}</td><td>${fmt(pT.aF)}</td><td>${fmt(pT.aM)}</td><td>${pct(pgc,1)}</td><td class="${pT.aF-pT.aM>=0?"up":"dn"}">${sg(pT.aF-pT.aM)}</td><td></td></tr></tbody></table></div></details>
+  <p class="note">Fonte: ${escH(RM.fonte)} (importado em ${escH(RM.importado)}). Regionais, ranking e mapa vêm desta planilha; o geral (KPIs, gráfico e linha Geral) vem do orçamento do grupo. Pela planilha o acumulado daria ${pct(pgc,1)}, porque ela difere do orçamento em ${dif.join("; ")||"nenhum mês"}.</p>`;}
  const rows=rmAcum(sel),ult=rows[rows.length-1];
  return chips+`<div class="kpis">
   <div class="card kpi hero"><div class="l">${escH(rmNome(sel.nome))} · faturado acumulado</div><div class="v">${mi(ult.aF)}</div><div class="s">meta acumulada ${ult.aM?mi(ult.aM):"—"} · ${per}</div></div>
@@ -995,7 +998,7 @@ function rmIr(v){RMsel=v;const bx=$("#rmBox"),pk=$("#rmPick"),y0=pk?pk.getBoundi
  bx.innerHTML=rmHtml();rmBind();const pk2=$("#rmPick");if(pk2){const dy=pk2.getBoundingClientRect().top-y0;if(Math.abs(dy)>1)scrollBy(0,dy);}}
 /* lista de regionais no computador: painel no tema do app (em vez da lista branca do navegador), com atingimento acumulado e faturado de cada uma; no celular fica o rolo nativo */
 function rmPop(sl){if(!matchMedia("(pointer:fine)").matches)return;const box=sl.closest(".rmsel");
- const info=v=>{const r=v?RM.regionais.find(x=>x.nome===v):RM.total;if(!r)return null;const a=rmAcum(r),u=a[a.length-1];return u;};
+ const info=v=>{if(!v){const a=rmAcumOrc();return a[a.length-1];}const r=RM.regionais.find(x=>x.nome===v);if(!r)return null;const a=rmAcum(r),u=a[a.length-1];return u;};
  const fecha=()=>{document.querySelector(".rmpop")?.remove();document.removeEventListener("pointerdown",fora,true);document.removeEventListener("keydown",tecla,true);box.classList.remove("open");};
  const fora=e=>{if(!e.target.closest(".rmpop")&&!e.target.closest(".rmsel"))fecha();};
  const tecla=e=>{const it=[...document.querySelectorAll(".rmpop button")];let i=it.indexOf(document.activeElement);
