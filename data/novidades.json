@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-h",
+   "data": "25/11/2026",
+   "itens": [
+    "Projeção: Três projeções × meta com barra em largura total abaixo de cada linha (antes ficava espremida)",
+    "Projeção: Ritmo por dia útil mais alto",
+    "Faixas do ano: mais compacto — realizado e projeção em duas colunas dentro de cada faixa"
+   ]
+  },
+  {
    "v": "2026.11.25-g",
    "data": "25/11/2026",
    "itens": [
