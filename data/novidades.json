@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-j",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta › Acumulado por regional: trocar de regional não faz mais a página pular — o quadro mantém a altura e o seletor fica parado na tela",
+    "Gráficos de barras: eixo com valores completos (antes 1.647 aparecia cortado como 647)",
+    "Acumulado mês a mês (geral e por regional): barra colorida pelo atingimento, traço = meta acumulada e % sobre cada mês"
+   ]
+  },
+  {
    "v": "2026.11.25-i",
    "data": "25/11/2026",
    "itens": [
