@@ -6,7 +6,8 @@
    "itens": [
     "Meta: abre de uma vez, já com os dados das regionais — antes mostrava a página, depois \"Carregando…\" e redesenhava tudo para baixo",
     "Os dados das regionais são baixados em segundo plano logo que o app abre",
-    "Blocos das abas aparecem já arrumados nas colunas, sem trocar de lugar na abertura"
+    "Blocos das abas aparecem já arrumados nas colunas, sem trocar de lugar na abertura",
+    "Colunas fixas depois que a aba aparece: os blocos não trocam mais de coluna enquanto você olha"
    ]
   },
   {
