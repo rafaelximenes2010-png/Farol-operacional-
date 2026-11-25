@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-f",
+   "data": "25/11/2026",
+   "itens": [
+    "Mês: Calendário do mês e Média por dia da semana lado a lado, ocupando toda a largura no computador, com a mesma altura e números maiores"
+   ]
+  },
+  {
    "v": "2026.11.25-e",
    "data": "25/11/2026",
    "itens": [
