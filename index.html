@@ -178,7 +178,7 @@ nav.tabs button.on{color:var(--navy2);background:rgba(27,58,122,.08)}
 .simr{margin-top:12px;background:linear-gradient(135deg,#0f2350,#1b3a7a);color:#fff;border-radius:14px;padding:14px 16px}.simr small{opacity:.8;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.simr b{display:block;font-size:30px;margin:2px 0}.simr div{font-size:12.5px;opacity:.85}
 .simf{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.simf div{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}.simf small{display:block;font-size:10.5px;font-weight:700;color:var(--ink2)}.simf b{display:block;font-size:18px;margin:2px 0}.simf span{font-size:10px;color:var(--ink2)}
 .simf .ok{background:var(--gs);border-color:#9fd8b5}.simf .ok b,.simf .ok span{color:var(--g)}
-.fx2{display:grid;gap:8px}.fx2 .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.fx2 .r b{font-size:14px}.fx2 .r .v{font-weight:800;text-align:right}.fx2 .r small{color:var(--ink2);font-size:12px}
+.fx2{display:grid;gap:8px}.fx2 .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.fx2 .r b{font-size:14px}.fx2 .r .v{font-weight:800;text-align:right}.fx2 .r small{color:var(--ink2);font-size:12px}.fx2 .r small b{color:var(--ink)}.fx2 .fxr{text-align:right;font-weight:700}.fx2 .fxh{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink2);padding:0 2px 2px}.fx2 .fxh b{color:var(--ink)}
 .fx2 .r.ok{border-color:#9fd8b5;background:var(--gs)}
 .hbtn svg,.ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:block;margin:auto}
 .hbtn{display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(6px)}
@@ -850,9 +850,8 @@ function vProj(){const n=30,real=[],metaL=[],projL=[];let a=0;D.dias.forEach(x=>
  <h2>Ritmo por dia útil <small>toque para detalhar</small></h2>
  <div class="card drl" data-m="necDU">${barsChart([{v:M.mediaDU,c:"#3b82f6",t:mi(M.mediaDU),l:"Realizado"},{v:M.metaMediaRest,c:"#94a3b8",t:mi(M.metaMediaRest),l:"Meta média restante"},{v:necDU,c:"#8b5cf6",t:mi(necDU),l:"Necessário p/ meta"} ],360,180)}</div>
  <h2>Projeção do mês por regional <small>Power BI · fechamento projetado</small></h2><div id="pjBox">${pjHtml()}</div>
- <h2>Super meta do ano · quanto falta <small>mesma base do acumulado (${pct(Y.pc,1)}) e da projeção (${pct(pcA,1)})</small></h2>
- <div class="card fx2" data-m="superano">${FAIXAS.map(f=>{const v=metaA*(1+f[1]/100),ok=A.tot>=v,falt=Math.max(0,v-Y.real),mr=Math.max(1,D.orc.length-A.nFech);return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Realizado ${pct(Y.real/v*100,1)} · projeção ${ok?"✓ atinge":pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${falt?"faltam "+mi(falt)+" · "+mi(falt/mr)+"/mês":"✓ atingida"}</small></div>`;}).join("")}
- <p class="note" style="margin:4px 2px 0">Acumulado do ano = ${A.nFech} meses fechados (${mi(A.real)}) + ${D.orc[A.mI]?D.orc[A.mI][0]:"mês"} até o D-1 (${mi(M.acum)}). Projeção do ano = meses fechados + projeção do mês (${mi(M.proj)}) + orçado dos meses seguintes (${mi(A.fut)}). "Por mês" = o que falta dividido pelos ${Math.max(1,D.orc.length-A.nFech)} meses restantes, incluindo o atual.</p></div>`;}
+ <h2>Faixas do ano · quanto falta <small>realizado e projeção</small></h2>
+ ${faixasAno(metaA,' data-m="superano"')}`;}
 /* destaque do crescimento sobre a meta (R$ e %) */
 function cresc(dif){const up=dif>=0;return `<div class="cres ${up?"up":"dn"}">${up?"▲ +":"▼ −"}${mi(Math.abs(dif))} vs meta</div>`;}
 /* acumulado do ano até o D-1: meses fechados + mês atual, contra a meta orçada do mesmo período */
@@ -1108,6 +1107,13 @@ function ponteSVG(base,proj,acum,w=360,h=290){const pad={l:34,r:8,t:26,b:40};con
  return `<svg class="chart tipchart" viewBox="0 0 ${w} ${h}">${g}</svg><div class="tipbox" hidden></div>`;}
 function faixasTabela(base,real,proj,duRest){return `<div class="tw"><table><thead><tr><th>Faixa</th><th>Valor</th><th>Realizado</th><th>Projeção</th>${duRest!=null?"<th>Falta</th><th>Necessário/dia útil</th>":""}</tr></thead><tbody>
  ${FAIXAS.map(f=>{const v=base*(1+f[1]/100),fl=Math.max(0,v-real);return `<tr><td><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b></td><td>${mi(v)}</td><td><span class="pill ${real>=v?"g":"r"}">${pct(real/v*100)}</span></td><td><span class="pill ${proj>=v?"g":proj>=v*.97?"y":"r"}">${proj>=v?"✓ atinge":pct(proj/v*100)}</span></td>${duRest!=null?`<td>${fl?mi(fl):"✓"}</td><td>${fl?brl(fl/duRest):"—"}</td>`:""}</tr>`;}).join("")}</tbody></table></div>`;}
+/* Faixas do ano: mesma tabela nas abas Projeção e Meta — duas bases explícitas: realizado (quanto falta faturar) e projeção (se a projeção alcança) */
+function faixasAno(meta,attrs=""){const Y=anoAcum(),A=anoProj(M.proj),mr=Math.max(1,D.orc.length-A.nFech);
+ return `<div class="card fx2"${attrs}><div class="fxh"><span></span><span>Realizado até o D-1: <b>${mi(Y.real)}</b></span><span>Projeção do ano: <b>${mi(A.tot)}</b></span></div>${FAIXAS.map(f=>{const v=meta*(1+f[1]/100),ok=A.tot>=v,falt=Math.max(0,v-Y.real),gap=A.tot-v;
+  return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span>
+  <small>Realizado: <b>${pct(Y.real/v*100,1)}</b></small><small class="fxr">${falt?"falta faturar "+mi(falt)+" · "+mi(falt/mr)+"/mês":"✓ já atingida"}</small>
+  <small>Projeção: <b>${pct(A.tot/v*100,1)}</b></small><small class="fxr" style="color:${ok?"var(--g)":"var(--r)"}">${ok?"✓ atinge (sobra "+mi(gap)+")":"não atinge (faltam "+mi(-gap)+")"}</small></div>`;}).join("")}
+ <p class="note" style="margin:4px 2px 0">Realizado = ${A.nFech} meses fechados (${mi(A.real)}) + ${D.orc[A.mI]?D.orc[A.mI][0]:"mês"} até o D-1 (${mi(M.acum)}). Projeção = meses fechados + projeção do mês (${mi(M.proj)}) + orçado dos meses seguintes (${mi(A.fut)}). "Falta faturar" = meta − realizado; "/mês" = dividido pelos ${mr} meses restantes, incluindo o atual. "Sobra/faltam" = projeção − meta.</p></div>`;}
 function anoProj(novVal){const mI=D.orc.findIndex(x=>x[5]);const fech=D.orc.filter(x=>x[3]!=null&&!x[5]);const real=fech.reduce((a,x)=>a+x[3],0);
  const futuros=D.orc.slice(mI+1).reduce((a,x)=>a+(x[1]||0),0);return {real,nov:novVal,fut:futuros,tot:real+novVal+futuros,mI,nFech:fech.length};}
 function ponteAno(A,meta,w=360,h=320){const pad={l:12,r:84,t:30,b:40};const lv=FAIXAS.map(f=>meta*(1+f[1]/100));const top=Math.max(A.tot,lv[3])*1.03,bot=Math.min(A.real,meta)*.9;
@@ -1130,7 +1136,7 @@ function vSuper(){const meta=D.metaAno;const pj=D.proj3.map(x=>[x[0],x[1]*1e6]);
  const pmin=Math.min(...pj.map(x=>x[1])),pcm=pmin/M.metaOrc*100;
  return `<h2>Super meta 2026 · ponte do ano <small>realizado + projeção + orçado</small></h2>
  <div class="card" data-m="superano">${ponteAno(A,meta)}<div class="note">Ano projetado em <b>${mi(A.tot)}</b> = <b>${pct(pcA,1)}</b> da meta orçada (${mi(meta)}): <b>${faixaTxt(fA)}</b>.${prox?` Para ${prox[0]} faltam <b>${mi(meta*(1+prox[1]/100)-A.tot)}</b>.`:""}</div></div>
- <h2>Faixas do ano · quanto falta</h2><div class="card fx2">${FAIXAS.map(f=>{const v=meta*(1+f[1]/100),ok=A.tot>=v;return `<div class="r ${ok?"ok":""}"><b>${f[0]==="Meta"?"Meta 100%":"Super meta "+f[0]}</b><span class="v">${mi(v)}</span><small>Projetado: ${pct(A.tot/v*100,1)}</small><small style="text-align:right;font-weight:700;color:${ok?"var(--g)":"var(--r)"}">${ok?"✓ atingida":"faltam "+mi(v-A.tot)}</small></div>`;}).join("")}</div>
+ <h2>Faixas do ano · quanto falta <small>realizado e projeção</small></h2>${faixasAno(meta)}
  <h2>Cenários de fechamento 2026 <small>${D.orc[A.mI]?D.orc[A.mI][0]:""} pelas 3 projeções</small></h2><div class="card fx2">
  ${pj.map(([n,v])=>{const t=A.real+v+A.fut,pc=t/meta*100,fx=faixaAting(pc);return `<div class="r ${fx>=1?"ok":""}"><b>${n}</b><span class="v">${mi(t)}</span><small>${D.orc[A.mI]?D.orc[A.mI][0]:"Mês"}: ${mi(v)} · ${pct(pc,1)} da meta</small><small style="text-align:right;font-weight:800;color:${fx>=1?"var(--g)":fx===0?"var(--y)":"var(--r)"}">${fx<0?"abaixo da meta":fx===0?"meta":"faixa "+FAIXAS[fx][0]}</small></div>`;}).join("")}
  <p class="note" style="margin:4px 2px 0">Realizado ${A.nFech} meses fechados (${mi(A.real)}) + mês atual projetado + meses seguintes no orçado.</p></div>
