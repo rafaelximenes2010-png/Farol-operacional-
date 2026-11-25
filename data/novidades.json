@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-m",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta: abre de uma vez, já com os dados das regionais — antes mostrava a página, depois \"Carregando…\" e redesenhava tudo para baixo",
+    "Os dados das regionais são baixados em segundo plano logo que o app abre",
+    "Blocos das abas aparecem já arrumados nas colunas, sem trocar de lugar na abertura"
+   ]
+  },
+  {
    "v": "2026.11.25-l",
    "data": "25/11/2026",
    "itens": [
