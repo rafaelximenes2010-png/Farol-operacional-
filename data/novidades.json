@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-q",
+   "data": "25/11/2026",
+   "itens": [
+    "Meta › seletor de regional: no computador, clicar em qualquer ponto da caixa (inclusive no rótulo \"Regional\" e na setinha) abre o painel do app — a lista branca do navegador não aparece mais"
+   ]
+  },
+  {
    "v": "2026.11.25-p",
    "data": "25/11/2026",
    "itens": [
