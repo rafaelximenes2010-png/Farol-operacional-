@@ -570,8 +570,8 @@ function lineChart(series,w=360,h=200,opts={}){const pad={l:38,r:8,t:12,b:24};co
  if(opts.mark!=null) g+=`<line x1="${X(opts.mark)}" x2="${X(opts.mark)}" y1="${pad.t}" y2="${h-pad.b}" stroke="var(--ink2)" stroke-dasharray="2 3"/><text x="${X(opts.mark)+4}" y="${pad.t+10}" font-size="10" fill="var(--ink2)">hoje (D-1)</text>`;
  return `<svg class="chart" viewBox="0 0 ${w} ${h}">${g}</svg>`;}
 function barsChart(items,w=360,h=190){const big=w>=600,fs=big?12.5:(w<=400&&items.length>14?9.5:8.5),fa=big?13:10;const tw=t=>String(t||"").length*fs*.6;
- const n=items.length,bw0=(w-(big?36:24)-4)/n,rot=items.some(i=>i.t&&tw(i.t)>bw0*.98);const rl=rot?Math.max(...items.map(i=>tw(i.t)))+6:0;
- const pad={l:big?36:24,r:4,t:(big?24:18)+rl,b:big?30:22};const maxV=Math.max(...items.flatMap(i=>[i.v||0,i.m||0,i.ghost||0]))*1.08||1;const bw=(w-pad.l-pad.r)/n;
+ const n=items.length,bw0=(w-(big?44:30)-4)/n,rot=items.some(i=>i.t&&tw(i.t)>bw0*.98);const rl=rot?Math.max(...items.map(i=>tw(i.t)))+6:0;
+ const maxV=Math.max(...items.flatMap(i=>[i.v||0,i.m||0,i.ghost||0]))*1.08||1;const yl=String(Math.round(maxV/1e6)).length;const pad={l:Math.max(big?36:24,yl*fa*.62+10),r:4,t:(big?24:18)+rl,b:big?30:22};const bw=(w-pad.l-pad.r)/n;
  const Y=v=>h-pad.b-(h-pad.t-pad.b)*v/maxV;let g="";for(let k=0;k<=3;k++){const v=maxV*k/3;g+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${pad.l-6}" y="${Y(v)+4}" font-size="${fa}" text-anchor="end" fill="var(--ink2)">${Math.round(v/1e6)}</text>`;}
  items.forEach((it,i)=>{const x=pad.l+i*bw+bw*.18,bwi=bw*.64;const gr=it.k!=null||it.dm;if(it.k!=null)g+=`<g class="dd" data-rmm="${it.k}" style="cursor:pointer"><rect x="${pad.l+i*bw}" y="0" width="${bw}" height="${h}" fill="transparent"/>`;else if(it.dm)g+=`<g class="dd" data-m="${it.dm}" style="cursor:pointer"><rect x="${pad.l+i*bw}" y="0" width="${bw}" height="${h}" fill="transparent"/>`;if(it.ghost!=null) g+=`<rect x="${x-bw*.1}" y="${Y(it.ghost)}" width="${bwi}" height="${Y(0)-Y(it.ghost)}" rx="3" fill="var(--line)"/>`;
   if(it.v!=null) g+=`<rect x="${it.ghost!=null?x+bw*.1:x}" y="${Y(it.v)}" width="${bwi}" height="${Y(0)-Y(it.v)}" rx="3" fill="${it.c}"/>`;
@@ -943,7 +943,7 @@ function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.
    <div class="card kpi"><div class="l">Regionais na meta</div><div class="v">${nOk} de ${lst.length}</div><div class="s">no acumulado do ano</div></div>
    <div class="card kpi"><div class="l">Melhor · pior</div><div class="v" style="font-size:20px">${escH(rmNome(lst[0].r.nome))}</div><div class="s">${pct(lst[0].u.pc,1)} · pior: ${escH(rmNome(lst[lst.length-1].r.nome))} ${pct(lst[lst.length-1].u.pc,1)}</div></div></div>
   <div class="rmg"><div class="sec">Acumulado geral · mês a mês</div>
-  <div class="card">${barsChart(G.map((x,i)=>({ghost:x.aM,v:x.aF,c:x.aF<x.aM?"#C00000":"#1F4E78",l:x.m,k:i})),360,190)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado do grupo · cinza = meta acumulada. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div></div>
+  <div class="card">${barsChart(G.map((x,i)=>{const p=x.aM?x.aF/x.aM*100:0;return {m:x.aM||null,v:x.aF,c:!x.aM?"#3b82f6":p>=100?"#22c55e":p>=90?"#f5b400":"#ef4444",t:x.aM?Math.round(p)+"%":"",l:x.m,k:i};}),360,210)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado do grupo (cor = atingimento) · traço = meta acumulada · % = faturado ÷ meta. <b>Toque num mês</b> para abrir as regionais daquele mês.</p></div></div>
   <div class="rmg"><div class="sec">Ranking do acumulado · ${per} <small style="font-weight:500;text-transform:none;letter-spacing:0">linha = 100%</small></div>
   <div class="card rank">${lst.map(x=>`<div class="rk" data-rm="${escH(x.r.nome)}"><span>${escH(rmNome(x.r.nome))}</span><div class="bar"><span style="width:${x.u.pc/mx*100}%;background:${C[cor(x.u.pc)]}"></span><em style="left:${100/mx*100}%"></em></div><span style="color:${C[cor(x.u.pc)]}">${pct(x.u.pc,1)}</span></div>`).join("")}</div></div>
   <div class="sec">Atingimento acumulado · mês a mês</div>
@@ -964,7 +964,7 @@ function rmHtml(){if(!RM)return"";const per=RM.meses[0]+"–"+RM.meses[RM.meses.
   <div class="card kpi hero"><div class="l">${escH(rmNome(sel.nome))} · faturado acumulado</div><div class="v">${mi(ult.aF)}</div><div class="s">meta acumulada ${ult.aM?mi(ult.aM):"—"} · ${per}</div></div>
   <div class="card kpi"><div class="l">Atingimento acumulado</div><div class="v" style="color:${ult.aM?C[cor(ult.pc)]:"inherit"}">${ult.aM?pct(ult.pc,1):"—"}</div><div class="s">${ult.aM?sg(ult.aFm-ult.aM)+" vs meta":"sem meta no período"}</div></div></div>
   <div class="sec">Acumulado mês a mês</div>
-  <div class="card">${barsChart(rows.map((x,i)=>({ghost:x.aM,v:x.aF,c:x.aM&&x.aFm<x.aM?"#C00000":"#1F4E78",l:x.m,k:i})),360,190)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado · cinza = meta acumulada · vermelho = abaixo da meta acumulada. <b>Toque num mês</b> para o detalhe.</p></div>
+  <div class="card">${barsChart(rows.map((x,i)=>{const p=x.aM?x.aFm/x.aM*100:0;return {m:x.aM||null,v:x.aF,c:!x.aM?"#3b82f6":p>=100?"#22c55e":p>=90?"#f5b400":"#ef4444",t:x.aM?Math.round(p)+"%":"",l:x.m,k:i};}),360,210)}<p class="note" style="margin:6px 0 0">Barras = faturado acumulado (cor = atingimento) · traço = meta acumulada · % = faturado ÷ meta. <b>Toque num mês</b> para o detalhe.</p></div>
   <div class="card"><div class="tw"><table><thead><tr><th>Mês</th><th>Faturado</th><th>Meta</th><th>Ating. mês</th><th>Fat. acum.</th><th>Meta acum.</th><th>Ating. acum.</th><th>Gap acum.</th></tr></thead><tbody>
   ${rows.map(x=>`<tr><td><b>${x.m}/26</b></td><td>${fmt(x.f)}</td><td>${x.mt?fmt(x.mt):"—"}</td><td>${x.mt?`<span class="pill ${cor(x.f/x.mt*100)}">${pct(x.f/x.mt*100,1)}</span>`:"sem meta"}</td><td>${fmt(x.aF)}</td><td>${x.aM?fmt(x.aM):"—"}</td><td>${x.aM?`<span class="pill ${cor(x.pc)}">${pct(x.pc,1)}</span>`:"—"}</td><td class="${x.aFm-x.aM>=0?"up":"dn"}">${x.aM?sg(x.aFm-x.aM):"—"}</td></tr>`).join("")}
   </tbody></table></div><p class="note">Fonte: ${escH(RM.fonte)}. Meses “sem meta” não entram no atingimento nem no gap acumulados (mesma regra da planilha).</p></div>`;}
@@ -984,7 +984,9 @@ function rmMesSheet(i){if(!RM)return;const m=RM.meses[i],R=RM.regionais,sel=R.fi
    <tr class="tot"><td>Grupo</td><td>${pct(G.pm,1)}</td><td>${pct(G.a.pc,1)}</td><td>${mi(G.f)}</td><td>${mi(G.mt)}</td></tr></tbody></table></div></div>`;}
  h+=`<p class="note">Fonte: ${escH(RM.fonte)}. Atingimento acumulado considera só meses com meta.</p>`;
  openSheet(h);document.querySelectorAll(".sheet tr[data-rmmr]").forEach(t=>t.onclick=()=>{const n=t.dataset.rmmr;document.querySelector(".sheet")?.remove();if(RM.regionais.find(r=>r.nome===n&&!r.anterior&&!/EM BRANCO|META NAO ALOCADA/.test(r.nome))){RMsel=n;$("#rmBox").innerHTML=rmHtml();rmBind();document.querySelector(".rmh")?.scrollIntoView({behavior:"smooth",block:"start"});}});}
-function rmIr(v){RMsel=v;$("#rmBox").innerHTML=rmHtml();rmBind();}
+/* troca de regional sem "pular" a página: o quadro mantém a maior altura já mostrada e o seletor fica parado no mesmo lugar da tela */
+function rmIr(v){RMsel=v;const bx=$("#rmBox"),pk=$("#rmPick"),y0=pk?pk.getBoundingClientRect().top:0,h0=bx.offsetHeight;bx.style.minHeight=Math.max(h0,parseFloat(bx.style.minHeight)||0)+"px";
+ bx.innerHTML=rmHtml();rmBind();const pk2=$("#rmPick");if(pk2){const dy=pk2.getBoundingClientRect().top-y0;if(Math.abs(dy)>1)scrollBy(0,dy);}}
 function rmBind(){const sl=$("#rmSel");if(sl){const ops=[...sl.options].map(o=>o.value),k=ops.indexOf(RMsel);sl.onchange=()=>rmIr(sl.value);$("#rmPrev").onclick=e=>{e.stopPropagation();rmIr(ops[(k-1+ops.length)%ops.length]);};$("#rmNext").onclick=e=>{e.stopPropagation();rmIr(ops[(k+1)%ops.length]);};}
  document.querySelectorAll("#rmBox [data-rmm]").forEach(g=>g.onclick=e=>{e.stopPropagation();rmMesSheet(+g.dataset.rmm);});
 
