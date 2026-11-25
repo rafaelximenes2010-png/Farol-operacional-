@@ -1639,9 +1639,9 @@ function blocar(){const m=$("#main");const hs=[...m.querySelectorAll(":scope > h
     m.querySelectorAll(":scope>.mas.tail").forEach(x=>x.remove());
     if(resto.length){const t2=document.createElement("div");t2.className="mas tail";t2.style.setProperty("--k",k);m.appendChild(t2);const c2=[...Array(k)].map(()=>{const c=document.createElement("div");c.className="col";t2.appendChild(c);return c;}),H2=c2.map(()=>0);
      resto.forEach(b=>{const i=H2.indexOf(Math.min(...H2));c2[i].appendChild(b);H2[i]+=hb.get(b)+G;});const mo=m.querySelector(":scope>.motto");if(mo)m.appendChild(mo);}};
-   mas.classList.add("arr");arrumar();requestAnimationFrame(()=>requestAnimationFrame(()=>{arrumar();m.querySelectorAll(":scope>.mas").forEach(x=>x.classList.remove("arr"));}));
+   mas.classList.add("arr");m._fix=0;arrumar();clearTimeout(m._rv);m._rv=setTimeout(()=>{arrumar();m._fix=1;m.querySelectorAll(":scope>.mas").forEach(x=>x.classList.remove("arr"));},280);
    /* conteúdo que chega depois (gráficos, dados cifrados, mercado) muda a altura dos blocos: reequilibra as colunas */
-   if(window.ResizeObserver){if(m._ro)m._ro.disconnect();let tm=0;const ro=new ResizeObserver(()=>{clearTimeout(tm);tm=setTimeout(arrumar,120);});nw.concat(xs).forEach(b=>ro.observe(b));m._ro=ro;}}
+   if(window.ResizeObserver){if(m._ro)m._ro.disconnect();let tm=0;const ro=new ResizeObserver(()=>{if(m._fix)return;clearTimeout(tm);tm=setTimeout(arrumar,120);});nw.concat(xs).forEach(b=>ro.observe(b));m._ro=ro;}}
   else if(innerWidth<1024){xs.forEach(b=>{if(!b.classList.contains("xm"))b.remove();});}
   else{if(r===1&&nw.length)nw[nw.length-1].classList.add("s12");if(c3&&r===2&&nw.length>1){nw[nw.length-1].classList.add("s6");nw[nw.length-2].classList.add("s6");}}}
  if(D&&!m.querySelector(".tools")){const t=document.createElement("div");t.className="tools";t.innerHTML='<button type="button" data-selmode>☑︎ Selecionar para enviar</button>';m.prepend(t);}}
