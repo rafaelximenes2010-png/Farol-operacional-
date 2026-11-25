@@ -1,6 +1,15 @@
 {
  "versoes": [
   {
+   "v": "2026.11.25-e",
+   "data": "25/11/2026",
+   "itens": [
+    "Projeção: Três projeções × meta com barras maiores, traço da meta orçada, diferença de cada projeção vs meta orçada e média das três",
+    "Projeção: Ritmo por dia útil com cores legíveis no tema escuro (valores de Realizado e Meta média restante voltam a aparecer)",
+    "Projeção do ano: selo \"vs meta\" legível sobre o fundo verde"
+   ]
+  },
+  {
    "v": "2026.11.25-d",
    "data": "25/11/2026",
    "itens": [
