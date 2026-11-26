@@ -346,7 +346,7 @@ html,body{height:100dvh}
 .mkt .mr em{grid-column:1/-1;font-style:normal;font-size:11.5px;display:flex;justify-content:space-between;color:var(--ink2)}.mkt .mr em i{font-style:normal;font-weight:700}
 .mkt .up{color:#22c55e}.mkt .dn{color:#ff5a5a}.mkt .lv{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-left:5px;vertical-align:middle;animation:tlpulse 2s infinite}
 .mkt .hl{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--bg);font-size:15.5px;line-height:1.5}.mkt .hl b{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
-.mkt .hl li{margin:0 0 6px 18px}.mkt .hl li[data-snic]{cursor:pointer;border-radius:8px}.mkt .hl li[data-snic]:hover{text-decoration:underline}.mkt .hl .hlv{display:block;font-size:12px;font-weight:700;color:#5b9bff;margin-top:1px}.hl .hla{color:inherit;text-decoration:none}.hl .hla:hover{text-decoration:underline}.hl .hlf{display:block;font-size:12px;opacity:.7;margin-top:1px}.hl .hlr{display:block;font-size:11px;opacity:.6;margin-top:8px;line-height:1.35}
+.mkt .hl li{margin:0 0 6px 18px}.mkt .hl li[data-snic],.mkt .hl li[data-hls]{cursor:pointer;border-radius:8px}.mkt .hl li[data-snic]:hover,.mkt .hl li[data-hls]:hover{text-decoration:underline}.mkt .hl .hlv{display:block;font-size:12px;font-weight:700;color:#5b9bff;margin-top:1px}.hl .hla{color:inherit;text-decoration:none}.hl .hla:hover{text-decoration:underline}.hl .hlf{display:block;font-size:12px;opacity:.7;margin-top:1px}.hl .hlc{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 0}.hl .hlc button{font:inherit;font-size:11.5px;font-weight:700;border:1px solid var(--line,#2a3550);background:transparent;color:inherit;border-radius:999px;padding:4px 9px;cursor:pointer;opacity:.75}.hl .hlc button.on{background:#1F4E78;border-color:#1F4E78;color:#fff;opacity:1}.hl .hlr{display:block;font-size:11px;opacity:.6;margin-top:8px;line-height:1.35}
 .snx-nav{display:flex;gap:6px;overflow-x:auto;margin:0 0 10px;padding-bottom:2px}.snx-nav button{flex:none;font:inherit;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink2);cursor:pointer}.snx-nav button.on{background:var(--navy2);border-color:var(--navy2);color:#fff}
 .snx-k{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.snx-k>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}.snx-k small{display:block;font-size:11.5px;color:var(--ink2);line-height:1.25;min-height:2.5em}.snx-k b{display:block;font-size:20px;font-weight:800;margin-top:2px}.snx-k em{font-style:normal;font-size:12.5px;font-weight:700}
 .snx-f a{color:#7fb0ff;font-weight:700}.snx-up{color:#22c55e}.snx-dn{color:#ff5a5a}.snx-nt{color:var(--ink2)}
@@ -619,7 +619,7 @@ function ddsSheet(){openSheet(`<div class="sh"><b>Segurança em primeiro lugar</
 
 /* ===== Mercado: SNIC, celulose, diesel e dólar (dólar ao vivo) ===== */
 let MKT=null,HLD=null;
-async function carregaMercado(){try{const r=await fetch("data/mercado.json?t="+Date.now());if(r.ok)MKT=await r.json();}catch(e){}try{const h=await fetch("data/highlights.json?t="+Date.now(),{cache:"no-store"});if(h.ok)HLD=await h.json();}catch(e){}pintaMercado();dolarVivo();}
+async function carregaMercado(){try{const r=await fetch("data/mercado.json?t="+Date.now());if(r.ok)MKT=await r.json();}catch(e){}try{const h=await fetch("data/setores-dia.json?t="+Date.now(),{cache:"no-store"});if(h.ok)HLD=await h.json();}catch(e){}pintaMercado();dolarVivo();}
 /* dados oficiais ao vivo: Banco Central (PTAX, Selic, IPCA, ouro B3) */
 async function sgs(n,k=2){const r=await fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${n}/dados/ultimos/${k}?formato=json`,{cache:"no-store"});if(!r.ok)throw 0;return (await r.json()).map(x=>({d:x.data,v:parseFloat(String(x.valor).replace(",","."))}));}
 const nf=(v,c)=>v.toLocaleString("pt-BR",{minimumFractionDigits:c,maximumFractionDigits:c});
@@ -641,12 +641,20 @@ function mktHtml(side){if(!MKT)return"";const ic={usd:"💵",selic:"🏦",ouro:"
 
 /* Highlights do dia: rodízio de setor (seg cimento · ter aço · qua celulose · qui agro · sex alimentos · sáb saúde · dom combustíveis) */
 function hlSnic(){return MKT&&MKT.snic?`<ul style="margin:0;padding:0">${MKT.snic.map((t,i)=>MKT.snicDet&&MKT.snicDet[i]?`<li data-snic="${i}">${t}<span class="hlv">detalhar ›</span></li>`:`<li>${t}</li>`).join("")}</ul>`:"";}
-function hlHtml(){const hj=new Date(Date.now()-3*3600e3).toISOString().slice(0,10);
- if(!HLD||!HLD.itens||!HLD.itens.length)return MKT&&MKT.snic?`<div class="hl"><b>Highlights SNIC · cimento</b>${hlSnic()}</div>`:"";
- const hm=x=>{const d=new Date(x);return d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"}).replace(",","");};
- return `<div class="hl"><b>Highlights do dia · ${HLD.ic||""} ${escH(HLD.nome)}${HLD.data!==hj?` <span style="text-transform:none;letter-spacing:0;font-weight:600">(${escH(HLD.dataBR)})</span>`:""}</b><ul style="margin:0;padding:0">${HLD.itens.map(x=>`<li><a class="hla" href="${escH(x.link)}" target="_blank" rel="noopener noreferrer">${escH(x.t)}</a><span class="hlf">${escH(x.fonte)} · ${hm(x.em)}</span></li>`).join("")}</ul>
- ${HLD.setor==="cimento"&&MKT&&MKT.snic?`<b style="margin-top:10px">SNIC · indicadores oficiais</b>${hlSnic()}`:""}
- <small class="hlr">Rodízio: seg cimento · ter aço · qua celulose · qui agro · sex alimentos · sáb saúde · dom combustíveis. Manchetes das últimas 48 h (Google Notícias), toque para ler no veículo.</small></div>`;}
+const HLN={cimento:["Cimento","🏗️"],aco:["Aço","🏭"],celulose:["Celulose","🌲"],agro:["Agro","🌾"],alimentos:["Alimentos","🍞"],saude:["Saúde","🩺"],combustiveis:["Combustíveis","⛽"]};
+let HLSel=null;
+function hlHoje(){const d=new Date(Date.now()-3*3600e3).getUTCDay();return (HLD&&HLD.rodizio&&HLD.rodizio[d])||["combustiveis","cimento","aco","celulose","agro","alimentos","saude"][d];}
+function hlHtml(){const hj=hlHoje(),k=HLSel||hj,ord=["cimento","aco","celulose","agro","alimentos","saude","combustiveis"];
+ const st=HLD&&HLD.setores&&HLD.setores[k];let corpo="",ref="";
+ if(k==="cimento"){if(!(MKT&&MKT.snic))return"";corpo=hlSnic();ref="SNIC · indicadores oficiais";}
+ else if(st){ref=st.ref;corpo=`<ul style="margin:0;padding:0">${st.linhas.map(l=>`<li data-hls="${k}" data-hli="${l[1]}">${escH(l[0])}<span class="hlv">detalhar ›</span></li>`).join("")}</ul>`;}
+ else return MKT&&MKT.snic?`<div class="hl"><b>Highlights SNIC · cimento</b>${hlSnic()}</div>`:"";
+ const nm=HLN[k];
+ return `<div class="hl"><b>Highlights${k===hj?" do dia":""} · ${nm[1]} ${nm[0]}</b><small class="hlf" style="margin:-2px 0 6px">${escH(ref)}</small>${corpo}
+ <div class="hlc">${ord.filter(x=>x==="cimento"||(HLD&&HLD.setores&&HLD.setores[x])).map(x=>`<button type="button" data-hlk="${x}"${x===k?' class="on"':""}>${HLN[x][1]} ${HLN[x][0]}${x===hj?" ·hoje":""}</button>`).join("")}</div>
+ <small class="hlr">Rodízio diário: seg cimento · ter aço · qua celulose · qui agro · sex alimentos · sáb saúde · dom combustíveis. Somente dados oficiais e de mercado com fonte, toque para detalhar.</small></div>`;}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-hlk]");if(b){e.stopPropagation();HLSel=b.dataset.hlk===hlHoje()?null:b.dataset.hlk;pintaMercado();return;}
+ const l=e.target.closest("[data-hls]");if(l){e.stopPropagation();const st=HLD.setores[l.dataset.hls];detSheet(st.det,+l.dataset.hli,`${HLN[l.dataset.hls][1]} Highlights · ${st.nome}`,st.abas);}},true);
 /* ícones de mercado (traço, no padrão do app) */
 const MIC={
  agro:["#22c55e",'<path d="M12 21V9"/><path d="M12 13c-3 0-5-2-5-5 3 0 5 2 5 5zM12 13c3 0 5-2 5-5-3 0-5 2-5 5zM12 9c-2 0-3.5-1.5-3.5-4C10.5 5 12 6.5 12 9zm0 0c2 0 3.5-1.5 3.5-4C13.5 5 12 6.5 12 9z"/>'],
@@ -673,7 +681,7 @@ function setoresSheet(){if(!MKT||!MKT.setores)return;openSheet(`<div class="sh">
 document.addEventListener("click",e=>{if(e.target.closest("#mktMais")){e.stopPropagation();setoresSheet();}},true);
 
 /* Highlights SNIC: drill-down de cada destaque (dados em mercado.json › snicDet, todos com fonte) */
-function snicCorpo(i){const x=MKT.snicDet[i],cl=d=>d>0?"snx-up":d<0?"snx-dn":"snx-nt";let h="";
+function snicCorpo(i,D){const x=(D||MKT.snicDet)[i],cl=d=>d>0?"snx-up":d<0?"snx-dn":"snx-nt";let h="";
  h+=`<div class="snx-k">${x.kpis.map(k=>`<div><small>${k[0]}</small><b>${k[1]}</b><em class="${cl(k[3])}">${k[2]}</em></div>`).join("")}</div>`;
  (x.grafs||[]).forEach(g=>{let c="";
   if(g.tipo==="hbar"){const mx=Math.max(...g.it.map(r=>r[1]));c=g.it.map(r=>`<div class="snx-h"><span>${r[0]}</span><span class="tr"><i style="width:${r[1]/mx*100}%"></i></span><em>${r[2]} · <span class="${cl(r[4])}">${r[3]}</span></em></div>`).join("");}
@@ -684,9 +692,10 @@ function snicCorpo(i){const x=MKT.snicDet[i],cl=d=>d>0?"snx-up":d<0?"snx-dn":"sn
  if(x.grupos)h+=`<div class="card snx-g">${x.grupos.map(g=>`<div class="snx-gr" style="--c:${g[1]>0?"#22c55e":"#ff5a5a"}"><b>${g[0]}</b><ul class="snx-p">${g[2].map(p=>`<li>${p}</li>`).join("")}</ul></div>`).join("")}</div>`;
  if(x.obs)h+=`<p class="note" style="margin:0 4px 10px">${x.obs}</p>`;
  h+=`<p class="note snx-f" style="margin:0 4px">Fontes: ${x.fontes.map(f=>`<a href="${f[1]}" target="_blank" rel="noopener">${f[0]}</a>`).join(" · ")}</p>`;return h;}
-function snicSheet(i){if(!MKT||!MKT.snicDet||!MKT.snicDet[i])return;
- openSheet(`<div class="sh"><b>Highlights SNIC · cimento</b><button id="xS">×</button></div><div class="snx-nav">${MKT.snicDet.map((x,k)=>`<button type="button" data-snx="${k}"${k==i?' class="on"':""}>${["Outubro","Ano","Regiões","Demanda"][k]||x.t}</button>`).join("")}</div><div id="snxB">${snicCorpo(i)}</div>`);
- const ss=document.querySelectorAll(".sheet"),sh=ss[ss.length-1];sh.querySelectorAll("[data-snx]").forEach(b=>b.onclick=()=>{sh.querySelectorAll("[data-snx]").forEach(z=>z.classList.toggle("on",z===b));sh.querySelector("#snxB").innerHTML=snicCorpo(+b.dataset.snx);sh.firstElementChild.scrollTop=0;});}
+function detSheet(D,i,tit,abas){if(!D||!D[i])return;
+ openSheet(`<div class="sh"><b>${tit}</b><button id="xS">×</button></div><div class="snx-nav">${D.map((x,k)=>`<button type="button" data-snx="${k}"${k==i?' class="on"':""}>${(abas&&abas[k])||x.t}</button>`).join("")}</div><div id="snxB">${snicCorpo(i,D)}</div>`);
+ const ss=document.querySelectorAll(".sheet"),sh=ss[ss.length-1];sh.querySelectorAll("[data-snx]").forEach(b=>b.onclick=()=>{sh.querySelectorAll("[data-snx]").forEach(z=>z.classList.toggle("on",z===b));sh.querySelector("#snxB").innerHTML=snicCorpo(+b.dataset.snx,D);sh.firstElementChild.scrollTop=0;});}
+function snicSheet(i){if(MKT&&MKT.snicDet)detSheet(MKT.snicDet,i,"Highlights SNIC · cimento",["Outubro","Ano","Regiões","Demanda"]);}
 document.addEventListener("click",e=>{const l=e.target.closest("[data-snic]");if(l){e.stopPropagation();snicSheet(+l.dataset.snic);}},true);
 function pintaMercado(){const a=document.getElementById("mktSide");if(a)a.innerHTML=mktHtml(true);const b=document.getElementById("mktHoje");if(b)b.innerHTML=mktHtml(false);}
 document.addEventListener("click",e=>{const m=e.target.closest("[data-mkt]");if(m&&MKT){const x=MKT.itens.concat(MKT.macro||[]).find(i=>i.id===m.dataset.mkt);if(!x)return;

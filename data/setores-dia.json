@@ -1,0 +1,925 @@
+{
+ "atualizado": "26/11/2026",
+ "rodizio": {
+  "1": "cimento",
+  "2": "aco",
+  "3": "celulose",
+  "4": "agro",
+  "5": "alimentos",
+  "6": "saude",
+  "0": "combustiveis"
+ },
+ "setores": {
+  "aco": {
+   "nome": "Aço",
+   "ic": "🏭",
+   "ref": "Aço Brasil · setembro/26",
+   "abas": [
+    "Setembro",
+    "Mercado"
+   ],
+   "linhas": [
+    [
+     "Aço bruto em setembro: 2,79 Mt (−0,8% a/a)",
+     0
+    ],
+    [
+     "Jan–set: 24,6 Mt (−1,7% a/a), queda menor que no 1º tri (−4,2%)",
+     0
+    ],
+    [
+     "Vendas internas em setembro: 1,8 Mt (−2,3% a/a)",
+     0
+    ],
+    [
+     "Importações jan–jul: −20,3%; consumo aparente −5%",
+     1
+    ]
+   ],
+   "det": [
+    {
+     "t": "Setembro/26",
+     "kpis": [
+      [
+       "Aço bruto set/26",
+       "2,79 Mt",
+       "−0,8% a/a",
+       -1
+      ],
+      [
+       "Vendas internas set",
+       "1,8 Mt",
+       "−2,3% a/a",
+       -1
+      ],
+      [
+       "Jan–set",
+       "24,6 Mt",
+       "−1,7% a/a",
+       -1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "div",
+       "t": "Produção acumulada no ano · variação a/a",
+       "it": [
+        [
+         "Jan–mar",
+         -4.2,
+         "−4,2%"
+        ],
+        [
+         "Jan–mai",
+         -1.9,
+         "−1,9%"
+        ],
+        [
+         "Jan–jul",
+         -1.2,
+         "−1,2%"
+        ],
+        [
+         "Jan–ago",
+         -1.8,
+         "−1,8%"
+        ],
+        [
+         "Jan–set",
+         -1.7,
+         "−1,7%"
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "A queda acumulada encolheu de −4,2% no 1º trimestre para −1,7% até setembro.",
+      "Setembro: 2,791 Mt contra 2,814 Mt em set/25.",
+      "Minas Gerais produziu 880 mil t em setembro (+1,3% a/a), 31,5% do aço bruto do país.",
+      "No fim de setembro o Aço Brasil revisou a estimativa de 2026 para leve queda de 0,1% na produção."
+     ],
+     "fontes": [
+      [
+       "SteelOrbis · Aço Brasil set/26",
+       "https://www.steelorbis.com/steel-news/latest-news/brazils-september-crude-steel-output-falls-08-percent-year-on-year-1485057.htm"
+      ],
+      [
+       "Diário do Comércio · Aço Brasil set/26",
+       "https://diariodocomercio.com.br/economia/producao-aco-minas-gerais-2/"
+      ],
+      [
+       "Aço Brasil · 1º tri/26",
+       "https://www.acobrasil.org.br/site/wp-content/uploads/2026/06/Estatisticas-da-Industria-do-Aco_1o_TRI_2026.pdf"
+      ],
+      [
+       "Aço Brasil · julho/26",
+       "https://www.acobrasil.org.br/site/wp-content/uploads/2026/08/AcoBrasil_EM_Julho_2026.pdf"
+      ]
+     ]
+    },
+    {
+     "t": "Mercado · jan–jul/26",
+     "kpis": [
+      [
+       "Exportações jan–jul",
+       "+2,4%",
+       "a/a",
+       1
+      ],
+      [
+       "Importações jan–jul",
+       "−20,3%",
+       "a/a",
+       -1
+      ],
+      [
+       "Consumo aparente jan–jul",
+       "−5%",
+       "a/a",
+       -1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "div",
+       "t": "Julho/26 · variação a/a",
+       "it": [
+        [
+         "Exportações (1,0 Mt)",
+         9.8,
+         "+9,8%"
+        ],
+        [
+         "Vendas internas (1,9 Mt)",
+         4.1,
+         "+4,1%"
+        ],
+        [
+         "Importações (383 mil t)",
+         -19.9,
+         "−19,9%"
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Vendas internas estáveis no acumulado de jan–jul (0,0%).",
+      "Importações em queda forte no ano: −20,3% até julho.",
+      "Exportações seguraram parte da produção: +2,4% no acumulado e +9,8% em julho."
+     ],
+     "fontes": [
+      [
+       "Diário do Comércio · Aço Brasil jul/26",
+       "https://diariodocomercio.com.br/?p=619745"
+      ],
+      [
+       "Aço Brasil · julho/26",
+       "https://www.acobrasil.org.br/site/wp-content/uploads/2026/08/AcoBrasil_EM_Julho_2026.pdf"
+      ]
+     ]
+    }
+   ]
+  },
+  "celulose": {
+   "nome": "Celulose",
+   "ic": "🌲",
+   "ref": "MAPA/Secex · outubro/26",
+   "abas": [
+    "Exportações",
+    "Preço"
+   ],
+   "linhas": [
+    [
+     "Exportações em outubro: US$ 1,0 bi (+25,8% a/a)",
+     0
+    ],
+    [
+     "Volume embarcado: 2,0 Mt (+7,5% a/a)",
+     0
+    ],
+    [
+     "Receita cresce mais que o volume: preço médio em alta",
+     0
+    ],
+    [
+     "Fibra curta (BHKP) na China: US$ 600/t; lista Europa US$ 1.410/t",
+     1
+    ]
+   ],
+   "det": [
+    {
+     "t": "Exportações · 2026",
+     "kpis": [
+      [
+       "Valor out/26",
+       "US$ 1,0 bi",
+       "+25,8% a/a",
+       1
+      ],
+      [
+       "Volume out/26",
+       "2,0 Mt",
+       "+7,5% a/a",
+       1
+      ],
+      [
+       "Valor set/26",
+       "US$ 967 mi",
+       "+27,4% a/a",
+       1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "col",
+       "t": "Exportações por mês · US$ milhões e variação a/a",
+       "it": [
+        [
+         "Abr",
+         854.71,
+         "855",
+         "+16,0%",
+         1
+        ],
+        [
+         "Ago",
+         898.59,
+         "899",
+         "+30,2%",
+         1
+        ],
+        [
+         "Set",
+         967.28,
+         "967",
+         "+27,4%",
+         1
+        ],
+        [
+         "Out",
+         1000,
+         "1.000",
+         "+25,8%",
+         1
+        ]
+       ]
+      },
+      {
+       "tipo": "hbar",
+       "t": "Volume exportado · milhões de t",
+       "it": [
+        [
+         "Abr",
+         1.71,
+         "1,71 Mt",
+         "+13,6%",
+         1
+        ],
+        [
+         "Ago",
+         1.62,
+         "1,62 Mt",
+         "−2,8%",
+         -1
+        ],
+        [
+         "Set",
+         1.91,
+         "1,91 Mt",
+         "+3,5%",
+         1
+        ],
+        [
+         "Out",
+         2.0,
+         "2,0 Mt",
+         "+7,5%",
+         1
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Em agosto o valor subiu 30,2% com volume em queda (−2,8%): o preço médio avançou 33,8%.",
+      "Outubro repete o padrão: receita +25,8% para volume +7,5%.",
+      "A China recebeu 53,3% da celulose exportada em abril.",
+      "No 1º semestre os embarques caíram 10,5%, para 9,4 Mt; a recuperação veio no 2º semestre."
+     ],
+     "fontes": [
+      [
+       "MAPA · balança do agro out/26",
+       "https://www.gov.br/agricultura/pt-br/assuntos/noticias/2026/exportacoes-do-agronegocio-somam-us-16-bilhoes-em-outubro-e-crescem-4-1/notaimprensa10_20261.pdf"
+      ],
+      [
+       "MAPA · set/26",
+       "https://www.gov.br/agricultura/pt-br/assuntos/relacoes-internacionais/Notaimprensa09_2026.pdf"
+      ],
+      [
+       "MAPA · ago/26",
+       "https://www.gov.br/agricultura/pt-br/assuntos/relacoes-internacionais/Notaimprensa08_2026.pdf"
+      ],
+      [
+       "MAPA · abr/26",
+       "https://www.gov.br/agricultura/pt-br/assuntos/relacoes-internacionais/Notaimprensa04_2026.docx"
+      ],
+      [
+       "Times Brasil · 1º semestre",
+       "https://timesbrasil.com.br/brasil/exportacao-de-celulose-cai-105-em-2026-apos-brasil-produzir-recorde-de-294-milhoes-de-toneladas/"
+      ]
+     ]
+    },
+    {
+     "t": "Preço da celulose",
+     "kpis": [
+      [
+       "Fibra curta · China",
+       "US$ 600/t",
+       "futuro dez US$ 605",
+       1
+      ],
+      [
+       "Fibra longa · China",
+       "US$ 604/t",
+       "NBSK",
+       0
+      ],
+      [
+       "Lista Europa · Suzano",
+       "US$ 1.410/t",
+       "+US$ 50 em nov",
+       1
+      ]
+     ],
+     "pontos": [
+      "Fibra curta (BHKP) líquida na China em US$ 600/t, com o contrato futuro de dezembro a US$ 605.",
+      "A Suzano elevou a lista da fibra curta na Europa para US$ 1.410/t em novembro (+US$ 50); sem anúncio para a Ásia.",
+      "Preço de celulose não tem fonte oficial diária: dados de mercado."
+     ],
+     "fontes": [
+      [
+       "XP Investimentos · relatórios",
+       "https://conteudos.xpi.com.br/acoes/relatorios/"
+      ]
+     ]
+    }
+   ]
+  },
+  "agro": {
+   "nome": "Agro",
+   "ic": "🌾",
+   "ref": "Conab · 2º levantamento (nov/26)",
+   "abas": [
+    "Safra",
+    "Exportações"
+   ],
+   "linhas": [
+    [
+     "Safra 2026/27: 366,1 Mt (+1,3% a/a)",
+     0
+    ],
+    [
+     "Revisão de −0,3% (−1,01 Mt) frente ao 1º levantamento",
+     0
+    ],
+    [
+     "Milho: área de 23,7 Mha (+4,9%)",
+     0
+    ],
+    [
+     "Exportações do agro em outubro: US$ 16,0 bi (+4,1%)",
+     1
+    ]
+   ],
+   "det": [
+    {
+     "t": "Safra 2026/27",
+     "kpis": [
+      [
+       "Produção de grãos",
+       "366,1 Mt",
+       "+1,3% a/a",
+       1
+      ],
+      [
+       "vs 1º levantamento",
+       "−1,01 Mt",
+       "−0,3%",
+       -1
+      ],
+      [
+       "Área cultivada",
+       "85,3 Mha",
+       "milho, soja, sorgo e algodão em alta",
+       1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "col",
+       "t": "Estimativa da safra 2026/27 · Mt",
+       "it": [
+        [
+         "1º lev (out)",
+         367.1,
+         "367,1",
+         "",
+         0
+        ],
+        [
+         "2º lev (nov)",
+         366.1,
+         "366,1",
+         "−0,3%",
+         -1
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Plantio da safra 2026/27 em 66,8% da área até a 1ª semana de novembro.",
+      "Milho: área projetada em 23,7 Mha, 4,9% acima de 2025/26.",
+      "Culturas de inverno: área −10,7%, de 3,35 Mha para cerca de 3 Mha.",
+      "Arroz: área −0,8% (1,5 Mha), com o irrigado −2,4%.",
+      "Exportação de milho prevista em cerca de 43 Mt em 2026/27."
+     ],
+     "fontes": [
+      [
+       "Conab · 2º levantamento",
+       "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/2o-levantamento-safra-2026-27/apresentacao-2o-lev-safra-graos-nov.pdf"
+      ],
+      [
+       "Folha PE · Conab",
+       "https://www.folhape.com.br/economia/conab-reduz-estimativa-e-preve-safra-202627-de-36613-milhoes-de-t/524067/"
+      ],
+      [
+       "World Grain · Conab",
+       "https://www.world-grain.com/articles/23455-brazil-soybean-crop-begins-with-positive-outlook"
+      ]
+     ]
+    },
+    {
+     "t": "Exportações do agro",
+     "kpis": [
+      [
+       "Outubro/26",
+       "US$ 16,0 bi",
+       "+4,1% a/a",
+       1
+      ],
+      [
+       "Jan–out/26",
+       "US$ 149,4 bi",
+       "+5,2% a/a",
+       1
+      ],
+      [
+       "Celulose out",
+       "US$ 1,0 bi",
+       "+25,8%",
+       1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "div",
+       "t": "Outubro/26 · variação a/a do valor",
+       "it": [
+        [
+         "Celulose",
+         25.8,
+         "+25,8%"
+        ],
+        [
+         "Total do agro",
+         4.1,
+         "+4,1%"
+        ],
+        [
+         "Milho",
+         -1.4,
+         "−1,4%"
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "No ano o agro exportou US$ 7,4 bi a mais que em jan–out/25.",
+      "Para os Estados Unidos, exportações +35,7% em outubro (carne bovina, café verde e celulose).",
+      "Milho: US$ 1,3 bi em outubro, 3º produto da pauta."
+     ],
+     "fontes": [
+      [
+       "MAPA · balança do agro out/26",
+       "https://www.gov.br/agricultura/pt-br/assuntos/noticias/2026/exportacoes-do-agronegocio-somam-us-16-bilhoes-em-outubro-e-crescem-4-1/notaimprensa10_20261.pdf"
+      ],
+      [
+       "Agência Gov · out/26",
+       "https://agenciagov.ebc.com.br/noticias/202611/com-alta-de-4-1-exportacoes-do-agronegocio-alcancam-us-16-bilhoes-em-outubro"
+      ]
+     ]
+    }
+   ]
+  },
+  "alimentos": {
+   "nome": "Alimentos",
+   "ic": "🍞",
+   "ref": "IBGE · IPCA outubro/26",
+   "abas": [
+    "Preços",
+    "IPCA por grupo"
+   ],
+   "linhas": [
+    [
+     "Alimentação e bebidas: +1,04% em outubro, maior impacto do IPCA",
+     0
+    ],
+    [
+     "Alimentação no domicílio acelerou: +1,31% (set +0,96%)",
+     0
+    ],
+    [
+     "Tomate +19,57%, cebola +11,29%, arroz +4,81%, carnes +2,27%",
+     0
+    ],
+    [
+     "IPCA de outubro 0,14%; 12 meses 4,63%, acima do teto",
+     1
+    ]
+   ],
+   "det": [
+    {
+     "t": "Alimentos · outubro/26",
+     "kpis": [
+      [
+       "Alimentação e bebidas",
+       "+1,04%",
+       "set +0,83%",
+       -1
+      ],
+      [
+       "No domicílio",
+       "+1,31%",
+       "set +0,96%",
+       -1
+      ],
+      [
+       "Impacto no IPCA",
+       "0,22 p.p.",
+       "maior do mês",
+       -1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "hbar",
+       "t": "Maiores altas em outubro",
+       "it": [
+        [
+         "Tomate",
+         19.57,
+         "+19,57%",
+         "",
+         -1
+        ],
+        [
+         "Cebola",
+         11.29,
+         "+11,29%",
+         "",
+         -1
+        ],
+        [
+         "Arroz",
+         4.81,
+         "+4,81%",
+         "",
+         -1
+        ],
+        [
+         "Carnes",
+         2.27,
+         "+2,27%",
+         "",
+         -1
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Alimentos foram a principal pressão do mês, enquanto energia, transportes e habitação aliviaram o índice.",
+      "Alimentação no domicílio acelerou pelo segundo mês: 0,96% em setembro e 1,31% em outubro.",
+      "Altas de alimentos encarecem a cesta e pressionam reajustes de custos operacionais."
+     ],
+     "fontes": [
+      [
+       "Agência Gov · IPCA out/26",
+       "https://agenciagov.ebc.com.br/noticias/202611/inflacao-desacelera-e-fica-em-0-14-em-outubro"
+      ],
+      [
+       "Metrópoles · grupos do IPCA",
+       "https://www.metropoles.com/brasil/ipca-inflacao-de-outubro-sobe-014-mas-desacelera"
+      ]
+     ]
+    },
+    {
+     "t": "IPCA por grupo · outubro/26",
+     "kpis": [
+      [
+       "IPCA outubro",
+       "0,14%",
+       "set 0,82%",
+       0
+      ],
+      [
+       "No ano",
+       "4,10%",
+       "jan–out",
+       0
+      ],
+      [
+       "12 meses",
+       "4,63%",
+       "acima do teto 4,5%",
+       -1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "div",
+       "t": "Variação por grupo em outubro (%)",
+       "it": [
+        [
+         "Alimentação e bebidas",
+         1.04,
+         "+1,04%"
+        ],
+        [
+         "Comunicação",
+         0.71,
+         "+0,71%"
+        ],
+        [
+         "Artigos de residência",
+         0.44,
+         "+0,44%"
+        ],
+        [
+         "Vestuário",
+         0.38,
+         "+0,38%"
+        ],
+        [
+         "Despesas pessoais",
+         0.36,
+         "+0,36%"
+        ],
+        [
+         "Saúde e cuidados",
+         0.09,
+         "+0,09%"
+        ],
+        [
+         "Educação",
+         0.07,
+         "+0,07%"
+        ],
+        [
+         "Habitação",
+         -0.51,
+         "−0,51%"
+        ],
+        [
+         "Transportes",
+         -0.59,
+         "−0,59%"
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Transportes (−0,59%) e habitação (−0,51%) seguraram o índice, com energia elétrica e passagens aéreas em queda.",
+      "Gasolina caiu 0,56% no mês."
+     ],
+     "fontes": [
+      [
+       "Metrópoles · IPCA out/26",
+       "https://www.metropoles.com/brasil/ipca-inflacao-de-outubro-sobe-014-mas-desacelera"
+      ],
+      [
+       "BP Money · IPCA out/26",
+       "https://bpmoney.com.br/?p=435965"
+      ]
+     ]
+    }
+   ]
+  },
+  "saude": {
+   "nome": "Saúde",
+   "ic": "🩺",
+   "ref": "ANS · setembro/26",
+   "abas": [
+    "Planos de saúde"
+   ],
+   "linhas": [
+    [
+     "Planos médico-hospitalares: 53,1 milhões de beneficiários (+0,83% a/a)",
+     0
+    ],
+    [
+     "Planos odontológicos: 37,4 milhões (+7,01% a/a)",
+     0
+    ],
+    [
+     "Coletivos empresariais: 39,0 milhões de vidas",
+     0
+    ],
+    [
+     "Saúde e cuidados pessoais no IPCA de outubro: +0,09%",
+     0
+    ]
+   ],
+   "det": [
+    {
+     "t": "Saúde suplementar · set/26",
+     "kpis": [
+      [
+       "Assistência médica",
+       "53,1 mi",
+       "+0,83% a/a",
+       1
+      ],
+      [
+       "Odontológicos",
+       "37,4 mi",
+       "+7,01% a/a",
+       1
+      ],
+      [
+       "IPCA saúde out/26",
+       "+0,09%",
+       "no mês",
+       0
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "hbar",
+       "t": "Assistência médica por contratação · milhões de vidas (set/26)",
+       "it": [
+        [
+         "Coletivo empresarial",
+         38.988,
+         "39,0 mi",
+         "",
+         1
+        ],
+        [
+         "Individual/familiar",
+         8.302,
+         "8,3 mi",
+         "",
+         0
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "Sete em cada dez beneficiários estão em planos coletivos empresariais, o tipo de plano oferecido pelas empresas aos colaboradores.",
+      "Odontológicos crescem bem acima dos médicos: +7,01% contra +0,83% em 12 meses.",
+      "No IPCA de outubro, saúde e cuidados pessoais subiram só 0,09%."
+     ],
+     "fontes": [
+      [
+       "O Liberal · ANS set/26",
+       "https://www.oliberal.com/brasil/ans-numero-de-beneficiarios-de-planos-de-saude-sobe-0-02-em-setembro-para-53-1-milhoes-1.1191036"
+      ],
+      [
+       "CQCS · ANS",
+       "https://cqcs.com.br/noticia/sete-em-cada-10-planos-de-saude-sao-coletivos-empresariais/"
+      ],
+      [
+       "Metrópoles · IPCA out/26",
+       "https://www.metropoles.com/brasil/ipca-inflacao-de-outubro-sobe-014-mas-desacelera"
+      ]
+     ]
+    }
+   ]
+  },
+  "combustiveis": {
+   "nome": "Combustíveis",
+   "ic": "⛽",
+   "ref": "ANP · semana 01–07/11/26",
+   "abas": [
+    "Diesel"
+   ],
+   "linhas": [
+    [
+     "Diesel S10: R$ 7,30/L (−0,14% na semana)",
+     0
+    ],
+    [
+     "Em 12 meses: cerca de +21% (R$ 7,32 em 24/10, +20,99%)",
+     0
+    ],
+    [
+     "Diesel A na refinaria (realização): R$ 3,50/L (+2,37%)",
+     0
+    ],
+    [
+     "Terceira semana seguida de queda após o pico de R$ 7,38 em outubro",
+     0
+    ]
+   ],
+   "det": [
+    {
+     "t": "Diesel · revenda e refinaria",
+     "kpis": [
+      [
+       "Diesel S10 revenda",
+       "R$ 7,30/L",
+       "−0,14% semana",
+       -1
+      ],
+      [
+       "Variação em 12 meses",
+       "+20,99%",
+       "semana até 24/10",
+       1
+      ],
+      [
+       "Diesel A realização",
+       "R$ 3,50/L",
+       "+2,37% (até 01/11)",
+       1
+      ]
+     ],
+     "grafs": [
+      {
+       "tipo": "col",
+       "t": "Diesel S10 · preço médio de revenda (R$/L, semana terminada em)",
+       "it": [
+        [
+         "12/09",
+         6.24,
+         "6,24",
+         "",
+         0
+        ],
+        [
+         "19/09",
+         6.4,
+         "6,40",
+         "",
+         1
+        ],
+        [
+         "26/09",
+         6.49,
+         "6,49",
+         "",
+         1
+        ],
+        [
+         "17/10",
+         7.34,
+         "7,34",
+         "",
+         1
+        ],
+        [
+         "24/10",
+         7.32,
+         "7,32",
+         "",
+         -1
+        ],
+        [
+         "07/11",
+         7.3,
+         "7,30",
+         "",
+         -1
+        ]
+       ]
+      }
+     ],
+     "pontos": [
+      "O diesel subiu de R$ 6,24 em meados de setembro para R$ 7,34 em outubro e passou a recuar devagar.",
+      "Média da semana em 3.174 postos: mínimo de R$ 5,89 e máximo de R$ 9,19.",
+      "Para a frota, cada R$ 0,10/L pesa diretamente no custo por km rodado."
+     ],
+     "fontes": [
+      [
+       "ANP · síntese semanal 45/2026",
+       "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/arq-sintese-semanal/2026/sintese-precos-45.pdf"
+      ],
+      [
+       "ANP · preços",
+       "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
