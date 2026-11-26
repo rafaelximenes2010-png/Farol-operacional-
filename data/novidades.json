@@ -1,6 +1,13 @@
 {
  "versoes": [
   {
+   "v": "2026.11.26-c",
+   "data": "26/11/2026",
+   "itens": [
+    "Highlights › seletor de setores reorganizado em grade por dia da semana (ícone, dia e setor), com ponto verde no setor do dia"
+   ]
+  },
+  {
    "v": "2026.11.26-b",
    "data": "26/11/2026",
    "itens": [
