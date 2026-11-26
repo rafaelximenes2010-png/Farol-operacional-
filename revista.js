@@ -114,7 +114,7 @@
 
     const txtRitmo = falta > 0 ? `Faltam ${R$(falta)} para a meta orçada em ${M.duRest} dias úteis: ${R$(necDU)} por dia útil, ${p1(Math.abs(vsMedia))} ${vsMedia <= 0 ? "abaixo" : "acima"} da média realizada (${R$(M.mediaDU)}).`
       : `A meta orçada do mês (${mi(M.metaOrc)}) já foi atingida: ${R$(-falta)} acima.`;
-    const txtProj = pj.length ? `As ${pj.length} metodologias apontam entre ${mi(pmin)} e ${mi(pmax)} — ${todas ? "todas acima" : pj.some(v => v >= M.metaOrc) ? "nem todas acima" : "todas abaixo"} da meta orçada de ${mi(M.metaOrc)}.` : `Projeção do Power BI: ${mi(M.proj)}.`;
+    const txtProj = pj.length === 1 ? `A projeção do Power BI aponta ${mi(pj[0])}, ${pj[0] >= M.metaOrc ? "acima" : "abaixo"} da meta orçada de ${mi(M.metaOrc)} (${p0(pj[0] / M.metaOrc * 100)}).` : pj.length ? `As ${pj.length} metodologias apontam entre ${mi(pmin)} e ${mi(pmax)} — ${todas ? "todas acima" : pj.some(v => v >= M.metaOrc) ? "nem todas acima" : "todas abaixo"} da meta orçada de ${mi(M.metaOrc)}.` : `Projeção do Power BI: ${mi(M.proj)}.`;
     const txtAbaixo = abaixo.length ? `${lista(abaixo.map(r => esc(r[0])))} ${abaixo.length > 1 ? "deixaram" : "deixou"} de faturar ${R$(devendo)} frente à meta proporcional até o D-1.` : "Todas as regionais estão acima de 100% da meta proporcional do mês.";
 
     const nF = Math.min(9, D.farol.length) || 1;
