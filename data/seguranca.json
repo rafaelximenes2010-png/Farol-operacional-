@@ -1,5 +1,5 @@
 {
- "data": "2026-11-27",
+ "data": "2026-11-28",
  "horas": [
   7,
   11,
@@ -7,22 +7,10 @@
  ],
  "dicas": [
   {
-   "dica": "Distância segura do veículo da frente: no mínimo 3 segundos.",
-   "titulo": "PRF prende motorista com Porsche portando placas falsas na BR-381, em João Monlevade (MG)",
+   "dica": "Carga dentro do limite e lona conferida antes de sair.",
+   "titulo": "PRF recupera veículo de carga roubado na BR 324 e identifica caminhão trator adulterado",
    "fonte": "PRF",
-   "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPWHEzLTd0T1VTX2tnTVRSUlJ2YTZIOThpanFKUm92TkRSaFBBbVZhcWl1ZFhMSUVDNmphT3NGX2s3TGFVVS1EbmIwZ0RzTVg3Nkg1dldZTGNuQlp6V3EzWUEzWFZtTGIwSzJac0FmdkdwcFFNTGJnNV9VZm1DYjZseTd5RTNtZWxYX01yUUl0NGs3RXdYXzdubkZhb1JBdGFZUHFxM256YUtFTkdsT1JBYjZsVUc1bGoyaURpVTl5TDYxT21KOWdFcUlaTkNoM2hnTV9BSnhpZW1qZlVvdUszLUdWdFFNbFltbGIxOFBGY1lrYnc?oc=5"
-  },
-  {
-   "dica": "Viu uma condição insegura? Pare, avise o líder e só siga quando resolver.",
-   "titulo": "Prêmio Álvaro Zocchio reconhece destaques da Segurança do Trabalho",
-   "fonte": "Revista Proteção",
-   "url": "https://protecao.com.br/noticias/geral/premio-alvaro-zocchio-reconhece-destaques-da-seguranca-do-trabalho/"
-  },
-  {
-   "dica": "Álcool e direção: tolerância zero. Nem um gole antes de dirigir.",
-   "titulo": "Programa P.A.R.T.Y. Brasil ganha página dedicada no portal do Observatório",
-   "fonte": "Observatório Nacional de Segurança Viária",
-   "url": "https://www.onsv.org.br/comunicacao/materias/programa-p-a-r-t-y-brasil-ganha-pagina-dedicada-no-portal-do-observatorio"
+   "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQYmFXUC1DOWc4aU1MYkYtQ1U3eVB6RWhxYW5tRnUtaWs1OGlQRDhqcHhCSTcwVUVMdHR4Q0dsVzR4bThjVUxZbGpUaTBaSnptM3NoS3F6NWpYMk5uYzFpaWdqTXNJSW5FLTh5YUdWcU9pLTBCeW5SMF9GalkzTEp5VnQ1OGhMTmRrak1heXJDMHBRdWRLS1pYWnBpdTd2VzdFY05vMjdMdko3MkRTeWJveUhPa2ZMYlFhVEFhMDBMS05ZaUtrMWlKY0dyaGpWby1KQ3hULWZBU0hFa01aRUpRVC1wR2RPNkxpRWQw?oc=5"
   }
  ],
  "fontes": [
@@ -77,16 +65,17 @@
   "https://protecao.com.br/multimidia/protecao-tendencias-seguranca-e-meio-ambiente-na-concepcao-de-projetos-2/",
   "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPWHEzLTd0T1VTX2tnTVRSUlJ2YTZIOThpanFKUm92TkRSaFBBbVZhcWl1ZFhMSUVDNmphT3NGX2s3TGFVVS1EbmIwZ0RzTVg3Nkg1dldZTGNuQlp6V3EzWUEzWFZtTGIwSzJac0FmdkdwcFFNTGJnNV9VZm1DYjZseTd5RTNtZWxYX01yUUl0NGs3RXdYXzdubkZhb1JBdGFZUHFxM256YUtFTkdsT1JBYjZsVUc1bGoyaURpVTl5TDYxT21KOWdFcUlaTkNoM2hnTV9BSnhpZW1qZlVvdUszLUdWdFFNbFltbGIxOFBGY1lrYnc?oc=5",
   "https://protecao.com.br/noticias/geral/premio-alvaro-zocchio-reconhece-destaques-da-seguranca-do-trabalho/",
-  "https://www.onsv.org.br/comunicacao/materias/programa-p-a-r-t-y-brasil-ganha-pagina-dedicada-no-portal-do-observatorio"
+  "https://www.onsv.org.br/comunicacao/materias/programa-p-a-r-t-y-brasil-ganha-pagina-dedicada-no-portal-do-observatorio",
+  "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQYmFXUC1DOWc4aU1MYkYtQ1U3eVB6RWhxYW5tRnUtaWs1OGlQRDhqcHhCSTcwVUVMdHR4Q0dsVzR4bThjVUxZbGpUaTBaSnptM3NoS3F6NWpYMk5uYzFpaWdqTXNJSW5FLTh5YUdWcU9pLTBCeW5SMF9GalkzTEp5VnQ1OGhMTmRrak1heXJDMHBRdWRLS1pYWnBpdTd2VzdFY05vMjdMdko3MkRTeWJveUhPa2ZMYlFhVEFhMDBMS05ZaUtrMWlKY0dyaGpWby1KQ3hULWZBU0hFa01aRUpRVC1wR2RPNkxpRWQw?oc=5"
  ],
  "log": [
   "Observatório Nacional de Segurança Viária: 25",
-  "Revista Proteção: 10",
-  "ANAMT: erro fetch failed",
+  "Revista Proteção: erro 403",
+  "ANAMT: 10",
   "PRF: 25",
   "Fundacentro: 12",
   "Ministério do Trabalho: 25",
-  "Notícias: 6"
+  "Notícias: 5"
  ],
- "atualizado": "2026-11-27T10:36:21.527Z"
+ "atualizado": "2026-11-28T10:34:08.783Z"
 }
